@@ -2,13 +2,46 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  turbopack: {},
   typescript: {
-    ignoreBuildErrors: true, // "오타 있어도 그냥 넘어가!"
+    ignoreBuildErrors: true,
   },
-  // eslint 부분은 에러가 나서 삭제했습니다!
   webpack: (config) => {
-    config.externals.push('pino-pretty', 'lokijs', 'encoding'); // "이 부품들은 검사 면제!"
+    config.externals.push('pino-pretty', 'lokijs', 'encoding');
     return config;
+  },
+  // Production optimization
+  compress: true,
+  poweredByHeader: false,
+  // Domain configuration
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin'
+          }
+        ]
+      }
+    ]
   },
 };
 

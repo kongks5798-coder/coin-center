@@ -1,25 +1,347 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Link from "next/link";
+
+const featureCategories = [
+  {
+    key: "market",
+    title: "Live Market Radar",
+    badge: "Realtime",
+    description:
+      "Stream prices, volumes and volatility for every supported coin in one unified view.",
+    href: "/market",
+    accent: "from-purple-500/40 via-fuchsia-500/30 to-cyan-400/40",
+  },
+  {
+    key: "wallets",
+    title: "Wallet & Account Explorer",
+    badge: "Transparent",
+    description:
+      "Drill down into anonymized wallets, balances and flows to see exactly where coins are sitting.",
+    href: "/wallets",
+    accent: "from-cyan-500/40 via-sky-500/30 to-purple-400/40",
+  },
+  {
+    key: "yield",
+    title: "Yield & Profit Dashboard",
+    badge: "Revenue",
+    description:
+      "Visualize how yield is generated, how rewards are distributed and which pools drive profit.",
+    href: "/yield",
+    accent: "from-emerald-500/40 via-teal-400/30 to-cyan-400/40",
+  },
+  {
+    key: "treasury",
+    title: "Treasury & Reserves",
+    badge: "On‑chain",
+    description:
+      "Track protocol treasuries, runway, collateral and reserves with full on‑chain transparency.",
+    href: "/treasury",
+    accent: "from-indigo-500/40 via-purple-500/30 to-fuchsia-400/40",
+  },
+  {
+    key: "governance",
+    title: "Governance & Voting",
+    badge: "Community",
+    description:
+      "See who is voting, how power is distributed and what proposals are driving your roadmap.",
+    href: "/governance",
+    accent: "from-fuchsia-500/40 via-violet-500/30 to-sky-400/40",
+  },
+  {
+    key: "activity",
+    title: "Live Activity Feed",
+    badge: "Streaming",
+    description:
+      "Watch large transfers, liquidations and whale movements as they happen across the network.",
+    href: "/activity",
+    accent: "from-amber-400/40 via-rose-500/30 to-purple-500/40",
+  },
+];
+
+const transparencyRows = [
+  {
+    address: "0xA3F9...9F21",
+    label: "Market Maker Node",
+    balance: 1284.42,
+    coin: "ETH",
+    pnl24h: 12.4,
+    pnlTotal: 231.8,
+  },
+  {
+    address: "0x7B02...C8D4",
+    label: "Yield Vault Pool #1",
+    balance: 982_340.12,
+    coin: "USDC",
+    pnl24h: 3.1,
+    pnlTotal: 48.3,
+  },
+  {
+    address: "0x4C9E...11B7",
+    label: "Treasury Multisig",
+    balance: 2_345_901.55,
+    coin: "KAUS",
+    pnl24h: 0.7,
+    pnlTotal: 114.9,
+  },
+  {
+    address: "0xD1AA...7E09",
+    label: "Top Community Wallet",
+    balance: 74_210.33,
+    coin: "KAUS",
+    pnl24h: -1.9,
+    pnlTotal: 26.4,
+  },
+  {
+    address: "0x89F0...AA3C",
+    label: "Arb Bot Strategy",
+    balance: 412.78,
+    coin: "ETH",
+    pnl24h: 8.6,
+    pnlTotal: 163.2,
+  },
+];
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-900 text-white">
-      <div className="flex flex-col items-center gap-6 px-6 text-center">
-        <p className="text-xs uppercase tracking-[0.6em] text-gray-400">
-          Web3 Gateway
-        </p>
-        <h1 className="text-5xl font-black text-[#00FF94] drop-shadow-[0_0_24px_rgba(0,255,148,0.8)] sm:text-6xl">
-          KAUS TRINITY
-        </h1>
-        <p className="max-w-2xl text-base text-gray-200 sm:text-lg">
-          Connect your wallet to unlock the KAUS TRINITY multiverse and begin
-          your on-chain journey.
-        </p>
-        <div className="flex justify-center">
-          <div className="scale-[1.2] transform">
-            <ConnectButton />
-          </div>
+    <main className="relative min-h-screen overflow-hidden bg-[#02010a] text-slate-100">
+      {/* Neon background glows */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 -left-24 h-80 w-80 rounded-full bg-purple-600/30 blur-3xl" />
+        <div className="absolute top-48 -right-16 h-80 w-80 rounded-full bg-cyan-500/30 blur-3xl" />
+        <div className="absolute inset-x-0 bottom-[-20rem] mx-auto h-96 w-[40rem] rounded-full bg-indigo-500/20 blur-3xl" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/60 to-transparent opacity-70" />
+      </div>
+
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="w-full space-y-16">
+          {/* HEADER */}
+          <header className="flex items-center justify-between border-b border-purple-500/20 pb-6">
+            <Link href="/" className="group flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-500 shadow-[0_0_25px_rgba(168,85,247,0.5)] transition-all group-hover:shadow-[0_0_40px_rgba(168,85,247,0.8)]">
+                <span className="text-lg font-bold text-white">KC</span>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                  KAUS Coin
+                </h2>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider">Control Center</p>
+              </div>
+            </Link>
+
+            <nav className="hidden md:flex items-center gap-6">
+              <Link href="/market" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                Market
+              </Link>
+              <Link href="/wallets" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                Wallets
+              </Link>
+              <Link href="/yield" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                Yield
+              </Link>
+              <Link href="/treasury" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                Treasury
+              </Link>
+              <Link href="/governance" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                Governance
+              </Link>
+              <Link href="/activity" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                Activity
+              </Link>
+            </nav>
+
+            <button className="rounded-full border border-purple-500/80 bg-purple-500/20 px-6 py-2 text-xs font-semibold text-purple-50 shadow-[0_0_20px_rgba(168,85,247,0.6)] transition hover:bg-purple-500/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.8)]">
+              Connect Wallet
+            </button>
+          </header>
+
+          {/* HERO */}
+          <section className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-purple-500/50 bg-purple-500/10 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-purple-100 backdrop-blur">
+              <span className="h-1.5 w-1.5 rounded-full bg-purple-300 shadow-[0_0_14px_rgba(216,180,254,1)]" />
+              <span>Futuristic crypto control room</span>
+            </div>
+
+            <h1 className="mt-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-cyan-400 bg-clip-text text-5xl font-semibold leading-tight tracking-tight text-transparent sm:text-6xl lg:text-7xl">
+              KAUS Coin Center
+            </h1>
+
+            <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-300/90 sm:text-base">
+              The home base for your coins. Monitor markets, wallets and
+              on‑chain activity in real time with full transparency.
+            </p>
+            <p className="mx-auto mt-1 max-w-2xl text-xs text-slate-400 sm:text-sm">
+              See how profits are generated, which accounts hold which amounts,
+              and how every token in the system is moving.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <button className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-purple-500/80 bg-gradient-to-r from-purple-600 via-fuchsia-500 to-cyan-500 px-8 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white shadow-[0_0_40px_rgba(168,85,247,0.9)] transition-transform duration-150 hover:scale-105 hover:shadow-[0_0_65px_rgba(34,211,238,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
+                <span>Connect Wallet</span>
+                <span
+                  aria-hidden
+                  className="translate-x-0 text-sm transition-transform group-hover:translate-x-1"
+                >
+                  ↗
+                </span>
+              </button>
+
+              <Link
+                href="/market"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-700 bg-slate-900/40 px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-100/90 backdrop-blur transition hover:border-cyan-400/80 hover:bg-slate-900/80 hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              >
+                <span>View Market</span>
+                <span aria-hidden className="text-sm">
+                  ▶
+                </span>
+              </Link>
+            </div>
+          </section>
+
+          {/* MAIN GRID */}
+          <section className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+            {/* FEATURE CATEGORIES */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                  Coin function categories
+                </h2>
+                <span className="rounded-full bg-slate-900/80 px-3 py-1 text-[10px] font-medium text-slate-300">
+                  Click a module to dive in
+                </span>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                {featureCategories.map((feature) => (
+                  <Link
+                    key={feature.key}
+                    href={feature.href}
+                    className="group relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/70 px-4 py-4 shadow-[0_0_0_1px_rgba(15,23,42,0.9)] transition hover:-translate-y-1 hover:border-purple-500/80 hover:shadow-[0_0_28px_rgba(129,140,248,0.7)]"
+                  >
+                    <div className="pointer-events-none absolute inset-0 opacity-0 blur-2xl transition group-hover:opacity-100">
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${feature.accent}`}
+                      />
+                    </div>
+
+                    <div className="relative z-10 flex flex-col gap-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="text-sm font-semibold text-slate-50">
+                          {feature.title}
+                        </h3>
+                        {feature.badge && (
+                          <span className="rounded-full bg-slate-900/80 px-2.5 py-1 text-[10px] font-medium text-slate-100">
+                            {feature.badge}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-xs leading-relaxed text-slate-300/90">
+                        {feature.description}
+                      </p>
+
+                      <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-slate-400">
+                        <span>Open module</span>
+                        <span
+                          aria-hidden
+                          className="transition-transform group-hover:translate-x-1"
+                        >
+                          ⟶
+                        </span>
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* TRANSPARENCY PANEL */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+                  Transparent account snapshot
+                </h2>
+                <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-[10px] font-medium text-emerald-200">
+                  Demo data
+                </span>
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/80 shadow-[0_0_0_1px_rgba(15,23,42,0.9)]">
+                <div className="border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 text-[11px] text-slate-300">
+                  See how different accounts hold coins, how profits are
+                  changing and how the system is running — all in one look.
+                </div>
+
+                <div className="max-h-72 overflow-y-auto">
+                  <table className="min-w-full border-separate border-spacing-y-1 px-2 py-2 text-left text-[11px]">
+                    <thead className="sticky top-0 z-10 bg-slate-950/95 backdrop-blur">
+                      <tr className="text-[10px] uppercase tracking-[0.18em] text-slate-500">
+                        <th className="px-4 py-2">Account</th>
+                        <th className="px-3 py-2 text-right">Coins</th>
+                        <th className="px-3 py-2 text-right">24h PnL</th>
+                        <th className="px-3 py-2 text-right">Total PnL</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {transparencyRows.map((row) => (
+                        <tr key={row.address} className="align-middle">
+                          <td className="px-4 py-2">
+                            <div className="flex flex-col gap-0.5">
+                              <span className="font-mono text-[11px] text-slate-200">
+                                {row.address}
+                              </span>
+                              <span className="text-[10px] text-slate-500">
+                                {row.label}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            <span className="font-mono text-[11px] text-slate-100">
+                              {row.balance.toLocaleString("en-US", {
+                                maximumFractionDigits: 2,
+                              })}{" "}
+                              {row.coin}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            <span
+                              className={`font-mono text-[11px] ${
+                                row.pnl24h >= 0
+                                  ? "text-emerald-400"
+                                  : "text-rose-400"
+                              }`}
+                            >
+                              {row.pnl24h >= 0 ? "+" : ""}
+                              {row.pnl24h.toFixed(2)}%
+                            </span>
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            <span
+                              className={`font-mono text-[11px] ${
+                                row.pnlTotal >= 0
+                                  ? "text-emerald-400"
+                                  : "text-rose-400"
+                              }`}
+                            >
+                              {row.pnlTotal >= 0 ? "+" : ""}
+                              {row.pnlTotal.toFixed(2)}%
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="border-t border-slate-800/80 px-4 py-2 text-[10px] text-slate-500">
+                  In the real platform, every module can expose similar views so
+                  users can verify balances, flows and profit generation in real
+                  time.
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </main>
   );
 }
+
