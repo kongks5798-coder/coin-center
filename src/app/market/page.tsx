@@ -77,78 +77,7 @@ export default function MarketPage() {
           </div>
         </div>
 
-        {/* Market Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="rounded-2xl border border-purple-500/30 bg-slate-950/80 p-6 shadow-[0_0_20px_rgba(168,85,247,0.3)]">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Total Market Cap</p>
-            <p className="text-3xl font-bold text-purple-400">$2.4T</p>
-            <p className="text-sm text-emerald-400 mt-1">+5.2% 24h</p>
-          </div>
-          <div className="rounded-2xl border border-cyan-500/30 bg-slate-950/80 p-6 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">24h Volume</p>
-            <p className="text-3xl font-bold text-cyan-400">$145B</p>
-            <p className="text-sm text-emerald-400 mt-1">+12.8% 24h</p>
-          </div>
-          <div className="rounded-2xl border border-fuchsia-500/30 bg-slate-950/80 p-6 shadow-[0_0_20px_rgba(217,70,239,0.3)]">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">BTC Dominance</p>
-            <p className="text-3xl font-bold text-fuchsia-400">48.3%</p>
-            <p className="text-sm text-slate-400 mt-1">-0.5% 24h</p>
-          </div>
-          <div className="rounded-2xl border border-emerald-500/30 bg-slate-950/80 p-6 shadow-[0_0_20px_rgba(52,211,153,0.3)]">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Active Traders</p>
-            <p className="text-3xl font-bold text-emerald-400">8.2K</p>
-            <p className="text-sm text-emerald-400 mt-1">+18.3% 24h</p>
-          </div>
-        </div>
 
-        {/* Market Table */}
-        <div className="rounded-2xl border border-slate-800/80 bg-slate-950/80 overflow-hidden shadow-[0_0_30px_rgba(15,23,42,0.5)]">
-          <div className="bg-slate-950/90 border-b border-slate-800/80 px-6 py-4">
-            <h2 className="text-xl font-semibold text-slate-100">실시간 시장 데이터</h2>
-            <p className="text-sm text-slate-400 mt-1">주요 암호화폐 가격 및 거래량 정보</p>
-          </div>
-          
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-slate-950/95">
-                <tr className="text-left text-xs uppercase tracking-wider text-slate-500">
-                  <th className="px-6 py-4">Pair</th>
-                  <th className="px-6 py-4 text-right">Price</th>
-                  <th className="px-6 py-4 text-right">24h Change</th>
-                  <th className="px-6 py-4 text-right">Volume</th>
-                  <th className="px-6 py-4 text-right">24h High</th>
-                  <th className="px-6 py-4 text-right">24h Low</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/50">
-                {marketData.map((item, index) => (
-                  <tr key={index} className="hover:bg-slate-900/50 transition">
-                    <td className="px-6 py-5">
-                      <span className="font-mono text-sm font-semibold text-slate-100">{item.symbol}</span>
-                    </td>
-                    <td className="px-6 py-5 text-right">
-                      <span className="font-mono text-sm text-slate-200">${item.price.toLocaleString()}</span>
-                    </td>
-                    <td className="px-6 py-5 text-right">
-                      <span className={`font-mono text-sm font-semibold ${item.change24h >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {item.change24h >= 0 ? '+' : ''}{item.change24h.toFixed(2)}%
-                      </span>
-                    </td>
-                    <td className="px-6 py-5 text-right">
-                      <span className="font-mono text-sm text-slate-300">${item.volume}</span>
-                    </td>
-                    <td className="px-6 py-5 text-right">
-                      <span className="font-mono text-sm text-slate-400">${item.high.toLocaleString()}</span>
-                    </td>
-                    <td className="px-6 py-5 text-right">
-                      <span className="font-mono text-sm text-slate-400">${item.low.toLocaleString()}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
 
         {/* Features Grid */}
         <div className="mt-16 grid md:grid-cols-3 gap-8">

@@ -73,72 +73,7 @@ export default function YieldPage() {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="rounded-2xl border border-emerald-500/30 bg-slate-950/80 p-6">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Total Staked</p>
-            <p className="text-3xl font-bold text-emerald-400">$19.5M</p>
-            <p className="text-sm text-emerald-400 mt-1">+8.2% this week</p>
-          </div>
-          <div className="rounded-2xl border border-cyan-500/30 bg-slate-950/80 p-6">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Avg APY</p>
-            <p className="text-3xl font-bold text-cyan-400">62.1%</p>
-            <p className="text-sm text-slate-400 mt-1">Across all pools</p>
-          </div>
-          <div className="rounded-2xl border border-purple-500/30 bg-slate-950/80 p-6">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Daily Rewards</p>
-            <p className="text-3xl font-bold text-purple-400">$3,240</p>
-            <p className="text-sm text-emerald-400 mt-1">+12.5% 24h</p>
-          </div>
-          <div className="rounded-2xl border border-fuchsia-500/30 bg-slate-950/80 p-6">
-            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Active Positions</p>
-            <p className="text-3xl font-bold text-fuchsia-400">12</p>
-            <p className="text-sm text-slate-400 mt-1">4 protocols</p>
-          </div>
-        </div>
 
-        {/* Yield Pools */}
-        <div className="rounded-2xl border border-slate-800/80 bg-slate-950/80 overflow-hidden shadow-[0_0_30px_rgba(15,23,42,0.5)]">
-          <div className="bg-slate-950/90 border-b border-slate-800/80 px-6 py-4">
-            <h2 className="text-xl font-semibold text-slate-100">Active Yield Pools</h2>
-            <p className="text-sm text-slate-400 mt-1">현재 운영 중인 수익 창출 풀</p>
-          </div>
-          
-          <div className="divide-y divide-slate-800/50">
-            {yieldPools.map((pool, index) => (
-              <div key={index} className="p-6 hover:bg-slate-900/50 transition">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-100 mb-1">{pool.name}</h3>
-                    <p className="text-sm text-slate-400">{pool.protocol}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-bold text-emerald-400">{pool.apy}</p>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider">APY</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <p className="text-xs text-slate-500 mb-1">TVL</p>
-                    <p className="text-sm font-semibold text-slate-200">{pool.tvl}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 mb-1">Rewards</p>
-                    <p className="text-sm font-semibold text-slate-200">{pool.rewards}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 mb-1">Risk Level</p>
-                    <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
-                      pool.risk === 'Low' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
-                    }`}>
-                      {pool.risk}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Features */}
         <div className="mt-16 grid md:grid-cols-3 gap-8">

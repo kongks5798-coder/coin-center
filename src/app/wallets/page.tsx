@@ -72,44 +72,7 @@ export default function WalletsPage() {
           </div>
         </div>
 
-        {/* Total Balance Card */}
-        <div className="mb-12 rounded-3xl border border-purple-500/50 bg-gradient-to-br from-slate-950 via-slate-900 to-black p-8 shadow-[0_0_50px_rgba(168,85,247,0.4)]">
-          <p className="text-sm text-slate-400 uppercase tracking-wider mb-2">Total Portfolio Value</p>
-          <p className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-4">
-            $7,244,527
-          </p>
-          <div className="flex items-center gap-4">
-            <span className="text-lg text-emerald-400 font-semibold">+18.3% (24h)</span>
-            <span className="text-sm text-slate-400">+$1,122,340</span>
-          </div>
-        </div>
 
-        {/* Wallets Grid */}
-        <div className="space-y-6">
-          {wallets.map((wallet, index) => (
-            <div key={index} className="rounded-2xl border border-slate-800/80 bg-slate-950/80 overflow-hidden shadow-[0_0_20px_rgba(15,23,42,0.4)] hover:border-purple-500/50 transition">
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-semibold text-slate-100 mb-1">{wallet.name}</h3>
-                    <p className="font-mono text-sm text-slate-400">{wallet.address}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-purple-400">{wallet.usdValue}</p>
-                    <p className="text-sm text-slate-400 mt-1">{wallet.balance}</p>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  {wallet.chains.map((chain, idx) => (
-                    <span key={idx} className="rounded-full bg-purple-500/20 border border-purple-500/40 px-3 py-1 text-xs text-purple-200">
-                      {chain}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
 
         {/* Features */}
         <div className="mt-16 grid md:grid-cols-3 gap-8">
