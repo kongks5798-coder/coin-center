@@ -137,14 +137,11 @@ export default function Home() {
               <Link href="/yield" className="text-sm text-slate-400 hover:text-purple-400 transition">
                 Yield
               </Link>
-              <Link href="/treasury" className="text-sm text-slate-400 hover:text-purple-400 transition">
-                Treasury
+              <Link href="/roadmap" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                Roadmap
               </Link>
-              <Link href="/governance" className="text-sm text-slate-400 hover:text-purple-400 transition">
-                Governance
-              </Link>
-              <Link href="/activity" className="text-sm text-slate-400 hover:text-purple-400 transition">
-                Activity
+              <Link href="/faq" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                FAQ
               </Link>
             </nav>
 
@@ -340,6 +337,65 @@ export default function Home() {
             </div>
           </section>
         </div>
+
+        {/* Footer */}
+        <footer className="mt-24 border-t border-slate-800/50 pt-12 pb-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-cyan-500">
+                  <span className="text-sm font-bold text-white">KC</span>
+                </div>
+                <span className="text-lg font-bold text-slate-100">KAUS Coin</span>
+              </div>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                완전한 투명성과 탈중앙화를 추구하는 차세대 DeFi 플랫폼
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider mb-4">Platform</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/market" className="text-slate-400 hover:text-purple-400 transition">Market</Link></li>
+                <li><Link href="/wallets" className="text-slate-400 hover:text-purple-400 transition">Wallets</Link></li>
+                <li><Link href="/yield" className="text-slate-400 hover:text-purple-400 transition">Yield</Link></li>
+                <li><Link href="/treasury" className="text-slate-400 hover:text-purple-400 transition">Treasury</Link></li>
+                <li><Link href="/governance" className="text-slate-400 hover:text-purple-400 transition">Governance</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider mb-4">Resources</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/roadmap" className="text-slate-400 hover:text-purple-400 transition">Roadmap</Link></li>
+                <li><Link href="/faq" className="text-slate-400 hover:text-purple-400 transition">FAQ</Link></li>
+                <li><Link href="#" className="text-slate-400 hover:text-purple-400 transition">Whitepaper</Link></li>
+                <li><Link href="#" className="text-slate-400 hover:text-purple-400 transition">Documentation</Link></li>
+                <li><Link href="#" className="text-slate-400 hover:text-purple-400 transition">GitHub</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider mb-4">Community</h3>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="text-slate-400 hover:text-purple-400 transition">Discord</a></li>
+                <li><a href="#" className="text-slate-400 hover:text-purple-400 transition">Telegram</a></li>
+                <li><a href="#" className="text-slate-400 hover:text-purple-400 transition">Twitter</a></li>
+                <li><a href="#" className="text-slate-400 hover:text-purple-400 transition">Medium</a></li>
+                <li><a href="mailto:support@kaus.io" className="text-slate-400 hover:text-purple-400 transition">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-800/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <p>© {new Date().getFullYear()} KAUS Coin. All rights reserved.</p>
+            <div className="flex items-center gap-6">
+              <Link href="#" className="hover:text-slate-300 transition">Privacy Policy</Link>
+              <Link href="#" className="hover:text-slate-300 transition">Terms of Service</Link>
+              <Link href="#" className="hover:text-slate-300 transition">Cookie Policy</Link>
+            </div>
+          </div>
+        </footer>
       </div>
     </main>
   );
