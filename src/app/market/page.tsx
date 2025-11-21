@@ -60,8 +60,21 @@ export default function MarketPage() {
             Live Market Radar
           </h1>
           <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            실시간 암호화폐 시장 데이터를 한눈에 확인하세요. 가격, 거래량, 변동성을 실시간으로 추적합니다.
+            실시간 거래 데이터를 제공할 예정입니다. KAUS 메인넷 출시와 함께 활성화됩니다.
           </p>
+        </div>
+
+        {/* Coming Soon Notice */}
+        <div className="mb-12 rounded-3xl border border-purple-500/50 bg-gradient-to-br from-slate-950 via-purple-950/20 to-slate-950 p-12 text-center">
+          <div className="text-6xl mb-6">📊</div>
+          <h2 className="text-3xl font-bold text-slate-100 mb-4">거래소 통합 준비 중</h2>
+          <p className="text-lg text-slate-300 mb-6 max-w-2xl mx-auto">
+            KAUS Coin이 주요 거래소에 상장되면 실시간 가격, 차트, 오더북 데이터를 제공합니다.
+          </p>
+          <div className="inline-flex items-center gap-2 rounded-full bg-purple-500/20 border border-purple-500/40 px-6 py-3 text-sm font-semibold text-purple-200">
+            <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse"></span>
+            2025 Q2 출시 예정
+          </div>
         </div>
 
         {/* Market Overview Cards */}

@@ -57,8 +57,21 @@ export default function TreasuryPage() {
             Treasury & Reserves
           </h1>
           <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            프로토콜 재무, 담보, 운영 자금을 완전한 온체인 투명성으로 모니터링합니다.
+            DAO Treasury 시스템을 구축 중입니다. 완전한 투명성을 보장합니다.
           </p>
+        </div>
+
+        {/* Coming Soon Notice */}
+        <div className="mb-12 rounded-3xl border border-indigo-500/50 bg-gradient-to-br from-slate-950 via-indigo-950/20 to-slate-950 p-12 text-center">
+          <div className="text-6xl mb-6">🏛️</div>
+          <h2 className="text-3xl font-bold text-slate-100 mb-4">Treasury 구축 중</h2>
+          <p className="text-lg text-slate-300 mb-6 max-w-2xl mx-auto">
+            멀티시그 지갑, 자산 배분, 비용 관리 시스템을 개발하고 있습니다. 모든 자금 흐름은 블록체인에 기록됩니다.
+          </p>
+          <div className="inline-flex items-center gap-2 rounded-full bg-indigo-500/20 border border-indigo-500/40 px-6 py-3 text-sm font-semibold text-indigo-200">
+            <span className="h-2 w-2 rounded-full bg-indigo-400 animate-pulse"></span>
+            멀티시그 지갑 설정 중
+          </div>
         </div>
 
         {/* Treasury Overview */}

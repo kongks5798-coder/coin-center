@@ -56,8 +56,21 @@ export default function YieldPage() {
             Yield & Profit Dashboard
           </h1>
           <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            스테이킹, 렌딩, 파밍으로 수익을 창출하세요. 실시간 APY와 리워드 분배를 추적합니다.
+            스테이킹 시스템을 준비 중입니다. 메인넷 출시 후 수익 창출이 가능합니다.
           </p>
+        </div>
+
+        {/* Coming Soon Notice */}
+        <div className="mb-12 rounded-3xl border border-emerald-500/50 bg-gradient-to-br from-slate-950 via-emerald-950/20 to-slate-950 p-12 text-center">
+          <div className="text-6xl mb-6">💰</div>
+          <h2 className="text-3xl font-bold text-slate-100 mb-4">스테이킹 시스템 개발 중</h2>
+          <p className="text-lg text-slate-300 mb-6 max-w-2xl mx-auto">
+            KAUS 스테이킹, 유동성 채굴, 렌딩 프로토콜이 준비되고 있습니다. 예상 APY 60%+
+          </p>
+          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 border border-emerald-500/40 px-6 py-3 text-sm font-semibold text-emerald-200">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            스마트 컨트랙트 감사 진행 중
+          </div>
         </div>
 
         {/* Stats Grid */}

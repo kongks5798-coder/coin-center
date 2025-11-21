@@ -55,8 +55,21 @@ export default function WalletsPage() {
             Wallet & Account Explorer
           </h1>
           <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            모든 지갑과 계정을 하나의 투명한 대시보드로 통합합니다. 멀티체인 자산을 실시간으로 추적하세요.
+            지갑 연동 기능을 준비 중입니다. 곧 멀티체인 자산을 통합 관리할 수 있습니다.
           </p>
+        </div>
+
+        {/* Coming Soon Notice */}
+        <div className="mb-12 rounded-3xl border border-cyan-500/50 bg-gradient-to-br from-slate-950 via-cyan-950/20 to-slate-950 p-12 text-center">
+          <div className="text-6xl mb-6">💼</div>
+          <h2 className="text-3xl font-bold text-slate-100 mb-4">지갑 통합 개발 중</h2>
+          <p className="text-lg text-slate-300 mb-6 max-w-2xl mx-auto">
+            Web3 지갑 연동, 멀티체인 자산 추적, 포트폴리오 분석 기능을 개발하고 있습니다.
+          </p>
+          <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/20 border border-cyan-500/40 px-6 py-3 text-sm font-semibold text-cyan-200">
+            <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            Connect Wallet 기능 준비 중
+          </div>
         </div>
 
         {/* Total Balance Card */}

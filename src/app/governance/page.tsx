@@ -62,8 +62,21 @@ export default function GovernancePage() {
             Governance & Voting
           </h1>
           <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            커뮤니티가 프로젝트의 미래를 결정합니다. 투표권 분배와 제안 진행 상황을 실시간으로 확인하세요.
+            커뮤니티 거버넌스 시스템을 준비 중입니다. 토큰 보유자가 미래를 결정합니다.
           </p>
+        </div>
+
+        {/* Coming Soon Notice */}
+        <div className="mb-12 rounded-3xl border border-fuchsia-500/50 bg-gradient-to-br from-slate-950 via-fuchsia-950/20 to-slate-950 p-12 text-center">
+          <div className="text-6xl mb-6">🗳️</div>
+          <h2 className="text-3xl font-bold text-slate-100 mb-4">DAO 거버넌스 개발 중</h2>
+          <p className="text-lg text-slate-300 mb-6 max-w-2xl mx-auto">
+            온체인 투표 시스템, 제안 관리, 스마트 컨트랙트 자동 집행 기능을 구축하고 있습니다.
+          </p>
+          <div className="inline-flex items-center gap-2 rounded-full bg-fuchsia-500/20 border border-fuchsia-500/40 px-6 py-3 text-sm font-semibold text-fuchsia-200">
+            <span className="h-2 w-2 rounded-full bg-fuchsia-400 animate-pulse"></span>
+            거버넌스 프레임워크 설계 중
+          </div>
         </div>
 
         {/* Governance Stats */}
