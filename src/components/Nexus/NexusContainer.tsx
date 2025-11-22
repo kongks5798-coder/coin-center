@@ -9,7 +9,33 @@ const NexusContainer = () => {
   return (
     <div className="nexus-container">
       {/* 헤더 */}
-      <div className="nexus-header" style={{ marginBottom: '2rem' }}>
+      <div className="nexus-header" style={{ marginBottom: '2rem', position: 'relative' }}>
+        <div style={{ 
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          textAlign: 'right'
+        }}>
+          <div style={{
+            fontSize: '1.2rem',
+            color: '#00ff41',
+            fontWeight: 'bold',
+            letterSpacing: '3px',
+            textShadow: '0 0 15px rgba(0, 255, 65, 0.6)',
+            marginBottom: '0.3rem'
+          }}>
+            JH LOGISTICS
+          </div>
+          <div style={{
+            fontSize: '0.75rem',
+            color: '#00ccff',
+            letterSpacing: '2px',
+            opacity: 0.8
+          }}>
+            CONTROL CENTER
+          </div>
+        </div>
+        
         <h1 style={{ 
           fontSize: '2.5rem', 
           color: '#00ff41', 
