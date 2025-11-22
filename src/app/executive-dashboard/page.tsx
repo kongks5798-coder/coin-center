@@ -357,10 +357,13 @@ export default function ExecutiveDashboard() {
                 <p className="text-white/60 mb-4">
                   재무, 세무, 인사, 프로젝트 등 모든 업무 데이터를 입력하고 관리하세요
                 </p>
-                <div className="flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-4 text-sm mb-4">
                   <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded">10개 템플릿</span>
                   <span className="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded">권한 기반</span>
                   <span className="px-3 py-1 bg-fuchsia-500/20 text-fuchsia-300 rounded">실시간 저장</span>
+                </div>
+                <div className="text-xs text-green-400 font-medium">
+                  🔐 임원진 접근 가능: 공경수, 김본부, 박규민, 박해운
                 </div>
               </div>
               <div className="text-4xl group-hover:scale-110 transition-transform">
