@@ -48,31 +48,31 @@ export default function Home() {
 
   const features = [
     {
-      title: "NEXUS OS Dashboard",
-      description: "5,000㎡ 물류센터를 실시간으로 모니터링하는 통제 시스템",
-      icon: "🎯",
-      gradient: "from-purple-600 via-fuchsia-600 to-pink-600",
-      href: "/nexus",
-      badge: "NEW",
-      stats: ["3D Warehouse Map", "AI Predictions", "Robot Fleet Control"]
-    },
-    {
-      title: "Blockchain Verification",
-      description: "NFT 기반 정품 인증과 블록체인 기록으로 위조품 차단",
-      icon: "🔐",
-      gradient: "from-cyan-600 via-blue-600 to-indigo-600",
-      href: "/about",
-      badge: "CORE",
-      stats: ["SHA-256 Hash", "Smart Contracts", "Immutable Records"]
-    },
-    {
-      title: "Supply Chain Analytics",
-      description: "AI가 분석하는 공급망 데이터와 예측 인사이트",
+      title: "FILLUMINATE",
+      description: "데이터 인사이트로 비즈니스를 조명하다",
       icon: "📊",
-      gradient: "from-emerald-600 via-teal-600 to-cyan-600",
-      href: "/market",
-      badge: "AI",
-      stats: ["Demand Forecast", "Bottleneck Detection", "Cost Optimization"]
+      gradient: "from-amber-600 via-orange-600 to-yellow-600",
+      href: "/filluminate",
+      badge: "DATA",
+      stats: ["실시간 분석", "AI 예측 모델", "비즈니스 인텔리전스"]
+    },
+    {
+      title: "MAD MAD",
+      description: "미친 창의성으로 세상을 바꾸다",
+      icon: "🎨",
+      gradient: "from-pink-600 via-rose-600 to-red-600",
+      href: "/madmad",
+      badge: "CREATIVE",
+      stats: ["브랜드 디자인", "콘텐츠 제작", "마케팅 솔루션"]
+    },
+    {
+      title: "DATABASE GUARD CENTER",
+      description: "NEXUS THE FIELD NINE - 공급망을 지키는 블록체인",
+      icon: "🛡️",
+      gradient: "from-cyan-600 via-blue-600 to-indigo-600",
+      href: "/nexus",
+      badge: "BLOCKCHAIN",
+      stats: ["5,000㎡ 물류센터", "AI 예측 시스템", "RFID 추적"]
     }
   ];
 
@@ -211,23 +211,23 @@ export default function Home() {
         <section className="mx-auto max-w-7xl px-6 py-20 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/50 bg-cyan-500/10 px-4 py-1.5 text-xs font-medium text-cyan-100 backdrop-blur mb-6">
             <span className="h-2 w-2 rounded-full bg-cyan-300 animate-pulse shadow-[0_0_10px_rgba(103,232,249,1)]" />
-            <span>Blockchain-Powered Supply Chain Platform</span>
+            <span>데이터 • 크리에이티브 • 블록체인 융합 플랫폼</span>
           </div>
 
           <h1 className="mb-6 text-6xl md:text-8xl font-bold leading-tight">
             <span className="block bg-gradient-to-r from-purple-400 via-fuchsia-500 to-cyan-400 bg-clip-text text-transparent mb-4">
-              The Future of
+              FIELD NINE
             </span>
-            <span className="block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-400 bg-clip-text text-transparent">
-              Supply Chain
+            <span className="block text-4xl md:text-5xl bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-400 bg-clip-text text-transparent">
+              미래를 설계하는 혁신 플랫폼
             </span>
           </h1>
 
           <p className="mx-auto max-w-3xl text-xl text-slate-300 mb-4">
-            전 세계 모든 상품의 진위를 검증하고, 유통 과정을 투명하게 추적합니다.
+            데이터, 크리에이티브, 블록체인이 만나는 융합 생태계
           </p>
           <p className="mx-auto max-w-2xl text-base text-slate-400 mb-12">
-            블록체인 기술과 AI 예측으로 위조품을 차단하고, 공급망을 최적화합니다.
+            3개의 혁신 제품으로 비즈니스의 새로운 차원을 열어갑니다
           </p>
 
           {/* CTA Buttons */}
@@ -236,7 +236,7 @@ export default function Home() {
               href="/nexus"
               className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-cyan-600 px-10 py-4 text-base font-semibold text-white shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:shadow-[0_0_60px_rgba(34,211,238,0.8)] hover:scale-105 transition-all"
             >
-              <span className="relative z-10">🚀 NEXUS OS 체험하기</span>
+              <span className="relative z-10">🚀 FIELD NINE 탐험하기</span>
               <span className="relative z-10 text-xl transition-transform group-hover:translate-x-1">→</span>
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-purple-600 to-fuchsia-600 opacity-0 group-hover:opacity-100 transition-opacity" />
             </Link>
@@ -245,7 +245,7 @@ export default function Home() {
               href="/about"
               className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/40 px-8 py-4 text-base font-semibold text-slate-100 backdrop-blur hover:border-cyan-400/80 hover:bg-slate-900/80 hover:text-cyan-100 transition"
             >
-              <span>기술 살펴보기</span>
+              <span>더 알아보기</span>
               <span className="text-lg">▶</span>
             </Link>
           </div>
@@ -377,56 +377,99 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Featured Section - NEXUS OS */}
+        {/* FIELD NINE Introduction */}
         <section className="mx-auto max-w-7xl px-6 py-20">
-          <div className="rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-950/50 to-cyan-950/50 p-12 backdrop-blur">
+          <div className="rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-950/50 to-cyan-950/50 p-16 backdrop-blur text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-purple-500/20 border border-purple-500/40 px-6 py-2 text-sm font-semibold text-purple-200 mb-8">
+              <span>✨</span>
+              <span>ABOUT FIELD NINE</span>
+            </div>
+            <h2 className="text-5xl font-bold bg-gradient-to-r from-purple-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent mb-8">
+              필드 나인이란?
+            </h2>
+            <div className="max-w-4xl mx-auto space-y-6 text-lg text-slate-300">
+              <p className="leading-relaxed">
+                FIELD NINE은 <span className="text-cyan-400 font-semibold">9개의 핵심 분야</span>에서 혁신을 추구하는 융합 플랫폼입니다.
+                데이터 분석, 크리에이티브 디자인, 블록체인 기술을 하나로 통합하여 
+                비즈니스의 새로운 가능성을 열어갑니다.
+              </p>
+              <p className="leading-relaxed">
+                <span className="text-purple-400 font-semibold">FILLUMINATE</span>로 데이터를 조명하고,
+                <span className="text-pink-400 font-semibold"> MAD MAD</span>로 창의성을 폭발시키며,
+                <span className="text-cyan-400 font-semibold"> DATABASE GUARD CENTER: NEXUS</span>로 
+                공급망의 미래를 설계합니다.
+              </p>
+              <div className="grid md:grid-cols-3 gap-6 pt-8">
+                <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6">
+                  <div className="text-4xl mb-3">💡</div>
+                  <div className="text-amber-400 font-bold mb-2">FILLUMINATE</div>
+                  <div className="text-sm text-slate-400">데이터 인사이트</div>
+                </div>
+                <div className="rounded-2xl border border-pink-500/30 bg-pink-500/10 p-6">
+                  <div className="text-4xl mb-3">🎭</div>
+                  <div className="text-pink-400 font-bold mb-2">MAD MAD</div>
+                  <div className="text-sm text-slate-400">크리에이티브 혁신</div>
+                </div>
+                <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-6">
+                  <div className="text-4xl mb-3">🔗</div>
+                  <div className="text-cyan-400 font-bold mb-2">NEXUS</div>
+                  <div className="text-sm text-slate-400">블록체인 보안</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Section - NEXUS THE FIELD NINE */}
+        <section className="mx-auto max-w-7xl px-6 py-20">
+          <div className="rounded-3xl border border-cyan-500/30 bg-gradient-to-br from-cyan-950/50 via-slate-950/50 to-blue-950/50 p-12 backdrop-blur">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-purple-500/20 border border-purple-500/40 px-4 py-2 text-sm font-semibold text-purple-200 mb-6">
-                  <span>⚡</span>
-                  <span>NEW RELEASE</span>
+                <div className="inline-flex items-center gap-2 rounded-full bg-cyan-500/20 border border-cyan-500/40 px-4 py-2 text-sm font-semibold text-cyan-200 mb-6">
+                  <span>🛡️</span>
+                  <span>DATABASE GUARD CENTER</span>
                 </div>
-                <h2 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent mb-6">
-                  NEXUS OS Dashboard
+                <h2 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-6">
+                  NEXUS THE FIELD NINE
                 </h2>
                 <p className="text-xl text-slate-300 mb-6">
-                  5,000㎡ 물류센터를 실시간으로 통제하는 AI 기반 운영 시스템
+                  5,000㎡ 물류센터를 블록체인과 AI로 실시간 통제하는 차세대 공급망 관리 시스템
                 </p>
                 <div className="grid grid-cols-3 gap-4 mb-8">
-                  {["3D Map", "AI Predictions", "RFID Integration"].map((feature, idx) => (
-                    <div key={idx} className="rounded-lg border border-purple-500/30 bg-slate-950/50 p-4 text-center">
+                  {["3D 창고 맵", "AI 예측", "RFID 통합"].map((feature, idx) => (
+                    <div key={idx} className="rounded-lg border border-cyan-500/30 bg-slate-950/50 p-4 text-center">
                       <div className="text-2xl mb-1">✓</div>
-                      <div className="text-xs text-purple-400">{feature}</div>
+                      <div className="text-xs text-cyan-400">{feature}</div>
                     </div>
                   ))}
                 </div>
                 <Link
                   href="/nexus"
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 to-cyan-600 px-8 py-4 text-base font-bold text-white shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:scale-105 transition-transform"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 to-blue-600 px-8 py-4 text-base font-bold text-white shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:scale-105 transition-transform"
                 >
-                  <span>지금 체험하기</span>
+                  <span>NEXUS 시스템 보기</span>
                   <span className="text-xl">→</span>
                 </Link>
               </div>
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 blur-2xl" />
-                <div className="relative rounded-2xl border border-purple-500/30 bg-slate-950/80 p-8 backdrop-blur">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/20 to-blue-600/20 blur-2xl" />
+                <div className="relative rounded-2xl border border-cyan-500/30 bg-slate-950/80 p-8 backdrop-blur">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-400">Active Robots</span>
+                      <span className="text-slate-400">로봇 가동 상태</span>
                       <span className="text-cyan-400 font-mono">5/5 ONLINE</span>
                     </div>
                     <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 w-full animate-pulse" />
+                      <div className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 w-full animate-pulse" />
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-4">
                       <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4">
                         <div className="text-emerald-400 text-2xl font-bold">94.7%</div>
-                        <div className="text-emerald-400/80 text-xs">AI Accuracy</div>
+                        <div className="text-emerald-400/80 text-xs">AI 정확도</div>
                       </div>
                       <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-4">
                         <div className="text-cyan-400 text-2xl font-bold">₩2.4M</div>
-                        <div className="text-cyan-400/80 text-xs">Saved/Month</div>
+                        <div className="text-cyan-400/80 text-xs">월 절감액</div>
                       </div>
                     </div>
                   </div>
@@ -474,8 +517,8 @@ export default function Home() {
         {/* Core Features */}
         <section className="mx-auto max-w-7xl px-6 py-20">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">핵심 기술</h2>
-            <p className="text-xl text-slate-400">최첨단 기술로 구현된 완벽한 시스템</p>
+            <h2 className="text-4xl font-bold text-white mb-4">3대 핵심 플랫폼</h2>
+            <p className="text-xl text-slate-400">FIELD NINE이 선보이는 혁신 솔루션</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -543,24 +586,24 @@ export default function Home() {
         <section className="mx-auto max-w-7xl px-6 py-20">
           <div className="rounded-3xl border border-cyan-500/30 bg-gradient-to-br from-cyan-950/50 via-slate-950/50 to-purple-950/50 p-16 text-center backdrop-blur">
             <h2 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-6">
-              지금 시작하세요
+              FIELD NINE과 함께하세요
             </h2>
             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-              KAUS와 함께 공급망의 미래를 경험하세요. 블록체인 기술로 투명성과 신뢰를 확보합니다.
+              데이터, 크리에이티브, 블록체인이 만나는 곳. FIELD NINE에서 비즈니스의 미래를 설계하세요.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/nexus"
                 className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-cyan-600 to-purple-600 px-10 py-4 text-lg font-bold text-white shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:scale-105 transition-transform"
               >
-                <span>NEXUS OS 체험</span>
+                <span>지금 시작하기</span>
                 <span>→</span>
               </Link>
               <Link
                 href="/about"
                 className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/60 px-8 py-4 text-lg font-semibold text-slate-100 backdrop-blur hover:border-cyan-400/80 hover:bg-slate-900/80 transition"
               >
-                <span>자세히 알아보기</span>
+                <span>문의하기</span>
               </Link>
             </div>
           </div>
