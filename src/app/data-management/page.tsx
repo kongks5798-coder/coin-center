@@ -40,14 +40,14 @@ interface TemplateField {
 }
 
 const DATA_TEMPLATES: DataTemplate[] = [
-  // 재무 데이터
+  // 재무 데이터 - 🔒 CRITICAL: 총괄/본부장 전용
   {
     id: 'financial-revenue',
     name: '월간 매출 입력',
     category: 'financial',
     icon: '💰',
-    description: '월별 매출 데이터 입력',
-    requiredRole: ['executive', 'general_manager', 'director', 'manager'],
+    description: '월별 매출 데이터 입력 (최고 보안)',
+    requiredRole: ['executive', 'general_manager'],
     fields: [
       { name: 'month', type: 'date', label: '년월', required: true },
       { name: 'revenue', type: 'currency', label: '매출액', required: true },
@@ -62,8 +62,8 @@ const DATA_TEMPLATES: DataTemplate[] = [
     name: '지출 내역',
     category: 'financial',
     icon: '💸',
-    description: '회사 지출 기록',
-    requiredRole: ['executive', 'general_manager', 'director', 'manager'],
+    description: '회사 지출 기록 (최고 보안)',
+    requiredRole: ['executive', 'general_manager'],
     fields: [
       { name: 'date', type: 'date', label: '지출일', required: true },
       { name: 'amount', type: 'currency', label: '금액', required: true },
@@ -74,13 +74,13 @@ const DATA_TEMPLATES: DataTemplate[] = [
     ]
   },
 
-  // 세무 데이터
+  // 세무 데이터 - 🔒 CRITICAL: 총괄/본부장 전용 (법적 책임)
   {
     id: 'tax-report',
     name: '세무 신고',
     category: 'tax',
     icon: '📋',
-    description: '세무 신고 데이터',
+    description: '세무 신고 데이터 (최고 보안)',
     requiredRole: ['executive', 'general_manager'],
     fields: [
       { name: 'quarter', type: 'select', label: '분기', required: true, options: ['1분기', '2분기', '3분기', '4분기'] },
@@ -92,14 +92,14 @@ const DATA_TEMPLATES: DataTemplate[] = [
     ]
   },
 
-  // 인사 데이터
+  // 인사 데이터 - 🔐 HIGH: 임원진 공유 (총괄/본부장/부장/실장)
   {
     id: 'hr-salary',
     name: '급여 정보',
     category: 'hr',
     icon: '💵',
-    description: '직원 급여 데이터',
-    requiredRole: ['executive', 'general_manager'],
+    description: '직원 급여 데이터 (임원진 공유)',
+    requiredRole: ['executive', 'general_manager', 'director', 'manager'],
     fields: [
       { name: 'employeeName', type: 'text', label: '직원명', required: true },
       { name: 'month', type: 'date', label: '급여월', required: true },
@@ -114,8 +114,8 @@ const DATA_TEMPLATES: DataTemplate[] = [
     name: '근태 관리',
     category: 'hr',
     icon: '📅',
-    description: '직원 출퇴근 기록',
-    requiredRole: ['team_leader', 'lead', 'senior'],
+    description: '직원 출퇴근 기록 (임원/팀장급 관리)',
+    requiredRole: ['executive', 'general_manager', 'director', 'manager', 'team_leader'],
     fields: [
       { name: 'employeeName', type: 'text', label: '직원명', required: true },
       { name: 'date', type: 'date', label: '날짜', required: true },
@@ -126,14 +126,14 @@ const DATA_TEMPLATES: DataTemplate[] = [
     ]
   },
 
-  // 프로젝트 데이터
+  // 프로젝트 데이터 - 📊 임원/팀장급 관리
   {
     id: 'project-new',
     name: '신규 프로젝트',
     category: 'project',
     icon: '🚀',
-    description: '새 프로젝트 등록',
-    requiredRole: ['manager', 'team_leader'],
+    description: '새 프로젝트 등록 (임원/팀장급)',
+    requiredRole: ['executive', 'general_manager', 'director', 'manager', 'team_leader'],
     fields: [
       { name: 'projectName', type: 'text', label: '프로젝트명', required: true },
       { name: 'client', type: 'text', label: '클라이언트', required: false },
@@ -149,8 +149,8 @@ const DATA_TEMPLATES: DataTemplate[] = [
     name: '마일스톤',
     category: 'project',
     icon: '🎯',
-    description: '프로젝트 단계 기록',
-    requiredRole: ['team_leader', 'lead'],
+    description: '프로젝트 단계 기록 (팀장/파트장)',
+    requiredRole: ['executive', 'general_manager', 'director', 'manager', 'team_leader', 'lead'],
     fields: [
       { name: 'projectName', type: 'text', label: '프로젝트명', required: true },
       { name: 'milestone', type: 'text', label: '마일스톤', required: true },
@@ -161,14 +161,14 @@ const DATA_TEMPLATES: DataTemplate[] = [
     ]
   },
 
-  // 재고 데이터
+  // 재고 데이터 - 📦 팀장급 이상 관리
   {
     id: 'inventory-stock',
     name: '재고 현황',
     category: 'inventory',
     icon: '📦',
-    description: '제품 재고 관리',
-    requiredRole: ['staff', 'senior'],
+    description: '제품 재고 관리 (팀장급 이상)',
+    requiredRole: ['executive', 'general_manager', 'director', 'manager', 'team_leader', 'lead', 'senior'],
     fields: [
       { name: 'productName', type: 'text', label: '제품명', required: true },
       { name: 'sku', type: 'text', label: 'SKU', required: true },
@@ -179,14 +179,14 @@ const DATA_TEMPLATES: DataTemplate[] = [
     ]
   },
 
-  // 영업 데이터
+  // 영업 데이터 - 💳 모든 직급 입력 가능
   {
     id: 'sales-daily',
     name: '일일 매출',
     category: 'sales',
     icon: '💳',
-    description: '일일 판매 기록',
-    requiredRole: ['staff', 'senior'],
+    description: '일일 판매 기록 (전 직급)',
+    requiredRole: ['executive', 'general_manager', 'director', 'manager', 'team_leader', 'lead', 'senior', 'staff'],
     fields: [
       { name: 'date', type: 'date', label: '날짜', required: true },
       { name: 'channel', type: 'select', label: '판매채널', required: true, options: ['온라인', '오프라인', '도매', 'B2B'] },
@@ -245,14 +245,20 @@ export default function DataManagementPage() {
     
     const userData = JSON.parse(storedUser);
     
-    // ⛔ CRITICAL SECURITY: 접근 권한 설정
-    // localStorage에서 추가 권한 확인 (대표님이 나중에 설정 가능)
-    const allowedRoles = ['executive', 'general_manager'];
+    // 🔒 ENTERPRISE-GRADE ACCESS CONTROL
+    // 기본 접근 권한: 총괄(공경수), 본부장(김본부), 부장(박규민), 실장(박해운)
+    const executiveRoles = ['executive', 'general_manager', 'director', 'manager'];
+    
+    // localStorage에서 추가 권한 확인 (필요 시 팀장급 이하도 추가 가능)
     const additionalAccess = localStorage.getItem('fieldnine-data-management-access');
+    let allowedRoles = [...executiveRoles];
+    
     if (additionalAccess) {
       try {
         const extraRoles = JSON.parse(additionalAccess);
         allowedRoles.push(...extraRoles);
+        // 중복 제거
+        allowedRoles = Array.from(new Set(allowedRoles));
       } catch (e) {
         console.error('Invalid access configuration');
       }
@@ -260,7 +266,7 @@ export default function DataManagementPage() {
     
     // 권한 체크
     if (!allowedRoles.includes(userData.role)) {
-      alert('🔒 접근 거부\n\n이 페이지는 최고 관리자 전용입니다.\n(총괄, 본부장만 접근 가능)\n\n추가 권한이 필요하면 총괄에게 문의하세요.');
+      alert('🔒 접근 거부\n\n이 페이지는 임원급 이상 전용입니다.\n(총괄, 본부장, 부장, 실장만 접근 가능)\n\n추가 권한이 필요하면 총괄에게 문의하세요.');
       router.push('/workspace');
       return;
     }
