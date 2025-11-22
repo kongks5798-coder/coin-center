@@ -121,7 +121,7 @@ export default function Home() {
               </div>
               <div>
                 <h2 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                  KAUS Coin
+                  KAUS
                 </h2>
                 <p className="text-[10px] text-slate-500 uppercase tracking-wider">Control Center</p>
               </div>
@@ -475,7 +475,7 @@ export default function Home() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-cyan-500">
                   <span className="text-sm font-bold text-white">KC</span>
                 </div>
-                <span className="text-lg font-bold text-slate-100">KAUS Coin</span>
+                <span className="text-lg font-bold text-slate-100">KAUS</span>
               </div>
               <p className="text-sm text-slate-400 leading-relaxed">
                 완전한 투명성과 탈중앙화를 추구하는 차세대 DeFi 플랫폼
