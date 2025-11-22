@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -245,8 +245,21 @@ export default function LoginPage() {
     password: ''
   });
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectedDept, setSelectedDept] = useState<string>('all');
+
+  // 회원가입 성공 메시지 표시
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('signup') === 'success') {
+        setSuccessMessage('회원가입이 완료되었습니다! 로그인해주세요.');
+        // 3초 후 메시지 제거
+        setTimeout(() => setSuccessMessage(''), 5000);
+      }
+    }
+  }, []);
 
   const departments = ['all', 'Management', 'FILLUMINATE', 'MARD MARD', 'DATABASE GUARD', 'Infrastructure'];
   
@@ -261,9 +274,45 @@ export default function LoginPage() {
 
     // 간단한 인증 로직 (실제로는 백엔드 API 호출)
     setTimeout(() => {
-      const user = DEMO_USERS.find(
+      // 1. 데모 계정 확인
+      let user = DEMO_USERS.find(
         u => u.email === credentials.email && u.password === credentials.password
       );
+
+      // 2. 회원가입한 계정 확인
+      if (!user) {
+        try {
+          const registeredUsers = JSON.parse(localStorage.getItem('fieldnine-users') || '[]');
+          const registeredUser = registeredUsers.find((u: any) => {
+            const decodedPassword = atob(u.password || '');
+            return u.email === credentials.email && decodedPassword === credentials.password;
+          });
+
+          if (registeredUser) {
+            // 회원가입한 유저를 데모 유저 형식으로 변환
+            user = {
+              email: registeredUser.email,
+              password: credentials.password,
+              name: registeredUser.name,
+              role: registeredUser.position,
+              department: registeredUser.team === 'design' ? '디자인팀' :
+                         registeredUser.team === 'mardmard' ? 'MARD MARD' :
+                         registeredUser.team === 'production' ? '생산팀' :
+                         registeredUser.team === 'online' ? '온라인팀' :
+                         registeredUser.team === 'offline' ? '오프라인팀' :
+                         registeredUser.team === 'operations' ? '운영지원팀' : 'Unknown',
+              avatar: registeredUser.team === 'design' ? '🎨' :
+                     registeredUser.team === 'mardmard' ? '🎬' :
+                     registeredUser.team === 'production' ? '🏭' :
+                     registeredUser.team === 'online' ? '💻' :
+                     registeredUser.team === 'offline' ? '🏪' :
+                     registeredUser.team === 'operations' ? '⚙️' : '👤'
+            };
+          }
+        } catch (error) {
+          console.error('Failed to check registered users:', error);
+        }
+      }
 
       if (user) {
         // 로컬 스토리지에 사용자 정보 저장
@@ -358,9 +407,15 @@ export default function LoginPage() {
               />
             </div>
 
+            {successMessage && (
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-sm text-green-300 animate-fade-in">
+                ✓ {successMessage}
+              </div>
+            )}
+
             {error && (
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm text-red-300">
-                {error}
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm text-red-300 animate-fade-in">
+                ✗ {error}
               </div>
             )}
 
