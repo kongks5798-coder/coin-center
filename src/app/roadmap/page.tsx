@@ -31,11 +31,11 @@ export default function RoadmapPage() {
       quarter: "Q2 2026",
       status: "in-progress",
       items: [
-        { title: "Polygon 네트워크 확장", done: true },
-        { title: "렌딩 프로토콜 통합", done: true },
-        { title: "모바일 앱 베타 출시", done: false },
-        { title: "파트너십 발표 (5개 프로젝트)", done: false },
-        { title: "NFT 마켓플레이스 연동", done: false },
+        { title: "QR/NFC 정품인증 시스템 개발", done: true },
+        { title: "공급망 추적 스마트 컨트랙트", done: true },
+        { title: "모바일 앱 베타 출시 (상품 스캔)", done: false },
+        { title: "패션 브랜드 파트너십 (5개)", done: false },
+        { title: "AI 위조품 탐지 엔진 통합", done: false },
       ]
     },
     {
@@ -43,10 +43,10 @@ export default function RoadmapPage() {
       quarter: "Q3-Q4 2026",
       status: "upcoming",
       items: [
+        { title: "식품 안전 추적 시스템 (IoT 센서)", done: false },
+        { title: "전자제품 정품인증 확대", done: false },
         { title: "크로스체인 브릿지 출시", done: false },
-        { title: "AI 기반 트레이딩 봇 통합", done: false },
-        { title: "Layer 2 솔루션 도입 (Arbitrum)", done: false },
-        { title: "DAO Treasury 다각화", done: false },
+        { title: "NFT 한정판 상품 발행", done: false },
         { title: "글로벌 거래소 상장 (3개)", done: false },
       ]
     },
@@ -55,11 +55,11 @@ export default function RoadmapPage() {
       quarter: "2027",
       status: "upcoming",
       items: [
-        { title: "자체 블록체인 개발 시작", done: false },
-        { title: "기업 파트너십 확대", done: false },
-        { title: "DeFi 2.0 혁신 기능 도입", done: false },
-        { title: "글로벌 규제 준수 (MiCA, SEC)", done: false },
-        { title: "1백만 활성 사용자 달성", done: false },
+        { title: "의약품 유통 추적 시스템", done: false },
+        { title: "100개 브랜드 파트너십", done: false },
+        { title: "글로벌 물류업체 통합 (DHL, FedEx)", done: false },
+        { title: "글로벌 규제 준수 (FDA, EU)", done: false },
+        { title: "10억 개 상품 추적 달성", done: false },
       ]
     }
   ];

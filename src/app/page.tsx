@@ -131,6 +131,9 @@ export default function Home() {
               <Link href="/market" className="text-sm text-slate-400 hover:text-purple-400 transition">
                 Market
               </Link>
+              <Link href="/about" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                About
+              </Link>
               <Link href="/wallets" className="text-sm text-slate-400 hover:text-purple-400 transition">
                 Wallets
               </Link>
@@ -189,6 +192,132 @@ export default function Home() {
                 <span aria-hidden className="text-sm">
                   ▶
                 </span>
+              </Link>
+            </div>
+          </section>
+
+          {/* VISION SECTION - 공급망 추적 & 정품인증 */}
+          <section className="mb-16 rounded-3xl border border-indigo-500/50 bg-gradient-to-br from-slate-950 via-indigo-950/20 to-slate-950 p-8 lg:p-12">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 rounded-full bg-indigo-500/20 border border-indigo-500/40 px-4 py-2 text-xs font-semibold text-indigo-200 mb-4">
+                <span>🌐</span>
+                <span>KAUS Coin의 핵심 비전</span>
+              </div>
+              <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-4">
+                글로벌 상품 추적 & 정품인증 플랫폼
+              </h2>
+              <p className="text-lg text-slate-300 max-w-3xl mx-auto">
+                블록체인 기술로 전 세계 모든 상품의 유통 과정을 투명하게 추적하고, 정품을 보증합니다.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="rounded-2xl border border-indigo-500/30 bg-slate-950/70 p-6">
+                <div className="text-4xl mb-4">👗</div>
+                <h3 className="text-lg font-semibold text-slate-100 mb-2">패션 & 럭셔리</h3>
+                <p className="text-sm text-slate-400 leading-relaxed mb-3">
+                  의류, 화장품, 악세사리, 명품 가방까지 모든 패션 아이템의 정품을 보증합니다.
+                </p>
+                <ul className="text-xs text-slate-500 space-y-1">
+                  <li>• NFC 태그 내장 정품 인증</li>
+                  <li>• 원산지부터 소비자까지 추적</li>
+                  <li>• 위조품 실시간 차단</li>
+                </ul>
+              </div>
+
+              <div className="rounded-2xl border border-purple-500/30 bg-slate-950/70 p-6">
+                <div className="text-4xl mb-4">🍎</div>
+                <h3 className="text-lg font-semibold text-slate-100 mb-2">식품 안전</h3>
+                <p className="text-sm text-slate-400 leading-relaxed mb-3">
+                  농산물, 가공식품, 건강기능식품의 생산부터 유통까지 완벽하게 기록합니다.
+                </p>
+                <ul className="text-xs text-slate-500 space-y-1">
+                  <li>• 온도/습도 센서 연동</li>
+                  <li>• 유기농 인증 검증</li>
+                  <li>• 유통기한 자동 알림</li>
+                </ul>
+              </div>
+
+              <div className="rounded-2xl border border-cyan-500/30 bg-slate-950/70 p-6">
+                <div className="text-4xl mb-4">📦</div>
+                <h3 className="text-lg font-semibold text-slate-100 mb-2">글로벌 유통</h3>
+                <p className="text-sm text-slate-400 leading-relaxed mb-3">
+                  전자제품, 의약품, 모든 상품의 국제 물류를 실시간으로 추적합니다.
+                </p>
+                <ul className="text-xs text-slate-500 space-y-1">
+                  <li>• 관세 자동 처리</li>
+                  <li>• 운송 경로 실시간 확인</li>
+                  <li>• 스마트 계약 자동 실행</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="rounded-2xl border border-slate-800/60 bg-slate-900/50 p-6">
+                <h3 className="text-lg font-semibold text-indigo-400 mb-4 flex items-center gap-2">
+                  <span>✨</span>
+                  <span>핵심 기술</span>
+                </h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-3">
+                    <span className="text-cyan-400 font-mono">01</span>
+                    <div>
+                      <p className="text-slate-200 font-medium">QR/NFC 통합 인증</p>
+                      <p className="text-slate-500 text-xs">각 상품마다 고유한 블록체인 ID 부여</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-cyan-400 font-mono">02</span>
+                    <div>
+                      <p className="text-slate-200 font-medium">AI 위조품 탐지</p>
+                      <p className="text-slate-500 text-xs">이미지 분석으로 가짜 상품 자동 차단</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-cyan-400 font-mono">03</span>
+                    <div>
+                      <p className="text-slate-200 font-medium">크로스체인 지원</p>
+                      <p className="text-slate-500 text-xs">Ethereum, Polygon, BSC 모두 호환</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800/60 bg-slate-900/50 p-6">
+                <h3 className="text-lg font-semibold text-purple-400 mb-4 flex items-center gap-2">
+                  <span>🎁</span>
+                  <span>소비자 혜택</span>
+                </h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-3">
+                    <span className="text-fuchsia-400 font-mono">01</span>
+                    <div>
+                      <p className="text-slate-200 font-medium">QR 스캔 리워드</p>
+                      <p className="text-slate-500 text-xs">정품 확인 시 KAUS 토큰 적립</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-fuchsia-400 font-mono">02</span>
+                    <div>
+                      <p className="text-slate-200 font-medium">리뷰 작성 보상</p>
+                      <p className="text-slate-500 text-xs">검증된 구매자 리뷰에 추가 보상</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="text-fuchsia-400 font-mono">03</span>
+                    <div>
+                      <p className="text-slate-200 font-medium">NFT 한정판</p>
+                      <p className="text-slate-500 text-xs">희귀 상품은 NFT로 소유권 증명</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link href="/about" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(99,102,241,0.6)] transition hover:shadow-[0_0_50px_rgba(99,102,241,0.8)]">
+                <span>자세히 알아보기</span>
+                <span>→</span>
               </Link>
             </div>
           </section>
@@ -367,6 +496,7 @@ export default function Home() {
             <div>
               <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider mb-4">Resources</h3>
               <ul className="space-y-2 text-sm">
+                <li><Link href="/about" className="text-slate-400 hover:text-purple-400 transition">About</Link></li>
                 <li><Link href="/roadmap" className="text-slate-400 hover:text-purple-400 transition">Roadmap</Link></li>
                 <li><Link href="/faq" className="text-slate-400 hover:text-purple-400 transition">FAQ</Link></li>
                 <li><Link href="#" className="text-slate-400 hover:text-purple-400 transition">Whitepaper</Link></li>
