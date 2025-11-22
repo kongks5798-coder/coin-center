@@ -34,12 +34,21 @@ export default function Home() {
 
   const quickLinks = [
     {
-      title: "🎮 메타버스",
+      title: "🎮 3D 메타버스",
       icon: "🌐",
       description: "Ready Player Me 가상세계",
       href: isLoggedIn ? "/metaverse" : "/login",
       gradient: "from-cyan-500 via-blue-500 to-purple-500",
-      badge: "HOT",
+      badge: "3D",
+      featured: true
+    },
+    {
+      title: "🏰 조조전 메타버스",
+      icon: "⚔️",
+      description: "삼국지 턴제 전략 게임",
+      href: isLoggedIn ? "/metaverse-classic" : "/login",
+      gradient: "from-amber-600 via-orange-600 to-red-600",
+      badge: "RETRO",
       featured: true
     },
     {
@@ -220,42 +229,62 @@ export default function Home() {
                 <span className="px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full text-sm font-black animate-pulse">
                   🔥 NEW!
                 </span>
-                <span className="text-sm text-cyan-400 font-bold">Ready Player Me 통합</span>
+                <span className="text-sm text-cyan-400 font-bold">2가지 메타버스 선택!</span>
               </div>
               <h2 className="text-5xl font-black mb-4 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
                 🎮 메타버스 입장
               </h2>
               <p className="text-xl text-white/80 mb-6 max-w-2xl">
-                <span className="font-bold text-cyan-400">본인 얼굴</span>로 AI 아바타를 만들고,
-                <span className="font-bold text-blue-400"> 사이버 세계</span>에서 동료들과 만나보세요!
+                <span className="font-bold text-cyan-400">3D 사이버 월드</span> 또는
+                <span className="font-bold text-amber-400"> 삼국지 조조전</span> 중 선택하세요!
               </p>
-              <div className="flex flex-wrap gap-4 mb-6">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
-                  <span className="text-2xl">✨</span>
-                  <span className="text-sm">실사 아바타 생성</span>
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                {/* 3D 메타버스 */}
+                <div className="bg-gradient-to-br from-cyan-600/20 to-blue-600/20 border-2 border-cyan-500/50 rounded-2xl p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-4xl">🌐</span>
+                    <div>
+                      <div className="text-xl font-bold text-white">3D 메타버스</div>
+                      <div className="text-sm text-cyan-300">AAA 게임급 그래픽</div>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="text-xs px-2 py-1 bg-white/10 rounded">✨ 실사 아바타</span>
+                    <span className="text-xs px-2 py-1 bg-white/10 rounded">⚡ AAA 그래픽</span>
+                    <span className="text-xs px-2 py-1 bg-white/10 rounded">🌐 사이버 월드</span>
+                  </div>
+                  <Link
+                    href={isLoggedIn ? "/metaverse" : "/login"}
+                    className="block w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl font-bold text-center hover:shadow-lg hover:shadow-cyan-500/50 hover:scale-105 transition-all"
+                  >
+                    🚀 3D 입장하기
+                  </Link>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
-                  <span className="text-2xl">🌐</span>
-                  <span className="text-sm">3D 사이버 월드</span>
-                </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
-                  <span className="text-2xl">⚡</span>
-                  <span className="text-sm">AAA 게임급 그래픽</span>
-                </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
-                  <span className="text-2xl">🎯</span>
-                  <span className="text-sm">5분 만에 시작</span>
+
+                {/* 조조전 메타버스 */}
+                <div className="bg-gradient-to-br from-amber-600/20 to-orange-600/20 border-2 border-amber-500/50 rounded-2xl p-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-4xl">⚔️</span>
+                    <div>
+                      <div className="text-xl font-bold text-white">조조전 메타버스</div>
+                      <div className="text-sm text-amber-300">삼국지 턴제 전략</div>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="text-xs px-2 py-1 bg-white/10 rounded">🏰 삼국지 배경</span>
+                    <span className="text-xs px-2 py-1 bg-white/10 rounded">🎯 턴제 전투</span>
+                    <span className="text-xs px-2 py-1 bg-white/10 rounded">📊 스탯 시스템</span>
+                  </div>
+                  <Link
+                    href={isLoggedIn ? "/metaverse-classic" : "/login"}
+                    className="block w-full px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl font-bold text-center hover:shadow-lg hover:shadow-amber-500/50 hover:scale-105 transition-all"
+                  >
+                    🏰 조조전 입장하기
+                  </Link>
                 </div>
               </div>
-              <Link
-                href={isLoggedIn ? "/metaverse" : "/login"}
-                className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 rounded-2xl font-black text-xl hover:shadow-2xl hover:shadow-cyan-500/50 hover:scale-105 transition-all animate-pulse"
-              >
-                <span>🚀 메타버스 입장하기</span>
-                <span className="text-2xl">→</span>
-              </Link>
               {!isLoggedIn && (
-                <p className="mt-3 text-sm text-white/40">
+                <p className="mt-3 text-sm text-white/40 text-center">
                   💡 로그인이 필요합니다
                 </p>
               )}
