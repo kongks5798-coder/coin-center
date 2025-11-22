@@ -13,7 +13,6 @@ interface SignupFormData {
   birthDate: string;
   team: string;
   position: string;
-  employeeId: string;
   joinDate: string;
   twoFactorEnabled: boolean;
   emergencyContact: string;
@@ -52,7 +51,6 @@ export default function SignupPage() {
     birthDate: '',
     team: '',
     position: '',
-    employeeId: '',
     joinDate: new Date().toISOString().split('T')[0],
     twoFactorEnabled: true,
     emergencyContact: ''
@@ -89,7 +87,6 @@ export default function SignupPage() {
       if (formData.password !== formData.confirmPassword) {
         newErrors.confirmPassword = '비밀번호가 일치하지 않습니다';
       }
-      if (!formData.employeeId.trim()) newErrors.employeeId = '사번을 입력하세요';
     }
 
     if (step === 2) {
@@ -251,34 +248,18 @@ export default function SignupPage() {
                     <p className="text-white/60 text-sm">로그인에 사용할 계정 정보를 입력하세요</p>
                   </div>
                   
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
-                        이름 <span className="text-red-400">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                        placeholder="홍길동"
-                      />
-                      {errors.name && <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">⚠️ {errors.name}</p>}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-white/80 mb-2">
-                        사번 <span className="text-red-400">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.employeeId}
-                        onChange={(e) => handleInputChange('employeeId', e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all"
-                        placeholder="F9-2025001"
-                      />
-                      {errors.employeeId && <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">⚠️ {errors.employeeId}</p>}
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white/80 mb-2">
+                      이름 <span className="text-red-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                      placeholder="홍길동"
+                    />
+                    {errors.name && <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">⚠️ {errors.name}</p>}
                   </div>
 
                   <div>
@@ -505,10 +486,6 @@ export default function SignupPage() {
                       <div>
                         <div className="text-xs text-white/40 mb-1">이름</div>
                         <div className="font-medium">{formData.name}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-white/40 mb-1">사번</div>
-                        <div className="font-medium">{formData.employeeId}</div>
                       </div>
                       <div>
                         <div className="text-xs text-white/40 mb-1">이메일</div>
