@@ -445,6 +445,7 @@ export default function ReadyPlayerMeMetaverse() {
   const [combo, setCombo] = useState(0);
   const [comboTimer, setComboTimer] = useState<NodeJS.Timeout | null>(null);
   const [showAvatarCreator, setShowAvatarCreator] = useState(false);
+  const [avatarUrlInput, setAvatarUrlInput] = useState('');
 
   const joystickRef = useRef<HTMLDivElement>(null);
 
@@ -727,6 +728,25 @@ export default function ReadyPlayerMeMetaverse() {
     addNotification('💡 완성 후 URL을 복사해서 "아바타 적용" 버튼 클릭');
   };
 
+  const applyAvatar = () => {
+    if (!avatarUrlInput.trim()) {
+      addNotification('❌ 아바타 URL을 입력해주세요');
+      return;
+    }
+
+    if (!avatarUrlInput.includes('readyplayer.me')) {
+      addNotification('❌ Ready Player Me URL이 아닙니다');
+      return;
+    }
+
+    if (myPlayer) {
+      setMyPlayer({ ...myPlayer, avatarUrl: avatarUrlInput });
+      addNotification('✅ 아바타 적용 완료!');
+      setShowAvatarCreator(false);
+      setAvatarUrlInput('');
+    }
+  };
+
   if (!user) return null;
 
   return (
@@ -756,10 +776,13 @@ export default function ReadyPlayerMeMetaverse() {
                 <h3 className="text-2xl font-bold text-white mb-4">🔗 2단계: URL 적용</h3>
                 <input
                   type="text"
+                  value={avatarUrlInput}
+                  onChange={(e) => setAvatarUrlInput(e.target.value)}
                   placeholder="아바타 URL을 붙여넣기 (예: https://models.readyplayer.me/...)"
                   className="w-full px-6 py-4 bg-black/50 border-2 border-cyan-500/50 rounded-xl text-white font-mono text-sm focus:border-cyan-500 focus:outline-none"
                 />
                 <button
+                  onClick={applyAvatar}
                   className="w-full mt-4 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl font-black text-white text-xl hover:scale-105 transition-all shadow-2xl"
                 >
                   ✓ 아바타 적용하기
