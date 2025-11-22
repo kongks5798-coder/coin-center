@@ -245,9 +245,22 @@ export default function DataManagementPage() {
     
     const userData = JSON.parse(storedUser);
     
-    // ⛔ CRITICAL SECURITY: 총괄(executive) 또는 본부장(general_manager)만 접근 가능
-    if (userData.role !== 'executive' && userData.role !== 'general_manager') {
-      alert('🔒 접근 거부\n\n이 페이지는 최고 관리자 전용입니다.\n(총괄, 본부장만 접근 가능)');
+    // ⛔ CRITICAL SECURITY: 접근 권한 설정
+    // localStorage에서 추가 권한 확인 (대표님이 나중에 설정 가능)
+    const allowedRoles = ['executive', 'general_manager'];
+    const additionalAccess = localStorage.getItem('fieldnine-data-management-access');
+    if (additionalAccess) {
+      try {
+        const extraRoles = JSON.parse(additionalAccess);
+        allowedRoles.push(...extraRoles);
+      } catch (e) {
+        console.error('Invalid access configuration');
+      }
+    }
+    
+    // 권한 체크
+    if (!allowedRoles.includes(userData.role)) {
+      alert('🔒 접근 거부\n\n이 페이지는 최고 관리자 전용입니다.\n(총괄, 본부장만 접근 가능)\n\n추가 권한이 필요하면 총괄에게 문의하세요.');
       router.push('/workspace');
       return;
     }
