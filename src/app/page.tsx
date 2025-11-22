@@ -34,6 +34,15 @@ export default function Home() {
 
   const quickLinks = [
     {
+      title: "🎮 메타버스",
+      icon: "🌐",
+      description: "Ready Player Me 가상세계",
+      href: isLoggedIn ? "/metaverse" : "/login",
+      gradient: "from-cyan-500 via-blue-500 to-purple-500",
+      badge: "HOT",
+      featured: true
+    },
+    {
       title: "워크스페이스",
       icon: "👨‍💼",
       description: "업무 관리 및 협업",
@@ -201,11 +210,64 @@ export default function Home() {
           ))}
         </div>
 
+        {/* 메타버스 하이라이트 */}
+        <div className="mb-12 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-purple-500/20 rounded-3xl blur-3xl" />
+          <div className="relative bg-gradient-to-r from-cyan-600/10 via-blue-600/10 to-purple-600/10 border-2 border-cyan-500/50 rounded-3xl p-8 overflow-hidden">
+            <div className="absolute top-0 right-0 text-[200px] opacity-5">🎮</div>
+            <div className="relative">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full text-sm font-black animate-pulse">
+                  🔥 NEW!
+                </span>
+                <span className="text-sm text-cyan-400 font-bold">Ready Player Me 통합</span>
+              </div>
+              <h2 className="text-5xl font-black mb-4 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                🎮 메타버스 입장
+              </h2>
+              <p className="text-xl text-white/80 mb-6 max-w-2xl">
+                <span className="font-bold text-cyan-400">본인 얼굴</span>로 AI 아바타를 만들고,
+                <span className="font-bold text-blue-400"> 사이버 세계</span>에서 동료들과 만나보세요!
+              </p>
+              <div className="flex flex-wrap gap-4 mb-6">
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                  <span className="text-2xl">✨</span>
+                  <span className="text-sm">실사 아바타 생성</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                  <span className="text-2xl">🌐</span>
+                  <span className="text-sm">3D 사이버 월드</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                  <span className="text-2xl">⚡</span>
+                  <span className="text-sm">AAA 게임급 그래픽</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
+                  <span className="text-2xl">🎯</span>
+                  <span className="text-sm">5분 만에 시작</span>
+                </div>
+              </div>
+              <Link
+                href={isLoggedIn ? "/metaverse" : "/login"}
+                className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-600 via-blue-600 to-purple-600 rounded-2xl font-black text-xl hover:shadow-2xl hover:shadow-cyan-500/50 hover:scale-105 transition-all animate-pulse"
+              >
+                <span>🚀 메타버스 입장하기</span>
+                <span className="text-2xl">→</span>
+              </Link>
+              {!isLoggedIn && (
+                <p className="mt-3 text-sm text-white/40">
+                  💡 로그인이 필요합니다
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* 빠른 링크 */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">빠른 실행</h2>
+          <h2 className="text-2xl font-bold mb-6">팀 선택</h2>
           <div className="grid md:grid-cols-4 gap-4">
-            {quickLinks.map((link, idx) => (
+            {quickLinks.filter(link => !link.featured).map((link, idx) => (
               <Link
                 key={idx}
                 href={link.href}
