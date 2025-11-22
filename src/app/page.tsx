@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
-export default function AntiGravityPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function HomePage() {
+  const [scrollY, setScrollY] = useState(0);
+  const [activeFeature, setActiveFeature] = useState(0);
 
   useEffect(() => {
     if (!containerRef.current) return;
