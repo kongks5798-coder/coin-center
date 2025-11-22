@@ -207,7 +207,7 @@ export default function Home() {
               AI 기반 물류 자동화 시스템으로<br />효율성을 극대화하고 비용을 절감하세요
             </p>
             <Link 
-              href={user ? "/components/Nexus" : "/login"}
+              href="/components/Nexus"
               className="inline-block px-10 py-5 bg-neutral-900 text-white font-black text-lg rounded-xl hover:bg-neutral-800 transition-all shadow-2xl hover:shadow-neutral-900/50"
             >
               Learn More →
