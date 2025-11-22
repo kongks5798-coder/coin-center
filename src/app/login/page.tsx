@@ -9,39 +9,216 @@ interface LoginCredentials {
   password: string;
 }
 
-// 데모 사용자 계정
+// FIELD NINE 전체 직원 계정 (25명)
 const DEMO_USERS = [
+  // Management (3명)
   {
     email: 'admin@fieldnine.io',
-    password: 'admin123',
+    password: 'field2025',
     name: '박나인',
     role: 'admin',
     department: 'Management',
     avatar: '👨‍💼'
   },
   {
+    email: 'ceo@fieldnine.io',
+    password: 'field2025',
+    name: '공경수',
+    role: 'admin',
+    department: 'Management',
+    avatar: '👔'
+  },
+  {
+    email: 'coo@fieldnine.io',
+    password: 'field2025',
+    name: '김운영',
+    role: 'manager',
+    department: 'Management',
+    avatar: '📊'
+  },
+
+  // FILLUMINATE (8명)
+  {
     email: 'field@fieldnine.io',
-    password: 'field123',
+    password: 'field2025',
     name: '김필드',
     role: 'manager',
     department: 'FILLUMINATE',
     avatar: '👨‍💼'
   },
   {
-    email: 'creative@fieldnine.io',
-    password: 'creative123',
-    name: '이크리에이티브',
+    email: 'data1@fieldnine.io',
+    password: 'field2025',
+    name: '이데이터',
     role: 'staff',
+    department: 'FILLUMINATE',
+    avatar: '📈'
+  },
+  {
+    email: 'data2@fieldnine.io',
+    password: 'field2025',
+    name: '박분석',
+    role: 'staff',
+    department: 'FILLUMINATE',
+    avatar: '📊'
+  },
+  {
+    email: 'ai1@fieldnine.io',
+    password: 'field2025',
+    name: '최인공',
+    role: 'staff',
+    department: 'FILLUMINATE',
+    avatar: '🤖'
+  },
+  {
+    email: 'ai2@fieldnine.io',
+    password: 'field2025',
+    name: '정머신',
+    role: 'staff',
+    department: 'FILLUMINATE',
+    avatar: '🧠'
+  },
+  {
+    email: 'bi1@fieldnine.io',
+    password: 'field2025',
+    name: '강비아이',
+    role: 'staff',
+    department: 'FILLUMINATE',
+    avatar: '💡'
+  },
+  {
+    email: 'bi2@fieldnine.io',
+    password: 'field2025',
+    name: '윤인사이트',
+    role: 'staff',
+    department: 'FILLUMINATE',
+    avatar: '🔍'
+  },
+  {
+    email: 'analytics@fieldnine.io',
+    password: 'field2025',
+    name: '서애널리틱스',
+    role: 'staff',
+    department: 'FILLUMINATE',
+    avatar: '📉'
+  },
+
+  // MARD MARD (7명)
+  {
+    email: 'creative@fieldnine.io',
+    password: 'field2025',
+    name: '이크리에이티브',
+    role: 'manager',
     department: 'MARD MARD',
     avatar: '👩‍🎨'
   },
   {
+    email: 'design1@fieldnine.io',
+    password: 'field2025',
+    name: '김디자인',
+    role: 'staff',
+    department: 'MARD MARD',
+    avatar: '🎨'
+  },
+  {
+    email: 'design2@fieldnine.io',
+    password: 'field2025',
+    name: '박그래픽',
+    role: 'staff',
+    department: 'MARD MARD',
+    avatar: '✏️'
+  },
+  {
+    email: 'brand@fieldnine.io',
+    password: 'field2025',
+    name: '최브랜드',
+    role: 'staff',
+    department: 'MARD MARD',
+    avatar: '🏷️'
+  },
+  {
+    email: 'content@fieldnine.io',
+    password: 'field2025',
+    name: '정콘텐츠',
+    role: 'staff',
+    department: 'MARD MARD',
+    avatar: '📝'
+  },
+  {
+    email: 'video@fieldnine.io',
+    password: 'field2025',
+    name: '강비디오',
+    role: 'staff',
+    department: 'MARD MARD',
+    avatar: '🎬'
+  },
+  {
+    email: 'marketing@fieldnine.io',
+    password: 'field2025',
+    name: '윤마케팅',
+    role: 'staff',
+    department: 'MARD MARD',
+    avatar: '📢'
+  },
+
+  // DATABASE GUARD CENTER (5명)
+  {
+    email: 'blockchain@fieldnine.io',
+    password: 'field2025',
+    name: '서블록',
+    role: 'manager',
+    department: 'DATABASE GUARD',
+    avatar: '🔗'
+  },
+  {
+    email: 'security@fieldnine.io',
+    password: 'field2025',
+    name: '한보안',
+    role: 'staff',
+    department: 'DATABASE GUARD',
+    avatar: '🛡️'
+  },
+  {
+    email: 'nexus@fieldnine.io',
+    password: 'field2025',
+    name: '조넥서스',
+    role: 'staff',
+    department: 'DATABASE GUARD',
+    avatar: '⚡'
+  },
+  {
+    email: 'rfid@fieldnine.io',
+    password: 'field2025',
+    name: '배알에프',
+    role: 'staff',
+    department: 'DATABASE GUARD',
+    avatar: '📡'
+  },
+  {
+    email: 'iot@fieldnine.io',
+    password: 'field2025',
+    name: '신아이오티',
+    role: 'staff',
+    department: 'DATABASE GUARD',
+    avatar: '📱'
+  },
+
+  // Infrastructure (2명)
+  {
     email: 'devops@fieldnine.io',
-    password: 'devops123',
+    password: 'field2025',
     name: '최데브옵스',
     role: 'staff',
     department: 'Infrastructure',
     avatar: '👨‍💻'
+  },
+  {
+    email: 'cloud@fieldnine.io',
+    password: 'field2025',
+    name: '황클라우드',
+    role: 'staff',
+    department: 'Infrastructure',
+    avatar: '☁️'
   }
 ];
 
@@ -53,6 +230,13 @@ export default function LoginPage() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [selectedDept, setSelectedDept] = useState<string>('all');
+
+  const departments = ['all', 'Management', 'FILLUMINATE', 'MARD MARD', 'DATABASE GUARD', 'Infrastructure'];
+  
+  const filteredUsers = selectedDept === 'all' 
+    ? DEMO_USERS.slice(0, 8) // 처음 8명만 표시
+    : DEMO_USERS.filter(u => u.department === selectedDept);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -174,9 +358,31 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-8 pt-6 border-t border-white/10">
-            <div className="text-sm text-white/40 mb-4">데모 계정으로 빠른 로그인:</div>
-            <div className="grid grid-cols-2 gap-3">
-              {DEMO_USERS.map(user => (
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-sm text-white/40">빠른 로그인 (25명 전체):</div>
+              <div className="text-xs text-white/30">비밀번호: field2025</div>
+            </div>
+            
+            {/* 부서 탭 */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {departments.map(dept => (
+                <button
+                  key={dept}
+                  onClick={() => setSelectedDept(dept)}
+                  className={`px-3 py-1 text-xs rounded-full transition-all ${
+                    selectedDept === dept
+                      ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50'
+                      : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10'
+                  }`}
+                >
+                  {dept === 'all' ? '전체' : dept}
+                </button>
+              ))}
+            </div>
+
+            {/* 계정 그리드 */}
+            <div className="grid grid-cols-2 gap-3 max-h-96 overflow-y-auto pr-2">
+              {filteredUsers.map(user => (
                 <button
                   key={user.email}
                   onClick={() => handleDemoLogin(user.email, user.password)}
@@ -190,10 +396,22 @@ export default function LoginPage() {
                 </button>
               ))}
             </div>
+            
+            {selectedDept === 'all' && (
+              <div className="mt-3 text-center text-xs text-white/30">
+                부서를 선택하면 해당 부서 직원 전체를 볼 수 있습니다
+              </div>
+            )}
           </div>
 
-          <div className="mt-6 text-center">
-            <Link href="/" className="text-sm text-white/40 hover:text-white transition-all">
+          <div className="mt-6 text-center space-y-2">
+            <div className="text-sm text-white/40">
+              계정이 없으신가요?{' '}
+              <Link href="/signup" className="text-purple-400 hover:text-purple-300 transition-all">
+                회원가입하기
+              </Link>
+            </div>
+            <Link href="/" className="block text-sm text-white/40 hover:text-white transition-all">
               ← 메인 페이지로 돌아가기
             </Link>
           </div>
