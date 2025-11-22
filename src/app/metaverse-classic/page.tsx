@@ -91,18 +91,18 @@ export default function ClassicMetaverse() {
     const newCharacters: Character[] = [
       {
         id: '1',
-        name: '공경수', // 조조
+        name: '공경수', // 유비 - 최강 캐릭터!
         position: { x: 7, y: 10 },
         faction: 'wei',
-        stats: { power: 75, intelligence: 95, politics: 98, leadership: 92 },
-        level: 50,
-        hp: 850,
-        maxHp: 850,
-        mp: 450,
-        maxMp: 450,
-        exp: 8500,
-        sprite: '👑',
-        color: '#4169E1'
+        stats: { power: 100, intelligence: 100, politics: 100, leadership: 100 },
+        level: 99,
+        hp: 9999,
+        maxHp: 9999,
+        mp: 9999,
+        maxMp: 9999,
+        exp: 99999,
+        sprite: '⚔️',
+        color: '#FFD700'
       },
       {
         id: '2',
