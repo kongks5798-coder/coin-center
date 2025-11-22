@@ -13,22 +13,19 @@ import {
   Sparkles,
   Float,
   MeshDistortMaterial,
-  Trail,
-  Billboard,
-  Html
+  Html,
+  useGLTF
 } from '@react-three/drei';
 import { EffectComposer, Bloom, ChromaticAberration, Vignette, DepthOfField } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { BlendFunction } from 'postprocessing';
 
-// 🎮 삼국지 유비 캐릭터 - 리니지M 모바일 게임 퀄리티
+// 🎮 Ready Player Me 메타버스
+// 실제 얼굴로 아바타 생성 가능!
 
 interface Player {
   id: string;
   name: string;
-  character: string;
-  class: string;
-  avatar: string;
   position: [number, number, number];
   rotation: number;
   level: number;
@@ -42,7 +39,7 @@ interface Player {
   role: string;
   isMoving: boolean;
   isAttacking: boolean;
-  weapon: string;
+  avatarUrl: string;
   color: string;
 }
 
@@ -78,53 +75,33 @@ interface Particle {
   size: number;
 }
 
-// 삼국지 유비 캐릭터 (코드로 생성)
-function LiuBeiCharacter({ player, isMe }: { player: Player; isMe: boolean }) {
+// Ready Player Me 아바타 컴포넌트
+function RPMAvatar({ player, isMe }: { player: Player; isMe: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
-  const bodyRef = useRef<THREE.Group>(null);
-  const swordLeftRef = useRef<THREE.Mesh>(null);
-  const swordRightRef = useRef<THREE.Mesh>(null);
-  const capeRef = useRef<THREE.Mesh>(null);
+  const modelRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
-    if (!groupRef.current || !bodyRef.current) return;
+    if (!groupRef.current) return;
     
     const time = state.clock.elapsedTime;
     
     // 걷기 애니메이션
-    if (player.isMoving) {
-      bodyRef.current.position.y = Math.sin(time * 8) * 0.1;
-      bodyRef.current.rotation.z = Math.sin(time * 6) * 0.03;
-      
-      // 망토 흔들림
-      if (capeRef.current) {
-        capeRef.current.rotation.x = Math.sin(time * 4) * 0.2 - 0.3;
-      }
-    } else {
-      bodyRef.current.position.y = THREE.MathUtils.lerp(bodyRef.current.position.y, 0, 0.1);
-      bodyRef.current.rotation.z = THREE.MathUtils.lerp(bodyRef.current.rotation.z, 0, 0.1);
-      
-      if (capeRef.current) {
-        capeRef.current.rotation.x = THREE.MathUtils.lerp(capeRef.current.rotation.x, -0.1, 0.05);
-      }
+    if (player.isMoving && modelRef.current) {
+      modelRef.current.position.y = Math.sin(time * 8) * 0.05;
+      modelRef.current.rotation.z = Math.sin(time * 6) * 0.02;
+    } else if (modelRef.current) {
+      modelRef.current.position.y = THREE.MathUtils.lerp(modelRef.current.position.y, 0, 0.1);
+      modelRef.current.rotation.z = THREE.MathUtils.lerp(modelRef.current.rotation.z, 0, 0.1);
     }
 
-    // 공격 애니메이션 (쌍검 휘두르기)
-    if (player.isAttacking) {
+    // 공격 애니메이션
+    if (player.isAttacking && modelRef.current) {
       const attackPhase = Math.sin(time * 25);
-      if (swordLeftRef.current) {
-        swordLeftRef.current.rotation.z = attackPhase * 1.5;
-      }
-      if (swordRightRef.current) {
-        swordRightRef.current.rotation.z = -attackPhase * 1.5;
-      }
-    } else {
-      if (swordLeftRef.current) {
-        swordLeftRef.current.rotation.z = THREE.MathUtils.lerp(swordLeftRef.current.rotation.z, 0.5, 0.2);
-      }
-      if (swordRightRef.current) {
-        swordRightRef.current.rotation.z = THREE.MathUtils.lerp(swordRightRef.current.rotation.z, -0.5, 0.2);
-      }
+      modelRef.current.scale.x = 1 + attackPhase * 0.1;
+      modelRef.current.rotation.x = attackPhase * 0.2;
+    } else if (modelRef.current) {
+      modelRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.2);
+      modelRef.current.rotation.x = THREE.MathUtils.lerp(modelRef.current.rotation.x, 0, 0.2);
     }
 
     // 회전
@@ -139,7 +116,7 @@ function LiuBeiCharacter({ player, isMe }: { player: Player; isMe: boolean }) {
     <group ref={groupRef} position={player.position}>
       {/* 그림자 */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
-        <circleGeometry args={[0.8, 32]} />
+        <circleGeometry args={[0.6, 32]} />
         <meshStandardMaterial
           color="#000000"
           transparent
@@ -148,266 +125,86 @@ function LiuBeiCharacter({ player, isMe }: { player: Player; isMe: boolean }) {
         />
       </mesh>
 
-      <group ref={bodyRef}>
-        {/* 망토 (비단 - 붉은색) */}
-        <mesh ref={capeRef} position={[0, 2, -0.3]} rotation={[-0.1, 0, 0]} castShadow>
-          <boxGeometry args={[1.2, 2, 0.05]} />
+      <group ref={modelRef}>
+        {/* 임시 캐릭터 (Ready Player Me 아바타 로드 전) */}
+        <mesh position={[0, 1, 0]} castShadow>
+          <capsuleGeometry args={[0.3, 1.2, 16, 32]} />
           <MeshDistortMaterial
-            color="#DC143C"
-            emissive="#8B0000"
+            color={player.color}
+            emissive={player.color}
             emissiveIntensity={0.3}
-            metalness={0.7}
-            roughness={0.3}
-            distort={0.2}
+            metalness={0.8}
+            roughness={0.2}
+            distort={0.1}
             speed={2}
           />
         </mesh>
 
-        {/* 몸통 (황금 갑옷) */}
-        <mesh position={[0, 1.5, 0]} castShadow>
-          <cylinderGeometry args={[0.5, 0.55, 1.8, 8]} />
-          <MeshDistortMaterial
-            color="#FFD700"
-            emissive="#DAA520"
-            emissiveIntensity={0.4}
-            metalness={0.9}
-            roughness={0.1}
-            distort={0.05}
-            speed={1}
+        {/* 머리 */}
+        <mesh position={[0, 2, 0]} castShadow>
+          <sphereGeometry args={[0.35, 32, 32]} />
+          <meshStandardMaterial
+            color={player.color}
+            metalness={0.6}
+            roughness={0.3}
           />
         </mesh>
 
-        {/* 어깨 갑옷 (좌) */}
-        <mesh position={[-0.6, 2.2, 0]} castShadow>
-          <sphereGeometry args={[0.3, 16, 16]} />
-          <meshStandardMaterial
-            color="#B8860B"
-            metalness={0.9}
-            roughness={0.2}
-            emissive="#DAA520"
-            emissiveIntensity={0.2}
-          />
-        </mesh>
-
-        {/* 어깨 갑옷 (우) */}
-        <mesh position={[0.6, 2.2, 0]} castShadow>
-          <sphereGeometry args={[0.3, 16, 16]} />
-          <meshStandardMaterial
-            color="#B8860B"
-            metalness={0.9}
-            roughness={0.2}
-            emissive="#DAA520"
-            emissiveIntensity={0.2}
-          />
-        </mesh>
-
-        {/* 머리 (유비) */}
-        <mesh position={[0, 2.8, 0]} castShadow>
-          <sphereGeometry args={[0.4, 32, 32]} />
-          <meshStandardMaterial
-            color="#FFE4C4"
-            metalness={0.2}
-            roughness={0.8}
-          />
-        </mesh>
-
-        {/* 왕관 (금관) */}
-        <mesh position={[0, 3.3, 0]} castShadow>
-          <cylinderGeometry args={[0.45, 0.4, 0.3, 8]} />
-          <meshStandardMaterial
-            color="#FFD700"
-            metalness={1}
-            roughness={0}
-            emissive="#FFD700"
-            emissiveIntensity={0.6}
-          />
-        </mesh>
-
-        {/* 왕관 장식 */}
-        <mesh position={[0, 3.5, 0]} castShadow>
-          <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial
-            color="#FF0000"
-            metalness={0.8}
-            roughness={0.2}
-            emissive="#FF0000"
-            emissiveIntensity={0.8}
-          />
-        </mesh>
-
-        {/* 왼팔 */}
-        <mesh position={[-0.65, 1.5, 0]} rotation={[0, 0, -0.3]} castShadow>
-          <cylinderGeometry args={[0.15, 0.13, 1.3, 16]} />
-          <meshStandardMaterial
-            color="#8B4513"
-            metalness={0.3}
-            roughness={0.7}
-          />
-        </mesh>
-
-        {/* 오른팔 */}
-        <mesh position={[0.65, 1.5, 0]} rotation={[0, 0, 0.3]} castShadow>
-          <cylinderGeometry args={[0.15, 0.13, 1.3, 16]} />
-          <meshStandardMaterial
-            color="#8B4513"
-            metalness={0.3}
-            roughness={0.7}
-          />
-        </mesh>
-
-        {/* 쌍검 (좌) - 유비의 상징 */}
-        <group ref={swordLeftRef} position={[-0.9, 1.5, 0]} rotation={[0, 0, 0.5]}>
-          <mesh castShadow>
-            <cylinderGeometry args={[0.04, 0.04, 1.8, 8]} />
-            <meshStandardMaterial
-              color="#C0C0C0"
-              metalness={1}
-              roughness={0.1}
-              emissive="#FFFFFF"
-              emissiveIntensity={0.3}
-            />
-          </mesh>
-          <mesh position={[0, 1, 0]} castShadow>
-            <coneGeometry args={[0.12, 0.4, 8]} />
-            <meshStandardMaterial
-              color="#FFD700"
-              metalness={1}
-              roughness={0}
-              emissive="#FFD700"
-              emissiveIntensity={0.7}
-            />
-          </mesh>
-          {/* 검 손잡이 */}
-          <mesh position={[0, -0.95, 0]} castShadow>
-            <cylinderGeometry args={[0.08, 0.08, 0.3, 8]} />
-            <meshStandardMaterial
-              color="#8B4513"
-              metalness={0.4}
-              roughness={0.6}
-            />
-          </mesh>
-        </group>
-
-        {/* 쌍검 (우) */}
-        <group ref={swordRightRef} position={[0.9, 1.5, 0]} rotation={[0, 0, -0.5]}>
-          <mesh castShadow>
-            <cylinderGeometry args={[0.04, 0.04, 1.8, 8]} />
-            <meshStandardMaterial
-              color="#C0C0C0"
-              metalness={1}
-              roughness={0.1}
-              emissive="#FFFFFF"
-              emissiveIntensity={0.3}
-            />
-          </mesh>
-          <mesh position={[0, 1, 0]} castShadow>
-            <coneGeometry args={[0.12, 0.4, 8]} />
-            <meshStandardMaterial
-              color="#FFD700"
-              metalness={1}
-              roughness={0}
-              emissive="#FFD700"
-              emissiveIntensity={0.7}
-            />
-          </mesh>
-          <mesh position={[0, -0.95, 0]} castShadow>
-            <cylinderGeometry args={[0.08, 0.08, 0.3, 8]} />
-            <meshStandardMaterial
-              color="#8B4513"
-              metalness={0.4}
-              roughness={0.6}
-            />
-          </mesh>
-        </group>
-
-        {/* 다리 (좌) */}
-        <mesh position={[-0.25, 0.5, 0]} castShadow>
-          <cylinderGeometry args={[0.15, 0.13, 1, 16]} />
-          <meshStandardMaterial
-            color="#8B4513"
-            metalness={0.2}
-            roughness={0.8}
-          />
-        </mesh>
-
-        {/* 다리 (우) */}
-        <mesh position={[0.25, 0.5, 0]} castShadow>
-          <cylinderGeometry args={[0.15, 0.13, 1, 16]} />
-          <meshStandardMaterial
-            color="#8B4513"
-            metalness={0.2}
-            roughness={0.8}
-          />
-        </mesh>
-
-        {/* 신발 (좌) */}
-        <mesh position={[-0.25, 0.05, 0.1]} castShadow>
-          <boxGeometry args={[0.2, 0.1, 0.3]} />
-          <meshStandardMaterial
-            color="#000000"
-            metalness={0.3}
-            roughness={0.7}
-          />
-        </mesh>
-
-        {/* 신발 (우) */}
-        <mesh position={[0.25, 0.05, 0.1]} castShadow>
-          <boxGeometry args={[0.2, 0.1, 0.3]} />
-          <meshStandardMaterial
-            color="#000000"
-            metalness={0.3}
-            roughness={0.7}
+        {/* Ready Player Me 로고 */}
+        <mesh position={[0, 2.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[0.35, 0.4, 32]} />
+          <meshBasicMaterial
+            color="#00D4FF"
+            transparent
+            opacity={0.8}
+            side={THREE.DoubleSide}
           />
         </mesh>
       </group>
 
-      {/* 본인 강조 (황금 링) */}
+      {/* 본인 강조 */}
       {isMe && (
         <>
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-            <ringGeometry args={[0.9, 1.1, 64]} />
+            <ringGeometry args={[0.7, 0.9, 64]} />
             <meshBasicMaterial
-              color="#FFD700"
+              color="#00D4FF"
               transparent
               opacity={0.8}
               side={THREE.DoubleSide}
             />
           </mesh>
           <Sparkles
-            count={80}
-            scale={[2.5, 4, 2.5]}
-            size={3}
+            count={60}
+            scale={[2, 3, 2]}
+            size={2.5}
             speed={0.4}
-            color="#FFD700"
+            color="#00D4FF"
           />
         </>
       )}
 
       {/* HP 바 */}
-      <Billboard position={[0, 4, 0]}>
-        <mesh>
-          <planeGeometry args={[2.2, 0.35]} />
-          <meshBasicMaterial color="#000000" transparent opacity={0.8} />
-        </mesh>
-        <mesh position={[-(1.1 - (player.hp / player.maxHp) * 1.1), 0, 0.01]}>
-          <planeGeometry args={[(player.hp / player.maxHp) * 2.2, 0.25]} />
-          <meshBasicMaterial color="#DC143C" />
-        </mesh>
-      </Billboard>
+      <Html position={[0, 3, 0]} center>
+        <div className="w-48 bg-black/80 rounded-full p-1 border-2 border-cyan-500/60">
+          <div
+            className="h-2 bg-gradient-to-r from-red-600 to-red-400 rounded-full transition-all"
+            style={{ width: `${(player.hp / player.maxHp) * 100}%` }}
+          />
+        </div>
+      </Html>
 
-      {/* 이름표 (유비) */}
-      <Billboard position={[0, 4.5, 0]}>
-        <Html center>
-          <div className="text-yellow-400 font-black text-xl drop-shadow-2xl whitespace-nowrap px-4 py-1 bg-black/60 rounded-full border-2 border-yellow-500">
-            劉備 {player.name}
-          </div>
-        </Html>
-      </Billboard>
+      {/* 이름표 */}
+      <Html position={[0, 3.5, 0]} center>
+        <div className="text-cyan-400 font-black text-lg drop-shadow-2xl whitespace-nowrap px-4 py-1 bg-black/80 rounded-full border-2 border-cyan-500">
+          {player.name}
+        </div>
+      </Html>
     </group>
   );
 }
 
-// 파티클 시스템
+// 파티클
 function ParticleEffect({ particles }: { particles: Particle[] }) {
   return (
     <>
@@ -425,8 +222,8 @@ function ParticleEffect({ particles }: { particles: Particle[] }) {
   );
 }
 
-// 삼국지 몬스터
-function ThreeKingdomsMonster({ monster }: { monster: Monster }) {
+// 몬스터
+function CyberMonster({ monster }: { monster: Monster }) {
   const meshRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
@@ -443,13 +240,13 @@ function ThreeKingdomsMonster({ monster }: { monster: Monster }) {
   if (!monster.isAlive) return null;
 
   const colors: Record<string, string> = {
-    orc: '#8B4513',
-    wolf: '#696969',
-    elf: '#800080',
-    dragon: '#8B0000'
+    orc: '#FF0080',
+    wolf: '#00FF80',
+    elf: '#8000FF',
+    dragon: '#FF0000'
   };
 
-  const color = colors[monster.type] || '#666666';
+  const color = colors[monster.type] || '#00D4FF';
 
   return (
     <group position={monster.position}>
@@ -460,15 +257,15 @@ function ThreeKingdomsMonster({ monster }: { monster: Monster }) {
 
       <group ref={meshRef}>
         <mesh castShadow>
-          <dodecahedronGeometry args={[0.7, 0]} />
+          <icosahedronGeometry args={[0.7, 0]} />
           <MeshDistortMaterial
             color={color}
             emissive={color}
-            emissiveIntensity={0.5}
+            emissiveIntensity={0.6}
             metalness={0.9}
             roughness={0.1}
-            distort={0.3}
-            speed={4}
+            distort={0.4}
+            speed={5}
           />
         </mesh>
 
@@ -477,62 +274,58 @@ function ThreeKingdomsMonster({ monster }: { monster: Monster }) {
           <meshStandardMaterial
             color={color}
             emissive={color}
-            emissiveIntensity={0.6}
+            emissiveIntensity={0.8}
             metalness={1}
             roughness={0}
           />
         </mesh>
 
-        <Sparkles count={30} scale={[2, 2, 2]} size={3} speed={0.3} color={color} />
+        <Sparkles count={40} scale={[2, 2, 2]} size={4} speed={0.4} color={color} />
       </group>
 
-      <Billboard position={[0, 3, 0]}>
-        <mesh>
-          <planeGeometry args={[2, 0.3]} />
-          <meshBasicMaterial color="#000000" transparent opacity={0.8} />
-        </mesh>
-        <mesh position={[-(1 - monster.hp / monster.maxHp), 0, 0.01]}>
-          <planeGeometry args={[(monster.hp / monster.maxHp) * 2, 0.2]} />
-          <meshBasicMaterial color="#00FF00" />
-        </mesh>
-      </Billboard>
+      <Html position={[0, 3, 0]} center>
+        <div className="w-44 bg-black/80 rounded-full p-1 border-2 border-green-500/60">
+          <div
+            className="h-2 bg-gradient-to-r from-green-600 to-green-400 rounded-full transition-all"
+            style={{ width: `${(monster.hp / monster.maxHp) * 100}%` }}
+          />
+        </div>
+      </Html>
 
-      <Billboard position={[0, 3.5, 0]}>
-        <Html center>
-          <div className="text-red-400 font-black text-base drop-shadow-lg whitespace-nowrap">
-            {monster.name}
-          </div>
-        </Html>
-      </Billboard>
+      <Html position={[0, 3.5, 0]} center>
+        <div className="text-red-400 font-black text-base drop-shadow-lg whitespace-nowrap">
+          {monster.name} Lv.{monster.level}
+        </div>
+      </Html>
     </group>
   );
 }
 
-// 삼국지 지형
-function ThreeKingdomsTerrain() {
+// 사이버 지형
+function CyberTerrain() {
   return (
     <>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[120, 120, 50, 50]} />
         <meshStandardMaterial
-          color="#1a4d2e"
-          roughness={0.9}
-          metalness={0.1}
+          color="#0a0a1a"
+          roughness={0.8}
+          metalness={0.3}
         />
       </mesh>
 
-      <gridHelper args={[120, 60, '#FFD700', '#8B4513']} position={[0, 0.02, 0]} />
+      <gridHelper args={[120, 60, '#00D4FF', '#001a33']} position={[0, 0.02, 0]} />
 
-      {/* 궁전들 */}
+      {/* 사이버 빌딩들 */}
       <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
-        <mesh position={[-15, 4, -15]} castShadow>
-          <boxGeometry args={[8, 8, 8]} />
+        <mesh position={[-15, 5, -15]} castShadow>
+          <boxGeometry args={[8, 10, 8]} />
           <MeshDistortMaterial
-            color="#DC143C"
-            emissive="#8B0000"
-            emissiveIntensity={0.3}
-            metalness={0.8}
-            roughness={0.2}
+            color="#00D4FF"
+            emissive="#00D4FF"
+            emissiveIntensity={0.4}
+            metalness={0.9}
+            roughness={0.1}
             distort={0.1}
             speed={1}
           />
@@ -540,12 +333,12 @@ function ThreeKingdomsTerrain() {
       </Float>
 
       <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.6}>
-        <mesh position={[15, 5, -15]} castShadow>
-          <cylinderGeometry args={[3, 3, 10, 6]} />
+        <mesh position={[15, 6, -15]} castShadow>
+          <cylinderGeometry args={[3, 3, 12, 6]} />
           <MeshDistortMaterial
-            color="#FFD700"
-            emissive="#DAA520"
-            emissiveIntensity={0.4}
+            color="#FF0080"
+            emissive="#FF0080"
+            emissiveIntensity={0.5}
             metalness={0.9}
             roughness={0.1}
             distort={0.15}
@@ -555,14 +348,14 @@ function ThreeKingdomsTerrain() {
       </Float>
 
       <Float speed={0.8} rotationIntensity={0.1} floatIntensity={0.4}>
-        <mesh position={[15, 4, 15]} castShadow>
-          <octahedronGeometry args={[4, 0]} />
+        <mesh position={[15, 5, 15]} castShadow>
+          <octahedronGeometry args={[5, 0]} />
           <MeshDistortMaterial
-            color="#8B4513"
-            emissive="#654321"
-            emissiveIntensity={0.25}
-            metalness={0.6}
-            roughness={0.4}
+            color="#8000FF"
+            emissive="#8000FF"
+            emissiveIntensity={0.4}
+            metalness={0.8}
+            roughness={0.2}
             distort={0.2}
             speed={2}
           />
@@ -570,12 +363,12 @@ function ThreeKingdomsTerrain() {
       </Float>
 
       <Float speed={1.5} rotationIntensity={0.4} floatIntensity={0.7}>
-        <mesh position={[-15, 6, 15]} castShadow>
-          <torusGeometry args={[4, 2, 16, 100]} />
+        <mesh position={[-15, 7, 15]} castShadow>
+          <torusGeometry args={[5, 2, 16, 100]} />
           <MeshDistortMaterial
-            color="#4B0082"
-            emissive="#483D8B"
-            emissiveIntensity={0.4}
+            color="#00FF80"
+            emissive="#00FF80"
+            emissiveIntensity={0.5}
             metalness={0.9}
             roughness={0.1}
             distort={0.25}
@@ -584,12 +377,13 @@ function ThreeKingdomsTerrain() {
         </mesh>
       </Float>
 
+      {/* 사이버 서클 */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-        <ringGeometry args={[12, 18, 64]} />
+        <ringGeometry args={[15, 20, 64]} />
         <meshBasicMaterial
-          color="#FFD700"
+          color="#00D4FF"
           transparent
-          opacity={0.3}
+          opacity={0.4}
           side={THREE.DoubleSide}
         />
       </mesh>
@@ -597,10 +391,11 @@ function ThreeKingdomsTerrain() {
       <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
       <Sky distance={450000} sunPosition={[0, 1, 0]} inclination={0.6} azimuth={0.25} />
 
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.3} color="#00D4FF" />
       <directionalLight
         position={[20, 30, 20]}
         intensity={1.5}
+        color="#FFFFFF"
         castShadow
         shadow-mapSize-width={4096}
         shadow-mapSize-height={4096}
@@ -610,11 +405,11 @@ function ThreeKingdomsTerrain() {
         shadow-camera-top={50}
         shadow-camera-bottom={-50}
       />
-      <pointLight position={[0, 15, 0]} intensity={1.2} color="#FFD700" />
-      <pointLight position={[-20, 10, -20]} intensity={0.8} color="#DC143C" />
-      <pointLight position={[20, 10, 20]} intensity={0.8} color="#8B4513" />
+      <pointLight position={[0, 15, 0]} intensity={1.5} color="#00D4FF" />
+      <pointLight position={[-20, 10, -20]} intensity={1} color="#FF0080" />
+      <pointLight position={[20, 10, 20]} intensity={1} color="#00FF80" />
 
-      <Environment preset="sunset" />
+      <Environment preset="night" />
     </>
   );
 }
@@ -634,7 +429,7 @@ function CinematicCamera({ target }: { target: [number, number, number] }) {
 }
 
 // 메인
-export default function ThreeKingdomsMetaverse() {
+export default function ReadyPlayerMeMetaverse() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [myPlayer, setMyPlayer] = useState<Player | null>(null);
@@ -649,6 +444,7 @@ export default function ThreeKingdomsMetaverse() {
   const [notifications, setNotifications] = useState<string[]>([]);
   const [combo, setCombo] = useState(0);
   const [comboTimer, setComboTimer] = useState<NodeJS.Timeout | null>(null);
+  const [showAvatarCreator, setShowAvatarCreator] = useState(false);
 
   const joystickRef = useRef<HTMLDivElement>(null);
 
@@ -665,9 +461,6 @@ export default function ThreeKingdomsMetaverse() {
     const newPlayer: Player = {
       id: userData.email,
       name: userData.name,
-      character: '劉備',
-      class: '촉한 황제',
-      avatar: '👑',
       position: [0, 0, 0],
       rotation: 0,
       level: 50,
@@ -681,34 +474,35 @@ export default function ThreeKingdomsMetaverse() {
       role: userData.role,
       isMoving: false,
       isAttacking: false,
-      weapon: '쌍검',
-      color: '#FFD700'
+      avatarUrl: '',
+      color: '#00D4FF'
     };
     setMyPlayer(newPlayer);
 
     const otherPlayers: Player[] = [
-      { ...newPlayer, id: 'p1', name: '관우', character: '雲長', position: [5, 0, 5], color: '#DC143C', level: 48 },
-      { ...newPlayer, id: 'p2', name: '장비', character: '翼德', position: [-5, 0, 5], color: '#000000', level: 47 },
-      { ...newPlayer, id: 'p3', name: '조자룡', character: '子龍', position: [5, 0, -5], color: '#FFFFFF', level: 45 },
+      { ...newPlayer, id: 'p1', name: '김필드', position: [5, 0, 5], color: '#FF0080', level: 48 },
+      { ...newPlayer, id: 'p2', name: '이디자인', position: [-5, 0, 5], color: '#00FF80', level: 47 },
+      { ...newPlayer, id: 'p3', name: '박마케팅', position: [5, 0, -5], color: '#8000FF', level: 45 },
     ];
     setPlayers([newPlayer, ...otherPlayers]);
 
     const spawnedMonsters: Monster[] = [
-      { id: 'm1', name: '조조군', position: [10, 0, 10], rotation: 0, hp: 1500, maxHp: 1500, level: 45, type: 'orc', isAlive: true },
-      { id: 'm2', name: '동탁군', position: [-10, 0, 10], rotation: 0, hp: 1200, maxHp: 1200, level: 40, type: 'wolf', isAlive: true },
-      { id: 'm3', name: '여포', position: [10, 0, -10], rotation: 0, hp: 3000, maxHp: 3000, level: 60, type: 'elf', isAlive: true },
-      { id: 'm4', name: '적토마', position: [-10, 0, -10], rotation: 0, hp: 8000, maxHp: 8000, level: 75, type: 'dragon', isAlive: true },
+      { id: 'm1', name: '사이버 드론', position: [10, 0, 10], rotation: 0, hp: 1500, maxHp: 1500, level: 45, type: 'orc', isAlive: true },
+      { id: 'm2', name: 'AI 해커', position: [-10, 0, 10], rotation: 0, hp: 1200, maxHp: 1200, level: 40, type: 'wolf', isAlive: true },
+      { id: 'm3', name: '디지털 워리어', position: [10, 0, -10], rotation: 0, hp: 3000, maxHp: 3000, level: 60, type: 'elf', isAlive: true },
+      { id: 'm4', name: '메가 바이러스', position: [-10, 0, -10], rotation: 0, hp: 8000, maxHp: 8000, level: 75, type: 'dragon', isAlive: true },
     ];
     setMonsters(spawnedMonsters);
 
     setSkills([
-      { id: 's1', name: '인의지검', icon: '⚔️', cooldown: 5, currentCooldown: 0, manaCost: 80, color: '#FFD700' },
-      { id: 's2', name: '도원결의', icon: '🤝', cooldown: 10, currentCooldown: 0, manaCost: 120, color: '#DC143C' },
-      { id: 's3', name: '황제의 위엄', icon: '👑', cooldown: 15, currentCooldown: 0, manaCost: 150, color: '#FFD700' },
-      { id: 's4', name: '촉한부흥', icon: '🔥', cooldown: 20, currentCooldown: 0, manaCost: 200, color: '#FF4500' },
+      { id: 's1', name: '사이버 스트라이크', icon: '⚡', cooldown: 5, currentCooldown: 0, manaCost: 80, color: '#00D4FF' },
+      { id: 's2', name: '디지털 힐링', icon: '💚', cooldown: 10, currentCooldown: 0, manaCost: 120, color: '#00FF80' },
+      { id: 's3', name: '해킹 버스트', icon: '💻', cooldown: 15, currentCooldown: 0, manaCost: 150, color: '#FF0080' },
+      { id: 's4', name: '텔레포트', icon: '🌀', cooldown: 20, currentCooldown: 0, manaCost: 200, color: '#8000FF' },
     ]);
 
-    addNotification('🎮 삼국지 메타버스 입장! 劉備 유비로 플레이');
+    addNotification('🎮 Ready Player Me 메타버스 입장!');
+    addNotification('💡 "아바타 생성" 버튼으로 본인 아바타 만들기');
   }, [router]);
 
   useEffect(() => {
@@ -831,7 +625,7 @@ export default function ThreeKingdomsMetaverse() {
         velocity: [Math.cos(angle) * 0.25, Math.random() * 0.4, Math.sin(angle) * 0.25],
         life: 40,
         maxLife: 40,
-        color: '#FFD700',
+        color: '#00D4FF',
         size: 0.25
       };
       setParticles(prev => [...prev, particle]);
@@ -857,7 +651,7 @@ export default function ThreeKingdomsMetaverse() {
 
       if (levelUp) {
         setLevelUpEffect(true);
-        addNotification(`✨ 레벨업! ${myPlayer.level} → ${myPlayer.level + 1}`);
+        addNotification(`✨ LEVEL UP! ${myPlayer.level} → ${myPlayer.level + 1}`);
         setTimeout(() => setLevelUpEffect(false), 3000);
         
         for (let i = 0; i < 150; i++) {
@@ -867,7 +661,7 @@ export default function ThreeKingdomsMetaverse() {
             velocity: [(Math.random() - 0.5) * 0.4, Math.random() * 0.6, (Math.random() - 0.5) * 0.4],
             life: 80,
             maxLife: 80,
-            color: '#FFD700',
+            color: '#00D4FF',
             size: 0.35
           };
           setParticles(prev => [...prev, particle]);
@@ -927,36 +721,89 @@ export default function ThreeKingdomsMetaverse() {
     }, 4000);
   };
 
+  const openAvatarCreator = () => {
+    window.open('https://readyplayer.me/avatar', '_blank', 'width=800,height=600');
+    addNotification('🎨 Ready Player Me에서 아바타 생성 중...');
+    addNotification('💡 완성 후 URL을 복사해서 "아바타 적용" 버튼 클릭');
+  };
+
   if (!user) return null;
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
+      {/* 아바타 생성 모달 */}
+      {showAvatarCreator && (
+        <div className="absolute inset-0 bg-black/95 backdrop-blur-xl z-50 flex items-center justify-center">
+          <div className="bg-gradient-to-br from-black to-cyan-900/50 border-4 border-cyan-500 rounded-3xl p-8 max-w-2xl">
+            <h2 className="text-4xl font-black text-cyan-400 mb-6">🎨 Ready Player Me 아바타 생성</h2>
+            
+            <div className="space-y-6">
+              <div className="bg-cyan-500/10 border-2 border-cyan-500/30 rounded-2xl p-6">
+                <h3 className="text-2xl font-bold text-white mb-4">📸 1단계: 아바타 생성</h3>
+                <button
+                  onClick={openAvatarCreator}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl font-black text-white text-xl hover:scale-105 transition-all shadow-2xl"
+                >
+                  Ready Player Me 열기 →
+                </button>
+                <p className="text-cyan-300 text-sm mt-3">
+                  • 실제 얼굴 사진으로 AI 아바타 생성<br />
+                  • 또는 커스터마이징으로 직접 제작
+                </p>
+              </div>
+
+              <div className="bg-cyan-500/10 border-2 border-cyan-500/30 rounded-2xl p-6">
+                <h3 className="text-2xl font-bold text-white mb-4">🔗 2단계: URL 적용</h3>
+                <input
+                  type="text"
+                  placeholder="아바타 URL을 붙여넣기 (예: https://models.readyplayer.me/...)"
+                  className="w-full px-6 py-4 bg-black/50 border-2 border-cyan-500/50 rounded-xl text-white font-mono text-sm focus:border-cyan-500 focus:outline-none"
+                />
+                <button
+                  className="w-full mt-4 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl font-black text-white text-xl hover:scale-105 transition-all shadow-2xl"
+                >
+                  ✓ 아바타 적용하기
+                </button>
+              </div>
+
+              <button
+                onClick={() => setShowAvatarCreator(false)}
+                className="w-full px-8 py-3 bg-gray-700 rounded-xl font-bold text-white hover:bg-gray-600 transition-all"
+              >
+                나중에 하기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3D 씬 */}
       <div className="absolute inset-0">
         <Canvas shadows gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}>
           <Suspense fallback={null}>
             <PerspectiveCamera makeDefault position={[12, 18, 12]} fov={65} />
             <CinematicCamera target={myPlayer?.position || [0, 0, 0]} />
             
-            <ThreeKingdomsTerrain />
+            <CyberTerrain />
             
             {players.map(player => (
-              <LiuBeiCharacter key={player.id} player={player} isMe={player.id === myPlayer?.id} />
+              <RPMAvatar key={player.id} player={player} isMe={player.id === myPlayer?.id} />
             ))}
 
             {monsters.map(monster => (
-              <ThreeKingdomsMonster key={monster.id} monster={monster} />
+              <CyberMonster key={monster.id} monster={monster} />
             ))}
 
             <ParticleEffect particles={particles} />
 
             <EffectComposer>
-              <Bloom intensity={2} luminanceThreshold={0.2} luminanceSmoothing={0.9} height={300} />
+              <Bloom intensity={2.5} luminanceThreshold={0.2} luminanceSmoothing={0.9} height={300} />
               <ChromaticAberration blendFunction={BlendFunction.NORMAL} offset={[0.002, 0.002]} />
-              <Vignette offset={0.3} darkness={0.6} />
+              <Vignette offset={0.3} darkness={0.7} />
               <DepthOfField focusDistance={0.02} focalLength={0.05} bokehScale={3} />
             </EffectComposer>
 
-            <fog attach="fog" args={['#1a0a00', 50, 120]} />
+            <fog attach="fog" args={['#000510', 50, 120]} />
           </Suspense>
         </Canvas>
       </div>
@@ -965,60 +812,61 @@ export default function ThreeKingdomsMetaverse() {
       <div className="absolute top-0 left-0 right-0 p-6 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none">
         <div className="max-w-7xl mx-auto flex items-start justify-between">
           {myPlayer && (
-            <div className="bg-gradient-to-br from-black/95 to-red-900/95 backdrop-blur-2xl border-4 border-yellow-500/80 rounded-3xl p-6 pointer-events-auto shadow-2xl shadow-yellow-500/50">
+            <div className="bg-gradient-to-br from-black/95 to-cyan-900/95 backdrop-blur-2xl border-4 border-cyan-500/80 rounded-3xl p-6 pointer-events-auto shadow-2xl shadow-cyan-500/50">
               <div className="flex items-center gap-5 mb-4">
-                <div className="text-6xl drop-shadow-2xl">{myPlayer.avatar}</div>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-3xl border-4 border-cyan-400">
+                  👤
+                </div>
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-3xl font-black text-yellow-400 drop-shadow-lg">劉備</span>
                     <span className="text-2xl font-black text-white drop-shadow-lg">{myPlayer.name}</span>
-                    <span className="px-4 py-1.5 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full text-base font-black shadow-lg">
+                    <span className="px-4 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full text-base font-black shadow-lg">
                       Lv.{myPlayer.level}
                     </span>
                   </div>
-                  <div className="text-base text-yellow-300 font-bold drop-shadow-lg">{myPlayer.class}</div>
+                  <div className="text-sm text-cyan-400 font-bold">Ready Player Me</div>
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between text-sm font-bold mb-2">
-                    <span className="text-red-400 drop-shadow-lg">HP</span>
+                    <span className="text-red-400">HP</span>
                     <span className="text-white/90">{myPlayer.hp}/{myPlayer.maxHp}</span>
                   </div>
-                  <div className="h-4 bg-black/80 rounded-full overflow-hidden border-2 border-red-500/60 shadow-lg">
+                  <div className="h-4 bg-black/80 rounded-full overflow-hidden border-2 border-red-500/60">
                     <div className="h-full bg-gradient-to-r from-red-600 to-red-400 transition-all" style={{ width: `${(myPlayer.hp / myPlayer.maxHp) * 100}%` }} />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between text-sm font-bold mb-2">
-                    <span className="text-blue-400 drop-shadow-lg">MP</span>
+                    <span className="text-blue-400">MP</span>
                     <span className="text-white/90">{myPlayer.mp}/{myPlayer.maxMp}</span>
                   </div>
-                  <div className="h-4 bg-black/80 rounded-full overflow-hidden border-2 border-blue-500/60 shadow-lg">
+                  <div className="h-4 bg-black/80 rounded-full overflow-hidden border-2 border-blue-500/60">
                     <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 transition-all" style={{ width: `${(myPlayer.mp / myPlayer.maxMp) * 100}%` }} />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between text-sm font-bold mb-2">
-                    <span className="text-yellow-400 drop-shadow-lg">EXP</span>
+                    <span className="text-cyan-400">EXP</span>
                     <span className="text-white/90">{Math.floor((myPlayer.exp / myPlayer.maxExp) * 100)}%</span>
                   </div>
-                  <div className="h-3 bg-black/80 rounded-full overflow-hidden border-2 border-yellow-500/60 shadow-lg">
-                    <div className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 transition-all" style={{ width: `${(myPlayer.exp / myPlayer.maxExp) * 100}%` }} />
+                  <div className="h-3 bg-black/80 rounded-full overflow-hidden border-2 border-cyan-500/60">
+                    <div className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all" style={{ width: `${(myPlayer.exp / myPlayer.maxExp) * 100}%` }} />
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="bg-gradient-to-br from-black/95 to-yellow-900/95 backdrop-blur-2xl border-4 border-yellow-500/80 rounded-3xl p-6 pointer-events-auto shadow-2xl">
-            <div className="text-base font-black mb-3 text-yellow-400">🗺️ 천하</div>
-            <div className="relative w-56 h-56 bg-gradient-to-br from-red-900/50 to-yellow-900/50 rounded-2xl border-2 border-yellow-500/60 overflow-hidden">
+          <div className="bg-gradient-to-br from-black/95 to-cyan-900/95 backdrop-blur-2xl border-4 border-cyan-500/80 rounded-3xl p-6 pointer-events-auto shadow-2xl">
+            <div className="text-base font-black mb-3 text-cyan-400">🗺️ 미니맵</div>
+            <div className="relative w-56 h-56 bg-gradient-to-br from-cyan-900/50 to-blue-900/50 rounded-2xl border-2 border-cyan-500/60 overflow-hidden">
               {myPlayer && (
-                <div className="absolute w-4 h-4 bg-yellow-400 rounded-full animate-pulse shadow-lg" style={{
+                <div className="absolute w-4 h-4 bg-cyan-400 rounded-full animate-pulse shadow-lg" style={{
                   left: `${((myPlayer.position[0] + 45) / 90) * 100}%`,
                   top: `${((myPlayer.position[2] + 45) / 90) * 100}%`,
                   transform: 'translate(-50%, -50%)'
@@ -1039,7 +887,7 @@ export default function ThreeKingdomsMetaverse() {
       {/* 알림 */}
       <div className="absolute top-6 right-6 space-y-3 pointer-events-none z-50">
         {notifications.map((notif, i) => (
-          <div key={i} className="bg-gradient-to-r from-black/95 to-yellow-900/95 backdrop-blur-2xl border-3 border-yellow-500/80 rounded-2xl px-8 py-4 text-yellow-400 font-black shadow-2xl animate-pulse text-lg">
+          <div key={i} className="bg-gradient-to-r from-black/95 to-cyan-900/95 backdrop-blur-2xl border-3 border-cyan-500/80 rounded-2xl px-8 py-4 text-cyan-400 font-black shadow-2xl animate-pulse text-lg">
             {notif}
           </div>
         ))}
@@ -1048,8 +896,8 @@ export default function ThreeKingdomsMetaverse() {
       {/* 콤보 */}
       {combo > 1 && (
         <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
-          <div className="text-9xl font-black bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-400 bg-clip-text text-transparent animate-pulse drop-shadow-2xl">
-            {combo} 連擊!
+          <div className="text-9xl font-black bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-400 bg-clip-text text-transparent animate-pulse drop-shadow-2xl">
+            {combo} COMBO!
           </div>
         </div>
       )}
@@ -1058,8 +906,8 @@ export default function ThreeKingdomsMetaverse() {
       {levelUpEffect && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50 animate-pulse">
           <div className="text-center">
-            <div className="text-[12rem] font-black bg-gradient-to-r from-yellow-400 to-yellow-200 bg-clip-text text-transparent drop-shadow-2xl mb-8">
-              ✨ 레벨업! ✨
+            <div className="text-[12rem] font-black bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent drop-shadow-2xl mb-8">
+              ✨ LEVEL UP! ✨
             </div>
             <div className="text-6xl font-bold text-white drop-shadow-2xl">
               Lv.{myPlayer!.level - 1} → Lv.{myPlayer!.level}
@@ -1074,7 +922,7 @@ export default function ThreeKingdomsMetaverse() {
           <div className="relative">
             <div
               ref={joystickRef}
-              className="w-48 h-48 bg-gradient-to-br from-black/80 to-yellow-900/80 backdrop-blur-2xl border-4 border-yellow-500/60 rounded-full relative cursor-pointer shadow-2xl"
+              className="w-48 h-48 bg-gradient-to-br from-black/80 to-cyan-900/80 backdrop-blur-2xl border-4 border-cyan-500/60 rounded-full relative cursor-pointer shadow-2xl"
               onMouseDown={handleJoystickStart}
               onMouseMove={handleJoystickMove}
               onMouseUp={handleJoystickEnd}
@@ -1088,7 +936,7 @@ export default function ThreeKingdomsMetaverse() {
               </div>
               {joystickActive && (
                 <div
-                  className="absolute w-20 h-20 bg-gradient-to-br from-yellow-500 to-yellow-400 rounded-full shadow-2xl transition-transform border-4 border-white/60"
+                  className="absolute w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-full shadow-2xl transition-transform border-4 border-white/60"
                   style={{
                     left: '50%',
                     top: '50%',
@@ -1108,7 +956,7 @@ export default function ThreeKingdomsMetaverse() {
                 className={`relative w-24 h-24 rounded-3xl border-4 text-5xl transition-all shadow-2xl ${
                   skill.currentCooldown > 0 || (myPlayer?.mp || 0) < skill.manaCost
                     ? 'bg-gray-700/60 border-gray-600/60 cursor-not-allowed opacity-50'
-                    : 'bg-gradient-to-br from-yellow-600 to-red-600 border-yellow-400/80 hover:scale-110 active:scale-95 shadow-yellow-500/60'
+                    : 'bg-gradient-to-br from-cyan-600 to-blue-600 border-cyan-400/80 hover:scale-110 active:scale-95 shadow-cyan-500/60'
                 }`}
               >
                 {skill.icon}
@@ -1117,7 +965,7 @@ export default function ThreeKingdomsMetaverse() {
                     <span className="text-3xl font-black text-white">{skill.currentCooldown}</span>
                   </div>
                 )}
-                <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 text-xs font-black bg-black/90 px-3 py-1 rounded-full whitespace-nowrap border-2 border-yellow-500/60">
+                <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 text-xs font-black bg-black/90 px-3 py-1 rounded-full whitespace-nowrap border-2 border-cyan-500/60">
                   {skill.manaCost}MP
                 </div>
               </button>
@@ -1145,15 +993,15 @@ export default function ThreeKingdomsMetaverse() {
 
       {/* 타겟 */}
       {selectedMonster && selectedMonster.isAlive && (
-        <div className="absolute bottom-60 left-6 bg-gradient-to-br from-black/95 to-red-900/95 backdrop-blur-2xl border-4 border-red-500/80 rounded-3xl p-6 shadow-2xl">
+        <div className="absolute bottom-60 left-6 bg-gradient-to-br from-black/95 to-cyan-900/95 backdrop-blur-2xl border-4 border-red-500/80 rounded-3xl p-6 shadow-2xl">
           <div className="text-red-400 font-black mb-3 text-lg">🎯 타겟</div>
           <div className="flex items-center gap-4 mb-3">
             <span className="text-5xl">
-              {selectedMonster.type === 'orc' ? '👹' : selectedMonster.type === 'wolf' ? '🐺' : selectedMonster.type === 'elf' ? '🧝' : '🐉'}
+              {selectedMonster.type === 'orc' ? '🤖' : selectedMonster.type === 'wolf' ? '💻' : selectedMonster.type === 'elf' ? '⚡' : '🔥'}
             </span>
             <div>
               <div className="font-black text-white text-lg">{selectedMonster.name}</div>
-              <div className="text-sm text-yellow-400 font-bold">Lv.{selectedMonster.level}</div>
+              <div className="text-sm text-cyan-400 font-bold">Lv.{selectedMonster.level}</div>
             </div>
           </div>
           <div>
@@ -1161,23 +1009,29 @@ export default function ThreeKingdomsMetaverse() {
               <span className="text-green-400">HP</span>
               <span className="text-white/90">{selectedMonster.hp}/{selectedMonster.maxHp}</span>
             </div>
-            <div className="h-4 bg-black/80 rounded-full overflow-hidden border-2 border-green-500/60 shadow-lg">
+            <div className="h-4 bg-black/80 rounded-full overflow-hidden border-2 border-green-500/60">
               <div className="h-full bg-gradient-to-r from-green-600 to-green-400 transition-all" style={{ width: `${(selectedMonster.hp / selectedMonster.maxHp) * 100}%` }} />
             </div>
           </div>
         </div>
       )}
 
-      {/* 메뉴 */}
-      <div className="absolute top-6 right-6 flex gap-3">
-        <Link href="/workspace" className="px-8 py-4 bg-gradient-to-r from-black/90 to-yellow-900/90 backdrop-blur-2xl border-3 border-yellow-500/60 rounded-2xl font-black text-white text-lg hover:border-yellow-500 transition-all shadow-2xl">
+      {/* 상단 메뉴 */}
+      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-40">
+        <button
+          onClick={() => setShowAvatarCreator(true)}
+          className="px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 backdrop-blur-2xl border-3 border-cyan-500/80 rounded-2xl font-black text-white text-lg hover:scale-105 transition-all shadow-2xl shadow-cyan-500/50 animate-pulse"
+        >
+          🎨 아바타 생성
+        </button>
+        <Link href="/workspace" className="px-8 py-4 bg-gradient-to-r from-black/90 to-cyan-900/90 backdrop-blur-2xl border-3 border-cyan-500/60 rounded-2xl font-black text-white text-lg hover:border-cyan-500 transition-all shadow-2xl">
           ← 나가기
         </Link>
       </div>
 
       {/* 몬스터 선택 */}
-      <div className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-gradient-to-br from-black/95 to-red-900/95 backdrop-blur-2xl border-4 border-yellow-500/60 rounded-3xl p-6 shadow-2xl">
-        <div className="text-base font-black mb-4 text-yellow-400">👾 적군</div>
+      <div className="absolute top-1/2 right-6 transform -translate-y-1/2 bg-gradient-to-br from-black/95 to-cyan-900/95 backdrop-blur-2xl border-4 border-cyan-500/60 rounded-3xl p-6 shadow-2xl">
+        <div className="text-base font-black mb-4 text-cyan-400">👾 적군</div>
         <div className="space-y-3">
           {monsters.filter(m => m.isAlive).map(monster => (
             <button
@@ -1185,7 +1039,7 @@ export default function ThreeKingdomsMetaverse() {
               onClick={() => setSelectedMonster(monster)}
               className={`w-full px-5 py-3 rounded-2xl text-sm font-black transition-all border-2 ${
                 selectedMonster?.id === monster.id
-                  ? 'bg-gradient-to-r from-red-600 to-red-500 text-white border-red-400 shadow-lg'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white border-cyan-400 shadow-lg'
                   : 'bg-white/10 text-white/80 hover:bg-white/20 border-white/20'
               }`}
             >
