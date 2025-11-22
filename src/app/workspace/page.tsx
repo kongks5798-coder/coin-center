@@ -72,19 +72,26 @@ export default function WorkspacePage() {
   const [view, setView] = useState<'dashboard' | 'tasks' | 'team' | 'analytics'>('dashboard');
   const [filterStatus, setFilterStatus] = useState<TaskStatus | 'all'>('all');
   const [filterPriority, setFilterPriority] = useState<TaskPriority | 'all'>('all');
+  const [loading, setLoading] = useState(true);
+
+  // 인증 확인 및 데모 데이터 생성
+  useEffect(() => {
+    // 로그인 체크
+    if (typeof window !== 'undefined') {
+      const storedUser = localStorage.getItem('fieldnine-user');
+      if (!storedUser) {
+        window.location.href = '/login';
+        return;
+      }
+      const user = JSON.parse(storedUser);
+      setCurrentUser(user);
+      setLoading(false);
+    }
+  }, []);
 
   // 임시 데모 데이터 생성
   useEffect(() => {
-    // 현재 로그인 사용자
-    const demoUser: User = {
-      id: 'user-1',
-      name: '김필드',
-      email: 'field@fieldnine.io',
-      role: 'manager',
-      department: 'FILLUMINATE',
-      avatar: '👨‍💼'
-    };
-    setCurrentUser(demoUser);
+    if (!currentUser) return;
 
     // 데모 작업들
     const demoTasks: Task[] = [
@@ -92,8 +99,8 @@ export default function WorkspacePage() {
         id: 'task-1',
         title: 'NEXUS OS 3D 맵 성능 최적화',
         description: '로봇 경로 계산 알고리즘을 50ms 이하로 개선',
-        assignee: demoUser,
-        assignedBy: { ...demoUser, id: 'admin-1', name: '박나인', role: 'admin' },
+        assignee: currentUser,
+        assignedBy: { ...currentUser, id: 'admin-1', name: '박나인', role: 'admin' },
         status: 'in-progress',
         priority: 'urgent',
         deadline: new Date('2025-11-25'),
@@ -110,8 +117,8 @@ export default function WorkspacePage() {
         id: 'task-2',
         title: 'MARD MARD 브랜드 가이드 작성',
         description: '로고, 컬러 팔레트, 타이포그래피 정리',
-        assignee: { ...demoUser, id: 'user-2', name: '이크리에이티브', department: 'MARD MARD' },
-        assignedBy: demoUser,
+        assignee: { ...currentUser, id: 'user-2', name: '이크리에이티브', department: 'MARD MARD' },
+        assignedBy: currentUser,
         status: 'review',
         priority: 'high',
         deadline: new Date('2025-11-23'),
@@ -128,8 +135,8 @@ export default function WorkspacePage() {
         id: 'task-3',
         title: 'FILLUMINATE 데이터 파이프라인 구축',
         description: 'Kafka + Spark 실시간 스트리밍 처리',
-        assignee: demoUser,
-        assignedBy: demoUser,
+        assignee: currentUser,
+        assignedBy: currentUser,
         status: 'pending',
         priority: 'medium',
         deadline: new Date('2025-11-28'),
@@ -146,8 +153,8 @@ export default function WorkspacePage() {
         id: 'task-4',
         title: 'fieldnine.io 도메인 연결',
         description: 'Vercel DNS 설정 및 SSL 인증서 적용',
-        assignee: { ...demoUser, id: 'user-3', name: '최데브옵스', department: 'Infrastructure' },
-        assignedBy: demoUser,
+        assignee: { ...currentUser, id: 'user-3', name: '최데브옵스', department: 'Infrastructure' },
+        assignedBy: currentUser,
         status: 'completed',
         priority: 'high',
         deadline: new Date('2025-11-22'),
@@ -167,7 +174,7 @@ export default function WorkspacePage() {
     const demoLogs: ActivityLog[] = [
       {
         id: 'log-1',
-        user: demoUser,
+        user: currentUser,
         action: 'updated',
         target: 'NEXUS OS 3D 맵 성능 최적화',
         details: '진행률 65%로 업데이트',
@@ -176,7 +183,7 @@ export default function WorkspacePage() {
       },
       {
         id: 'log-2',
-        user: { ...demoUser, id: 'user-2', name: '이크리에이티브' },
+        user: { ...currentUser, id: 'user-2', name: '이크리에이티브' },
         action: 'submitted',
         target: 'MARD MARD 브랜드 가이드',
         details: '검토 요청됨',
@@ -185,7 +192,7 @@ export default function WorkspacePage() {
       }
     ];
     setActivityLogs(demoLogs);
-  }, []);
+  }, [currentUser]);
 
   // 통계 계산
   const stats = {
@@ -224,6 +231,25 @@ export default function WorkspacePage() {
     const priorityMatch = filterPriority === 'all' || task.priority === filterPriority;
     return statusMatch && priorityMatch;
   });
+
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('fieldnine-user');
+      window.location.href = '/login';
+    }
+  };
+
+  if (loading || !currentUser) {
+    return (
+      <div className="min-h-screen bg-[#02010a] text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4 animate-pulse">⏳</div>
+          <div className="text-2xl font-bold mb-2">로딩 중...</div>
+          <div className="text-white/40">워크스페이스를 준비하고 있습니다</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#02010a] text-white">
@@ -266,6 +292,13 @@ export default function WorkspacePage() {
                     <div className="text-xs text-white/40 capitalize">{currentUser.role}</div>
                   </div>
                 </div>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-300 hover:bg-red-500/20 transition-all"
+                  title="로그아웃"
+                >
+                  🚪 로그아웃
+                </button>
               </div>
             )}
           </div>
