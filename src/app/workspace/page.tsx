@@ -284,6 +284,17 @@ export default function WorkspacePage() {
 
             {currentUser && (
               <div className="flex items-center gap-3">
+                {/* 슈퍼 관리자 전용 버튼 */}
+                {(currentUser.role === 'executive' || currentUser.role === 'general_manager') && (
+                  <Link
+                    href="/executive-dashboard"
+                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 rounded-lg font-medium transition-all flex items-center gap-2 shadow-lg shadow-purple-500/50"
+                  >
+                    <span>👑</span>
+                    <span>슈퍼 관리자 대시보드</span>
+                  </Link>
+                )}
+                
                 <span className="text-sm text-white/60">{currentUser.department}</span>
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10">
                   <span className="text-xl">{currentUser.avatar}</span>
