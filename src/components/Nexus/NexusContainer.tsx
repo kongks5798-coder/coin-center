@@ -3,6 +3,7 @@
 import React from 'react';
 import AssetDashboard from './AssetDashboard';
 import LiveLogTicker from './LiveLogTicker';
+import AutomationMonitor from './AutomationMonitor';
 import './nexus-style.css';
 
 const NexusContainer = () => {
@@ -77,6 +78,9 @@ const NexusContainer = () => {
         <AssetDashboard />
         <LiveLogTicker />
       </div>
+
+      {/* 자동화 시스템 모니터 - 전체 너비 */}
+      <AutomationMonitor />
 
       {/* 시스템 상태 바 */}
       <div className="nexus-panel" style={{ 
