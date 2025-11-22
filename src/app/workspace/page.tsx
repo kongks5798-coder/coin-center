@@ -89,109 +89,21 @@ export default function WorkspacePage() {
     }
   }, []);
 
-  // 임시 데모 데이터 생성
+  // 실제 데이터는 localStorage에서 불러오기
   useEffect(() => {
     if (!currentUser) return;
 
-    // 데모 작업들
-    const demoTasks: Task[] = [
-      {
-        id: 'task-1',
-        title: 'NEXUS OS 3D 맵 성능 최적화',
-        description: '로봇 경로 계산 알고리즘을 50ms 이하로 개선',
-        assignee: currentUser,
-        assignedBy: { ...currentUser, id: 'admin-1', name: '박나인', role: 'admin' },
-        status: 'in-progress',
-        priority: 'urgent',
-        deadline: new Date('2025-11-25'),
-        createdAt: new Date('2025-11-20'),
-        updatedAt: new Date(),
-        tags: ['NEXUS', 'Performance', 'Backend'],
-        comments: [],
-        attachments: [],
-        progress: 65,
-        estimatedHours: 16,
-        actualHours: 10.5
-      },
-      {
-        id: 'task-2',
-        title: 'MARD MARD 브랜드 가이드 작성',
-        description: '로고, 컬러 팔레트, 타이포그래피 정리',
-        assignee: { ...currentUser, id: 'user-2', name: '이크리에이티브', department: 'MARD MARD' },
-        assignedBy: currentUser,
-        status: 'review',
-        priority: 'high',
-        deadline: new Date('2025-11-23'),
-        createdAt: new Date('2025-11-18'),
-        updatedAt: new Date(),
-        tags: ['MARD MARD', 'Design', 'Branding'],
-        comments: [],
-        attachments: [],
-        progress: 90,
-        estimatedHours: 8,
-        actualHours: 7.2
-      },
-      {
-        id: 'task-3',
-        title: 'FILLUMINATE 데이터 파이프라인 구축',
-        description: 'Kafka + Spark 실시간 스트리밍 처리',
-        assignee: currentUser,
-        assignedBy: currentUser,
-        status: 'pending',
-        priority: 'medium',
-        deadline: new Date('2025-11-28'),
-        createdAt: new Date('2025-11-22'),
-        updatedAt: new Date(),
-        tags: ['FILLUMINATE', 'Data', 'Infrastructure'],
-        comments: [],
-        attachments: [],
-        progress: 0,
-        estimatedHours: 24,
-        actualHours: 0
-      },
-      {
-        id: 'task-4',
-        title: 'fieldnine.io 도메인 연결',
-        description: 'Vercel DNS 설정 및 SSL 인증서 적용',
-        assignee: { ...currentUser, id: 'user-3', name: '최데브옵스', department: 'Infrastructure' },
-        assignedBy: currentUser,
-        status: 'completed',
-        priority: 'high',
-        deadline: new Date('2025-11-22'),
-        createdAt: new Date('2025-11-21'),
-        updatedAt: new Date(),
-        tags: ['DevOps', 'Domain', 'Security'],
-        comments: [],
-        attachments: [],
-        progress: 100,
-        estimatedHours: 4,
-        actualHours: 3.5
-      }
-    ];
-    setTasks(demoTasks);
+    // localStorage에서 저장된 작업 불러오기
+    const savedTasks = localStorage.getItem('fieldnine-tasks');
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
 
-    // 활동 로그
-    const demoLogs: ActivityLog[] = [
-      {
-        id: 'log-1',
-        user: currentUser,
-        action: 'updated',
-        target: 'NEXUS OS 3D 맵 성능 최적화',
-        details: '진행률 65%로 업데이트',
-        timestamp: new Date(),
-        blockchainHash: '0x7a9f..3d2e'
-      },
-      {
-        id: 'log-2',
-        user: { ...currentUser, id: 'user-2', name: '이크리에이티브' },
-        action: 'submitted',
-        target: 'MARD MARD 브랜드 가이드',
-        details: '검토 요청됨',
-        timestamp: new Date(Date.now() - 1800000),
-        blockchainHash: '0x5b2c..1a4f'
-      }
-    ];
-    setActivityLogs(demoLogs);
+    // localStorage에서 저장된 활동 로그 불러오기
+    const savedLogs = localStorage.getItem('fieldnine-activity-logs');
+    if (savedLogs) {
+      setActivityLogs(JSON.parse(savedLogs));
+    }
   }, [currentUser]);
 
   // 통계 계산
