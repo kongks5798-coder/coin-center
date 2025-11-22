@@ -30,9 +30,20 @@ const NexusContainer = () => {
             fontSize: '0.75rem',
             color: '#00ccff',
             letterSpacing: '2px',
-            opacity: 0.8
+            opacity: 0.8,
+            marginBottom: '0.5rem'
           }}>
             CONTROL CENTER
+          </div>
+          <div style={{
+            fontSize: '0.7rem',
+            color: '#00ff41',
+            letterSpacing: '1.5px',
+            opacity: 0.6,
+            borderTop: '1px solid rgba(0, 255, 65, 0.3)',
+            paddingTop: '0.3rem'
+          }}>
+            CENTER DIRECTOR: PARK JUNHO
           </div>
         </div>
         
