@@ -172,19 +172,19 @@ export default function ExecutiveDashboard() {
           <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-2xl p-6">
             <div className="text-sm text-white/60 mb-2">전체 예산</div>
             <div className="text-3xl font-bold mb-1">₩{(getTotalBudget() / 100000000).toFixed(1)}억</div>
-            <div className="text-xs text-green-400">+12.4% vs 지난달</div>
+            <div className="text-xs text-white/40">데이터 입력 필요</div>
           </div>
 
           <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-2xl p-6">
             <div className="text-sm text-white/60 mb-2">평균 성과</div>
             <div className="text-3xl font-bold mb-1">{getAveragePerformance().toFixed(1)}%</div>
-            <div className="text-xs text-green-400">+3.2% vs 목표</div>
+            <div className="text-xs text-white/40">데이터 입력 필요</div>
           </div>
 
           <div className="bg-gradient-to-br from-fuchsia-500/10 to-fuchsia-500/5 border border-fuchsia-500/20 rounded-2xl p-6">
             <div className="text-sm text-white/60 mb-2">진행 프로젝트</div>
             <div className="text-3xl font-bold mb-1">{getTotalProjects()}개</div>
-            <div className="text-xs text-yellow-400">5개 승인 대기</div>
+            <div className="text-xs text-white/40">프로젝트 생성 필요</div>
           </div>
 
           <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6">
@@ -232,38 +232,46 @@ export default function ExecutiveDashboard() {
 
               {widget.type === 'alerts' && (
                 <div className="space-y-3 max-h-96 overflow-y-auto">
-                  {CRITICAL_ALERTS.map((alert) => (
-                    <div
-                      key={alert.id}
-                      className={`p-4 rounded-lg border ${
-                        alert.priority === 'urgent'
-                          ? 'bg-red-500/10 border-red-500/30'
-                          : alert.priority === 'high'
-                          ? 'bg-yellow-500/10 border-yellow-500/30'
-                          : 'bg-blue-500/10 border-blue-500/30'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-1 text-xs font-bold rounded ${
-                            alert.priority === 'urgent'
-                              ? 'bg-red-500 text-white'
-                              : alert.priority === 'high'
-                              ? 'bg-yellow-500 text-black'
-                              : 'bg-blue-500 text-white'
-                          }`}>
-                            {alert.type}
-                          </span>
-                          <span className="text-sm text-white/60">{alert.team}</span>
-                        </div>
-                        <span className="text-xs text-white/40">{alert.timestamp}</span>
-                      </div>
-                      <div className="font-medium">{alert.title}</div>
-                      {alert.amount && (
-                        <div className="text-sm text-purple-400 mt-1">{alert.amount}</div>
-                      )}
+                  {CRITICAL_ALERTS.length === 0 ? (
+                    <div className="text-center py-12 text-white/40">
+                      <div className="text-4xl mb-3">🔔</div>
+                      <div className="text-sm">CRITICAL 알림이 없습니다</div>
+                      <div className="text-xs mt-2">데이터 관리 시스템에서 데이터 입력 시 자동 생성됩니다</div>
                     </div>
-                  ))}
+                  ) : (
+                    CRITICAL_ALERTS.map((alert) => (
+                      <div
+                        key={alert.id}
+                        className={`p-4 rounded-lg border ${
+                          alert.priority === 'urgent'
+                            ? 'bg-red-500/10 border-red-500/30'
+                            : alert.priority === 'high'
+                            ? 'bg-yellow-500/10 border-yellow-500/30'
+                            : 'bg-blue-500/10 border-blue-500/30'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className={`px-2 py-1 text-xs font-bold rounded ${
+                              alert.priority === 'urgent'
+                                ? 'bg-red-500 text-white'
+                                : alert.priority === 'high'
+                                ? 'bg-yellow-500 text-black'
+                                : 'bg-blue-500 text-white'
+                            }`}>
+                              {alert.type}
+                            </span>
+                            <span className="text-sm text-white/60">{alert.team}</span>
+                          </div>
+                          <span className="text-xs text-white/40">{alert.timestamp}</span>
+                        </div>
+                        <div className="font-medium">{alert.title}</div>
+                        {alert.amount && (
+                          <div className="text-sm text-purple-400 mt-1">{alert.amount}</div>
+                        )}
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
 
