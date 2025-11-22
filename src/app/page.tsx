@@ -233,12 +233,19 @@ export default function Home() {
           {/* CTA Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
             <Link
-              href="/nexus"
+              href="/login"
               className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-cyan-600 px-10 py-4 text-base font-semibold text-white shadow-[0_0_40px_rgba(168,85,247,0.6)] hover:shadow-[0_0_60px_rgba(34,211,238,0.8)] hover:scale-105 transition-all"
             >
-              <span className="relative z-10">🚀 FIELD NINE 탐험하기</span>
+              <span className="relative z-10">👨‍💼 워크스페이스 시작하기</span>
               <span className="relative z-10 text-xl transition-transform group-hover:translate-x-1">→</span>
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-purple-600 to-fuchsia-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
+
+            <Link
+              href="/nexus"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/40 px-8 py-4 text-base font-semibold text-slate-100 backdrop-blur hover:border-cyan-400/80 hover:bg-slate-900/80 hover:text-cyan-100 transition"
+            >
+              <span>🚀 FIELD NINE 탐험하기</span>
             </Link>
 
             <Link
