@@ -374,6 +374,32 @@ export default function ExecutiveDashboard() {
           ))}
         </div>
 
+        {/* 데이터 관리 바로가기 */}
+        <div className="mt-8">
+          <Link
+            href="/data-management"
+            className="block p-8 bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 rounded-2xl hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/30 transition-all group"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-4xl mb-3">📊</div>
+                <h3 className="text-2xl font-bold mb-2">데이터 관리 시스템</h3>
+                <p className="text-white/60 mb-4">
+                  재무, 세무, 인사, 프로젝트 등 모든 업무 데이터를 입력하고 관리하세요
+                </p>
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded">10개 템플릿</span>
+                  <span className="px-3 py-1 bg-cyan-500/20 text-cyan-300 rounded">권한 기반</span>
+                  <span className="px-3 py-1 bg-fuchsia-500/20 text-fuchsia-300 rounded">실시간 저장</span>
+                </div>
+              </div>
+              <div className="text-4xl group-hover:scale-110 transition-transform">
+                →
+              </div>
+            </div>
+          </Link>
+        </div>
+
         {/* 전체 팀 빠른 접근 */}
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-6">전체 팀 빠른 접근</h2>

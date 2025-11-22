@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 // 타입 정의
-type UserRole = 'admin' | 'manager' | 'staff';
+type UserRole = 'admin' | 'manager' | 'staff' | 'executive' | 'general_manager' | 'director' | 'team_leader' | 'lead' | 'senior' | 'intern';
 type TaskStatus = 'pending' | 'in-progress' | 'review' | 'completed' | 'blocked';
 type TaskPriority = 'urgent' | 'high' | 'medium' | 'low';
 
@@ -279,6 +279,12 @@ export default function WorkspacePage() {
                     {v.charAt(0).toUpperCase() + v.slice(1)}
                   </button>
                 ))}
+                <Link
+                  href="/data-management"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-white/50 hover:text-white hover:bg-white/5 transition-all"
+                >
+                  📊 데이터 관리
+                </Link>
               </nav>
             </div>
 
