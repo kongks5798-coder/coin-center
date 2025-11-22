@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import Link from 'link';
 import { SecurityUtils } from '@/lib/security';
-import { TEAMS, ROLES } from '@/lib/rbac';
+import { TEAMS as RBAC_TEAMS } from '@/lib/rbac';
 
 interface SignupFormData {
   // 기본 정보
@@ -28,8 +28,8 @@ interface SignupFormData {
   emergencyContact: string;
 }
 
-// 5개 팀 정의 (총 26명)
-const TEAMS = [
+// 6개 팀 정의 (총 30명)
+const SIGNUP_TEAMS = [
   { id: 'design', name: '디자인팀', count: 7, icon: '🎨', color: 'purple' },
   { id: 'mardmard', name: 'MARD MARD', count: 8, icon: '🎬', color: 'pink' },
   { id: 'production', name: '생산팀', count: 3, icon: '🏭', color: 'blue' },
@@ -392,7 +392,7 @@ export default function SignupPage() {
                 <div>
                   <label className="block text-sm text-white/60 mb-3">팀 선택 *</label>
                   <div className="grid grid-cols-2 gap-3">
-                    {TEAMS.map(team => (
+                    {SIGNUP_TEAMS.map(team => (
                       <button
                         key={team.id}
                         type="button"
@@ -497,7 +497,7 @@ export default function SignupPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-white/60">팀</span>
-                      <span>{TEAMS.find(t => t.id === formData.team)?.name}</span>
+                      <span>{SIGNUP_TEAMS.find(t => t.id === formData.team)?.name}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-white/60">직책</span>
