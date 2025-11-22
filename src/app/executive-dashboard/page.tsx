@@ -28,24 +28,19 @@ interface Team {
 }
 
 const ALL_TEAMS: Team[] = [
-  { id: 'filluminate', name: 'FILLUMINATE', icon: '💡', color: 'from-yellow-500 to-orange-500', memberCount: 8, activeProjects: 12, budget: 45000000, performance: 94.7 },
-  { id: 'mardmard', name: 'MARD MARD', icon: '🎬', color: 'from-pink-500 to-rose-500', memberCount: 8, activeProjects: 15, budget: 38000000, performance: 91.2 },
-  { id: 'nexus', name: 'NEXUS & THE FIELD NINE', icon: '🔗', color: 'from-blue-500 to-cyan-500', memberCount: 5, activeProjects: 8, budget: 52000000, performance: 96.3 },
-  { id: 'orasydney', name: 'ORA SYDNEY (예정)', icon: '🌏', color: 'from-purple-500 to-indigo-500', memberCount: 0, activeProjects: 3, budget: 0, performance: 0 },
-  { id: 'design', name: '디자인팀', icon: '🎨', color: 'from-purple-500 to-pink-500', memberCount: 7, activeProjects: 18, budget: 28000000, performance: 89.5 },
-  { id: 'production', name: '생산팀', icon: '🏭', color: 'from-blue-500 to-cyan-500', memberCount: 3, activeProjects: 6, budget: 62000000, performance: 92.8 },
-  { id: 'online', name: '온라인팀', icon: '💻', color: 'from-cyan-500 to-teal-500', memberCount: 3, activeProjects: 10, budget: 32000000, performance: 88.4 },
-  { id: 'offline', name: '오프라인팀', icon: '🏪', color: 'from-fuchsia-500 to-purple-500', memberCount: 2, activeProjects: 5, budget: 25000000, performance: 86.9 },
-  { id: 'operations', name: '운영지원팀', icon: '⚙️', color: 'from-emerald-500 to-green-500', memberCount: 7, activeProjects: 9, budget: 42000000, performance: 93.6 }
+  { id: 'filluminate', name: 'FILLUMINATE', icon: '💡', color: 'from-yellow-500 to-orange-500', memberCount: 8, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'mardmard', name: 'MARD MARD', icon: '🎬', color: 'from-pink-500 to-rose-500', memberCount: 8, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'nexus', name: 'NEXUS & THE FIELD NINE', icon: '🔗', color: 'from-blue-500 to-cyan-500', memberCount: 5, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'orasydney', name: 'ORA SYDNEY (예정)', icon: '🌏', color: 'from-purple-500 to-indigo-500', memberCount: 0, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'design', name: '디자인팀', icon: '🎨', color: 'from-purple-500 to-pink-500', memberCount: 7, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'production', name: '생산팀', icon: '🏭', color: 'from-blue-500 to-cyan-500', memberCount: 3, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'online', name: '온라인팀', icon: '💻', color: 'from-cyan-500 to-teal-500', memberCount: 3, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'offline', name: '오프라인팀', icon: '🏪', color: 'from-fuchsia-500 to-purple-500', memberCount: 2, activeProjects: 0, budget: 0, performance: 0 },
+  { id: 'operations', name: '운영지원팀', icon: '⚙️', color: 'from-emerald-500 to-green-500', memberCount: 7, activeProjects: 0, budget: 0, performance: 0 }
 ];
 
-const CRITICAL_ALERTS = [
-  { id: 1, type: 'CRITICAL', team: 'NEXUS', title: '세무 신고 마감 3일 전', timestamp: '3분 전', priority: 'urgent' },
-  { id: 2, type: 'HIGH', team: 'FILLUMINATE', title: '대규모 계약 승인 대기', amount: '₩125M', timestamp: '15분 전', priority: 'high' },
-  { id: 3, type: 'MEDIUM', team: 'MARD MARD', title: '신규 캠페인 최종 검토', timestamp: '1시간 전', priority: 'medium' },
-  { id: 4, type: 'HIGH', team: '생산팀', title: '재고 부족 경고 (3일분)', timestamp: '2시간 전', priority: 'high' },
-  { id: 5, type: 'CRITICAL', team: '운영지원팀', title: '급여 지급 승인 필요 (26명)', amount: '₩87M', timestamp: '4시간 전', priority: 'urgent' }
-];
+// CRITICAL 알림은 데이터 관리 시스템에서 실제 데이터 입력 시 자동 생성
+const CRITICAL_ALERTS: any[] = [];
 
 const DEFAULT_WIDGETS: Widget[] = [
   { id: 'w1', title: '전사 재무 현황', type: 'financial', size: 'large', position: { x: 0, y: 0 } },
@@ -227,26 +222,10 @@ export default function ExecutiveDashboard() {
               {/* 위젯 컨텐츠 */}
               {widget.type === 'financial' && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-                    <div>
-                      <div className="text-sm text-white/60">월간 매출</div>
-                      <div className="text-2xl font-bold text-green-400">₩2.4억</div>
-                    </div>
-                    <div className="text-green-400">+18.2%</div>
-                  </div>
-                  <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-                    <div>
-                      <div className="text-sm text-white/60">월간 비용</div>
-                      <div className="text-2xl font-bold text-red-400">₩1.1억</div>
-                    </div>
-                    <div className="text-red-400">+5.4%</div>
-                  </div>
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-lg border border-purple-500/30">
-                    <div>
-                      <div className="text-sm text-white/60">순이익</div>
-                      <div className="text-2xl font-bold">₩1.3억</div>
-                    </div>
-                    <div className="text-green-400">+32.8%</div>
+                  <div className="text-center py-8 text-white/40">
+                    <div className="text-4xl mb-3">💰</div>
+                    <div className="text-sm">데이터 관리 시스템에서</div>
+                    <div className="text-sm">재무 데이터를 입력하세요</div>
                   </div>
                 </div>
               )}
@@ -347,27 +326,10 @@ export default function ExecutiveDashboard() {
               )}
 
               {widget.type === 'projects' && (
-                <div className="space-y-3">
-                  <div className="p-4 bg-white/5 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">NEXUS OS 3D 맵 최적화</span>
-                      <span className="text-xs px-2 py-1 bg-yellow-500 text-black rounded font-bold">진행중</span>
-                    </div>
-                    <div className="text-sm text-white/60 mb-2">생산팀 · 마감 2025-11-25</div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-purple-500 to-cyan-500" style={{ width: '65%' }} />
-                    </div>
-                  </div>
-                  <div className="p-4 bg-white/5 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">FILLUMINATE 데이터 파이프라인</span>
-                      <span className="text-xs px-2 py-1 bg-green-500 text-white rounded font-bold">완료</span>
-                    </div>
-                    <div className="text-sm text-white/60 mb-2">FILLUMINATE · 완료 2025-11-20</div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-green-500 to-emerald-500" style={{ width: '100%' }} />
-                    </div>
-                  </div>
+                <div className="text-center py-8 text-white/40">
+                  <div className="text-4xl mb-3">📋</div>
+                  <div className="text-sm">데이터 관리 시스템에서</div>
+                  <div className="text-sm">프로젝트를 생성하세요</div>
                 </div>
               )}
             </div>
