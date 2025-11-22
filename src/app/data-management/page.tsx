@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-// 데이터 관리 시스템 - 임원/팀장이 데이터를 심고 관리
+// ⛔ CRITICAL SECURITY: 데이터 관리 시스템 - 총괄/본부장 전용
+// 최고 보안 등급 - 재무, 세무, 인사 등 핵심 데이터 관리
 
 interface DataEntry {
   id: string;
@@ -241,7 +242,17 @@ export default function DataManagementPage() {
       router.push('/login');
       return;
     }
-    setUser(JSON.parse(storedUser));
+    
+    const userData = JSON.parse(storedUser);
+    
+    // ⛔ CRITICAL SECURITY: 총괄(executive) 또는 본부장(general_manager)만 접근 가능
+    if (userData.role !== 'executive' && userData.role !== 'general_manager') {
+      alert('🔒 접근 거부\n\n이 페이지는 최고 관리자 전용입니다.\n(총괄, 본부장만 접근 가능)');
+      router.push('/workspace');
+      return;
+    }
+    
+    setUser(userData);
 
     // 저장된 데이터 로드
     const stored = localStorage.getItem('fieldnine-data-entries');
