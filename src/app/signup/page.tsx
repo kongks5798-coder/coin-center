@@ -28,9 +28,10 @@ interface SignupFormData {
   emergencyContact: string;
 }
 
-// 5개 팀 정의 (총 22명)
+// 5개 팀 정의 (총 26명)
 const TEAMS = [
   { id: 'design', name: '디자인팀', count: 7, icon: '🎨', color: 'purple' },
+  { id: 'mardmard', name: 'MARD MARD', count: 8, icon: '🎬', color: 'pink' },
   { id: 'production', name: '생산팀', count: 3, icon: '🏭', color: 'blue' },
   { id: 'online', name: '온라인팀', count: 3, icon: '💻', color: 'cyan' },
   { id: 'offline', name: '오프라인팀', count: 2, icon: '🏪', color: 'fuchsia' },
@@ -39,8 +40,11 @@ const TEAMS = [
 
 // 직책 옵션
 const POSITIONS = [
-  { value: 'director', label: '이사' },
-  { value: 'manager', label: '팀장' },
+  { value: 'executive', label: '총괄' },
+  { value: 'general_manager', label: '본부장' },
+  { value: 'director', label: '부장' },
+  { value: 'manager', label: '실장' },
+  { value: 'team_leader', label: '팀장' },
   { value: 'lead', label: '파트장' },
   { value: 'senior', label: '책임' },
   { value: 'staff', label: '사원' },

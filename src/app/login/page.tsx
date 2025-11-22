@@ -9,32 +9,40 @@ interface LoginCredentials {
   password: string;
 }
 
-// FIELD NINE 전체 직원 계정 (25명)
+// FIELD NINE 전체 직원 계정 (26명 + 임원 4명 = 30명)
 const DEMO_USERS = [
-  // Management (3명)
-  {
-    email: 'admin@fieldnine.io',
-    password: 'field2025',
-    name: '박나인',
-    role: 'admin',
-    department: 'Management',
-    avatar: '👨‍💼'
-  },
+  // 임원진 (4명)
   {
     email: 'ceo@fieldnine.io',
     password: 'field2025',
     name: '공경수',
-    role: 'admin',
+    role: 'executive',
     department: 'Management',
     avatar: '👔'
   },
   {
-    email: 'coo@fieldnine.io',
+    email: 'general@fieldnine.io',
     password: 'field2025',
-    name: '김운영',
-    role: 'manager',
+    name: '김본부',
+    role: 'general_manager',
     department: 'Management',
     avatar: '📊'
+  },
+  {
+    email: 'director1@fieldnine.io',
+    password: 'field2025',
+    name: '이부장',
+    role: 'director',
+    department: 'Management',
+    avatar: '💼'
+  },
+  {
+    email: 'manager1@fieldnine.io',
+    password: 'field2025',
+    name: '박실장',
+    role: 'manager',
+    department: 'Management',
+    avatar: '📋'
   },
 
   // FILLUMINATE (8명)
@@ -103,12 +111,12 @@ const DEMO_USERS = [
     avatar: '📉'
   },
 
-  // MARD MARD (7명)
+  // MARD MARD (8명)
   {
     email: 'creative@fieldnine.io',
     password: 'field2025',
     name: '이크리에이티브',
-    role: 'manager',
+    role: 'team_leader',
     department: 'MARD MARD',
     avatar: '👩‍🎨'
   },
@@ -159,6 +167,14 @@ const DEMO_USERS = [
     role: 'staff',
     department: 'MARD MARD',
     avatar: '📢'
+  },
+  {
+    email: 'mard8@fieldnine.io',
+    password: 'field2025',
+    name: '한마드',
+    role: 'staff',
+    department: 'MARD MARD',
+    avatar: '🎭'
   },
 
   // DATABASE GUARD CENTER (5명)
@@ -359,7 +375,7 @@ export default function LoginPage() {
 
           <div className="mt-8 pt-6 border-t border-white/10">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-sm text-white/40">빠른 로그인 (25명 전체):</div>
+              <div className="text-sm text-white/40">빠른 로그인 (30명 전체):</div>
               <div className="text-xs text-white/30">비밀번호: field2025</div>
             </div>
             

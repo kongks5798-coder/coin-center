@@ -9,8 +9,8 @@
  * - 운영지원팀 (7명)
  */
 
-export type TeamId = 'design' | 'production' | 'online' | 'offline' | 'operations';
-export type RoleLevel = 'director' | 'manager' | 'lead' | 'senior' | 'staff' | 'intern';
+export type TeamId = 'design' | 'mardmard' | 'production' | 'online' | 'offline' | 'operations';
+export type RoleLevel = 'executive' | 'general_manager' | 'director' | 'manager' | 'team_leader' | 'lead' | 'senior' | 'staff' | 'intern';
 
 export interface Permission {
   id: string;
@@ -246,17 +246,39 @@ export const PERMISSIONS: Record<string, Permission> = {
 
 // 역할별 권한 정의
 export const ROLES: Record<RoleLevel, Role> = {
+  executive: {
+    level: 'executive',
+    label: '총괄',
+    permissions: Object.keys(PERMISSIONS), // 모든 권한
+    canManageTeam: true,
+    canAccessFinancials: true,
+    canModifySettings: true
+  },
+  general_manager: {
+    level: 'general_manager',
+    label: '본부장',
+    permissions: Object.keys(PERMISSIONS), // 모든 권한
+    canManageTeam: true,
+    canAccessFinancials: true,
+    canModifySettings: true
+  },
   director: {
     level: 'director',
-    label: '이사',
-    permissions: Object.keys(PERMISSIONS), // 모든 권한
+    label: '부장',
+    permissions: [
+      'workspace_view', 'workspace_manage',
+      'task_view', 'task_create', 'task_update', 'task_delete', 'task_assign',
+      'team_view', 'team_manage',
+      'financial_view', 'financial_manage',
+      'report_view', 'report_create'
+    ],
     canManageTeam: true,
     canAccessFinancials: true,
     canModifySettings: true
   },
   manager: {
     level: 'manager',
-    label: '팀장',
+    label: '실장',
     permissions: [
       'workspace_view', 'workspace_manage',
       'task_view', 'task_create', 'task_update', 'task_delete', 'task_assign',
@@ -266,6 +288,20 @@ export const ROLES: Record<RoleLevel, Role> = {
     ],
     canManageTeam: true,
     canAccessFinancials: true,
+    canModifySettings: false
+  },
+  team_leader: {
+    level: 'team_leader',
+    label: '팀장',
+    permissions: [
+      'workspace_view',
+      'task_view', 'task_create', 'task_update', 'task_delete', 'task_assign',
+      'team_view', 'team_manage',
+      'financial_view',
+      'report_view', 'report_create'
+    ],
+    canManageTeam: true,
+    canAccessFinancials: false,
     canModifySettings: false
   },
   lead: {
@@ -321,7 +357,7 @@ export const ROLES: Record<RoleLevel, Role> = {
   }
 };
 
-// 팀 정의 (총 22명)
+// 팀 정의 (총 26명)
 export const TEAMS: Record<TeamId, Team> = {
   design: {
     id: 'design',
@@ -331,6 +367,15 @@ export const TEAMS: Record<TeamId, Team> = {
     color: 'purple',
     maxMembers: 7,
     defaultPermissions: ['design_view', 'design_edit']
+  },
+  mardmard: {
+    id: 'mardmard',
+    name: 'MARD MARD',
+    description: '크리에이티브 컨텐츠, 브랜딩, 마케팅',
+    icon: '🎬',
+    color: 'pink',
+    maxMembers: 8,
+    defaultPermissions: ['design_view', 'design_edit', 'online_view']
   },
   production: {
     id: 'production',
