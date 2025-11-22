@@ -161,7 +161,7 @@ export default function Home() {
             </div>
 
             <h1 className="mt-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-cyan-400 bg-clip-text text-5xl font-semibold leading-tight tracking-tight text-transparent sm:text-6xl lg:text-7xl">
-              KAUS Coin Center
+              NEXUS The Field Nine
             </h1>
 
             <p className="mx-auto mt-4 max-w-2xl text-sm text-slate-300/90 sm:text-base">
