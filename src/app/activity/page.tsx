@@ -60,9 +60,9 @@ export default function ActivityPage() {
           <p className="text-lg text-slate-300 mb-6 max-w-2xl mx-auto">
             KAUS Coin 메인넷 출시 후 실시간 거래 활동, 고래 움직임, 청산 등 모든 온체인 이벤트를 추적할 수 있습니다.
           </p>
-          <div className="inline-flex items-center gap-2 rounded-full bg-amber-500/20 border border-amber-500/40 px-6 py-3 text-sm font-semibold text-amber-200">
-            <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
-            2025 Q2 출시 예정
+          <div className="inline-flex items-center gap-2 rounded-full bg-purple-500/20 border border-purple-500/40 px-6 py-3 text-sm font-semibold text-purple-200">
+            <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse"></span>
+            2026 Q2 출시 예정
           </div>
         </div>
 

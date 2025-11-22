@@ -73,7 +73,7 @@ export default function MarketPage() {
           </p>
           <div className="inline-flex items-center gap-2 rounded-full bg-purple-500/20 border border-purple-500/40 px-6 py-3 text-sm font-semibold text-purple-200">
             <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse"></span>
-            2025 Q2 출시 예정
+            2026 Q2 출시 예정
           </div>
         </div>
 

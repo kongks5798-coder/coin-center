@@ -28,7 +28,7 @@ export default function RoadmapPage() {
     },
     {
       phase: "Phase 3: Expansion",
-      quarter: "Q2 2025",
+      quarter: "Q2 2026",
       status: "in-progress",
       items: [
         { title: "Polygon 네트워크 확장", done: true },
@@ -40,7 +40,7 @@ export default function RoadmapPage() {
     },
     {
       phase: "Phase 4: Innovation",
-      quarter: "Q3-Q4 2025",
+      quarter: "Q3-Q4 2026",
       status: "upcoming",
       items: [
         { title: "크로스체인 브릿지 출시", done: false },
@@ -52,7 +52,7 @@ export default function RoadmapPage() {
     },
     {
       phase: "Phase 5: Maturity",
-      quarter: "2026",
+      quarter: "2027",
       status: "upcoming",
       items: [
         { title: "자체 블록체인 개발 시작", done: false },
