@@ -39,7 +39,7 @@ export default function Home() {
                   <Link href="/metaverse" className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">
                     Metaverse
                   </Link>
-                  <Link href="/components/Nexus" className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">
+                  <Link href="/nexus" className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900">
                     NEXUS OS
                   </Link>
                 </nav>
@@ -236,7 +236,7 @@ export default function Home() {
               AI 기반 물류 자동화 시스템으로 효율성을 극대화하고 비용을 절감하세요
             </p>
             <Link 
-              href="/components/Nexus"
+              href="/nexus"
               className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-gray-900 px-6 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-gray-800"
             >
               Learn more
