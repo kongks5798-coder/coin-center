@@ -511,6 +511,7 @@ export function shouldShowUIElement(
 export function getTeamDashboardWidgets(teamId: TeamId): string[] {
   const widgets: Record<TeamId, string[]> = {
     design: ['tasks', 'design-files', 'approval-queue', 'team-activity'],
+    mardmard: ['campaigns', 'creative-projects', 'content-calendar', 'tasks'],
     production: ['nexus-os', 'production-status', 'inventory', 'tasks'],
     online: ['campaigns', 'analytics', 'social-media', 'tasks'],
     offline: ['store-status', 'sales', 'inventory', 'tasks'],

@@ -42,27 +42,59 @@ export default function Home() {
       badge: "WORK"
     },
     {
-      title: "FILLUMINATE",
-      icon: "📊",
-      description: "데이터 분석 플랫폼",
-      href: "/filluminate",
-      gradient: "from-amber-600 to-orange-600",
-      badge: "DATA"
+      title: "디자인팀",
+      icon: "🎨",
+      description: "브랜드 디자인 & UI/UX",
+      href: "/team/design",
+      gradient: "from-purple-600 to-pink-600",
+      badge: "DESIGN"
     },
     {
       title: "MARD MARD",
-      icon: "🎨",
-      description: "크리에이티브 스튜디오",
-      href: "/mardmard",
+      icon: "🎬",
+      description: "크리에이티브 컨텐츠",
+      href: "/team/mardmard",
       gradient: "from-pink-600 to-rose-600",
       badge: "CREATIVE"
     },
     {
-      title: "NEXUS",
-      icon: "🛡️",
-      description: "블록체인 통제 시스템",
-      href: "/nexus",
-      gradient: "from-cyan-600 to-blue-600",
+      title: "생산팀",
+      icon: "🏭",
+      description: "NEXUS OS & 물류 자동화",
+      href: "/team/production",
+      gradient: "from-blue-600 to-cyan-600",
+      badge: "PRODUCTION"
+    },
+    {
+      title: "온라인팀",
+      icon: "💻",
+      description: "이커머스 & 디지털 마케팅",
+      href: "/team/online",
+      gradient: "from-cyan-600 to-teal-600",
+      badge: "ONLINE"
+    },
+    {
+      title: "오프라인팀",
+      icon: "🏪",
+      description: "매장 운영 & 고객 서비스",
+      href: "/team/offline",
+      gradient: "from-fuchsia-600 to-purple-600",
+      badge: "OFFLINE"
+    },
+    {
+      title: "운영지원팀",
+      icon: "⚙️",
+      description: "시스템 & IT 인프라",
+      href: "/team/operations",
+      gradient: "from-emerald-600 to-green-600",
+      badge: "OPS"
+    },
+    {
+      title: "NEXUS OS",
+      icon: "🤖",
+      description: "물류 자동화 시스템",
+      href: "/components/Nexus",
+      gradient: "from-orange-600 to-red-600",
       badge: "BLOCKCHAIN"
     }
   ];
