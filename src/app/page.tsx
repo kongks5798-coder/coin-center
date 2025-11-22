@@ -128,6 +128,9 @@ export default function Home() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
+              <Link href="/nexus" className="text-sm text-slate-400 hover:text-purple-400 transition">
+                NEXUS OS
+              </Link>
               <Link href="/market" className="text-sm text-slate-400 hover:text-purple-400 transition">
                 Market
               </Link>
@@ -485,6 +488,7 @@ export default function Home() {
             <div>
               <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider mb-4">Platform</h3>
               <ul className="space-y-2 text-sm">
+                <li><Link href="/nexus" className="text-slate-400 hover:text-purple-400 transition">NEXUS OS</Link></li>
                 <li><Link href="/market" className="text-slate-400 hover:text-purple-400 transition">Market</Link></li>
                 <li><Link href="/wallets" className="text-slate-400 hover:text-purple-400 transition">Wallets</Link></li>
                 <li><Link href="/yield" className="text-slate-400 hover:text-purple-400 transition">Yield</Link></li>
