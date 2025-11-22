@@ -4,6 +4,9 @@ import React from 'react';
 import AssetDashboard from './AssetDashboard';
 import LiveLogTicker from './LiveLogTicker';
 import AutomationMonitor from './AutomationMonitor';
+import Warehouse3DMap from './Warehouse3DMap';
+import PredictiveAI from './PredictiveAI';
+import HardwareGuide from './HardwareGuide';
 import './nexus-style.css';
 
 const NexusContainer = () => {
@@ -79,8 +82,17 @@ const NexusContainer = () => {
         <LiveLogTicker />
       </div>
 
+      {/* 3D 창고 맵 - 전체 너비 */}
+      <Warehouse3DMap />
+
+      {/* AI 예측 시스템 */}
+      <PredictiveAI />
+
       {/* 자동화 시스템 모니터 - 전체 너비 */}
       <AutomationMonitor />
+
+      {/* 하드웨어 연동 가이드 */}
+      <HardwareGuide />
 
       {/* 시스템 상태 바 */}
       <div className="nexus-panel" style={{ 
