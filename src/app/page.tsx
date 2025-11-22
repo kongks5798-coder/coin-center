@@ -163,9 +163,12 @@ export default function Home() {
               <span>Futuristic crypto control room</span>
             </div>
 
-            <Link href="/nexus">
-              <h1 className="mt-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-cyan-400 bg-clip-text text-5xl font-semibold leading-tight tracking-tight text-transparent sm:text-6xl lg:text-7xl cursor-pointer hover:scale-105 transition-transform">
+            <Link href="/nexus" className="group inline-block">
+              <h1 className="mt-6 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-cyan-400 bg-clip-text text-5xl font-semibold leading-tight tracking-tight text-transparent sm:text-6xl lg:text-7xl cursor-pointer group-hover:scale-105 transition-transform relative">
                 NEXUS The Field Nine
+                <span className="absolute -top-4 -right-16 bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.6)]">
+                  🚀 NEW
+                </span>
               </h1>
             </Link>
 
@@ -177,6 +180,43 @@ export default function Home() {
               See how profits are generated, which accounts hold which amounts,
               and how every token in the system is moving.
             </p>
+
+            {/* NEXUS OS 안내 카드 */}
+            <div className="mt-8 mx-auto max-w-3xl rounded-2xl border border-cyan-500/50 bg-gradient-to-br from-cyan-950/30 via-slate-950/50 to-purple-950/30 p-6 backdrop-blur">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <span className="text-2xl">⚡</span>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                  NEXUS OS 전용 대시보드 체험하기
+                </h3>
+              </div>
+              <p className="text-sm text-slate-300 mb-6">
+                실시간 3D 창고 맵, AI 예측 분석, 하드웨어 통합 가이드 - 모두 여기서 경험하세요
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="rounded-lg border border-emerald-500/30 bg-slate-950/50 p-4">
+                  <div className="text-3xl mb-2">🗺️</div>
+                  <div className="text-sm font-semibold text-emerald-400 mb-1">3D Warehouse Map</div>
+                  <div className="text-xs text-slate-400">Ocado 스타일 실시간 로봇 추적</div>
+                </div>
+                <div className="rounded-lg border border-purple-500/30 bg-slate-950/50 p-4">
+                  <div className="text-3xl mb-2">🤖</div>
+                  <div className="text-sm font-semibold text-purple-400 mb-1">AI Predictive Analytics</div>
+                  <div className="text-xs text-slate-400">Amazon Robotics 수준 예측</div>
+                </div>
+                <div className="rounded-lg border border-cyan-500/30 bg-slate-950/50 p-4">
+                  <div className="text-3xl mb-2">🔧</div>
+                  <div className="text-sm font-semibold text-cyan-400 mb-1">Hardware Guide</div>
+                  <div className="text-xs text-slate-400">Raspberry Pi + RFID 통합</div>
+                </div>
+              </div>
+              <Link
+                href="/nexus"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-600 via-purple-600 to-fuchsia-600 px-8 py-4 text-sm font-bold uppercase tracking-wider text-white shadow-[0_0_40px_rgba(34,211,238,0.7)] transition-all hover:scale-105 hover:shadow-[0_0_60px_rgba(168,85,247,0.9)]"
+              >
+                <span>🚀 NEXUS OS 들어가기</span>
+                <span className="text-lg">→</span>
+              </Link>
+            </div>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <button className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-purple-500/80 bg-gradient-to-r from-purple-600 via-fuchsia-500 to-cyan-500 px-8 py-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white shadow-[0_0_40px_rgba(168,85,247,0.9)] transition-transform duration-150 hover:scale-105 hover:shadow-[0_0_65px_rgba(34,211,238,0.95)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
