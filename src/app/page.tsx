@@ -57,11 +57,11 @@ export default function Home() {
       stats: ["실시간 분석", "AI 예측 모델", "비즈니스 인텔리전스"]
     },
     {
-      title: "MAD MAD",
+      title: "MARD MARD",
       description: "미친 창의성으로 세상을 바꾸다",
       icon: "🎨",
       gradient: "from-pink-600 via-rose-600 to-red-600",
-      href: "/madmad",
+      href: "/mardmard",
       badge: "CREATIVE",
       stats: ["브랜드 디자인", "콘텐츠 제작", "마케팅 솔루션"]
     },
@@ -395,7 +395,7 @@ export default function Home() {
               </p>
               <p className="leading-relaxed">
                 <span className="text-purple-400 font-semibold">FILLUMINATE</span>로 데이터를 조명하고,
-                <span className="text-pink-400 font-semibold"> MAD MAD</span>로 창의성을 폭발시키며,
+                <span className="text-pink-400 font-semibold"> MARD MARD</span>로 창의성을 폭발시키며,
                 <span className="text-cyan-400 font-semibold"> DATABASE GUARD CENTER: NEXUS</span>로 
                 공급망의 미래를 설계합니다.
               </p>
@@ -407,7 +407,7 @@ export default function Home() {
                 </div>
                 <div className="rounded-2xl border border-pink-500/30 bg-pink-500/10 p-6">
                   <div className="text-4xl mb-3">🎭</div>
-                  <div className="text-pink-400 font-bold mb-2">MAD MAD</div>
+                  <div className="text-pink-400 font-bold mb-2">MARD MARD</div>
                   <div className="text-sm text-slate-400">크리에이티브 혁신</div>
                 </div>
                 <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-6">
