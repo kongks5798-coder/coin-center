@@ -392,6 +392,7 @@ export default function HomePage() {
                                 <li><Link href="/nexus-satellite" className="hover:text-white transition">위성 네트워크</Link></li>
                                 <li><Link href="/wallet" className="hover:text-white transition">지갑 & 거래소</Link></li>
                                 <li><Link href="/listing" className="hover:text-white transition">상장 신청</Link></li>
+                                <li><Link href="/reserves" className="hover:text-white transition">리저브 대시보드</Link></li>
                                 <li><Link href="/kaus-empire" className="hover:text-white transition">KAUS 제국</Link></li>
                                 <li><Link href="/metaverse" className="hover:text-white transition">메타버스</Link></li>
                             </ul>

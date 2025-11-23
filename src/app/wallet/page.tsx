@@ -34,7 +34,7 @@ const useCryptoPrices = () => {
         BTC: 67500,
         ETH: 3450,
         XRP: 0.62,
-        KAUS: 3.50,
+        KAUS: 1.00, // USD-Pegged Stablecoin
         USDT: 1.00,
     });
 
@@ -44,7 +44,7 @@ const useCryptoPrices = () => {
                 BTC: prev.BTC + (Math.random() * 200 - 100),
                 ETH: prev.ETH + (Math.random() * 50 - 25),
                 XRP: prev.XRP + (Math.random() * 0.02 - 0.01),
-                KAUS: prev.KAUS + (Math.random() * 0.10 - 0.05),
+                KAUS: 1.00, // Stablecoin - always pegged to $1.00 USD
                 USDT: 1.00,
             }));
         }, 3000);
