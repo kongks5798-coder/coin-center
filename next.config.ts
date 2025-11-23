@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   // Production optimization
   compress: true,
   poweredByHeader: false,
+  // Performance optimizations
+  swcMinify: true,
+  experimental: {
+    optimizeCss: true,
+  },
   // Domain configuration
   async headers() {
     return [

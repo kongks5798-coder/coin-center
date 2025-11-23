@@ -8,7 +8,7 @@ const brandData: Record<string, any> = {
     'filluminate': {
         name: 'FILLUMINATE',
         tagline: '빛으로 빚어낸 명품의 시간',
-        desc: '럭셔리와 혁신의 완벽한 조화',
+        desc: '럭셔리와 혁신의 완벽한 조화를 추구하는 프리미엄 브랜드',
         gradient: 'from-amber-400 via-orange-500 to-red-500',
         videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
         stats: [
@@ -25,7 +25,7 @@ const brandData: Record<string, any> = {
     'mard-mard': {
         name: 'MARD MARD',
         tagline: '나를 위한, 나만의 스타일',
-        desc: '개성과 트렌드의 완벽한 밸런스',
+        desc: '개성과 트렌드의 완벽한 밸런스를 추구하는 패션 브랜드',
         gradient: 'from-pink-500 via-purple-500 to-indigo-500',
         videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
         stats: [
@@ -42,7 +42,7 @@ const brandData: Record<string, any> = {
     'database-guard': {
         name: 'DATABASE GUARD',
         tagline: '블록체인으로 지키는 신뢰',
-        desc: '불변의 기록, 완벽한 보안',
+        desc: '불변의 기록과 완벽한 보안을 제공하는 블록체인 기반 데이터 보호 솔루션',
         gradient: 'from-cyan-400 via-blue-500 to-indigo-600',
         videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
         stats: [
@@ -59,7 +59,7 @@ const brandData: Record<string, any> = {
     'ai-drone': {
         name: 'AI DRONE',
         tagline: '하늘을 지배하는 인공지능',
-        desc: '대한민국 AI 드론 1위',
+        desc: 'AI 기반 자율 비행 드론 배송 시스템을 제공하는 혁신 기업',
         gradient: 'from-green-400 via-emerald-500 to-teal-600',
         videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
         stats: [
@@ -73,27 +73,10 @@ const brandData: Record<string, any> = {
             { icon: '🌍', title: '전국망 구축', desc: '30분 내 배송 가능' }
         ]
     },
-    'korean-air': {
-        name: 'KOREAN AIR',
-        tagline: '하늘길을 여는 새로운 시대',
-        desc: 'FIELD NINE의 항공 물류 혁명',
-        gradient: 'from-blue-500 via-indigo-600 to-purple-700',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        stats: [
-            { value: '₩30조', label: '기업 가치' },
-            { value: '200+', label: '운항 국가' },
-            { value: '500대', label: '보유 항공기' }
-        ],
-        features: [
-            { icon: '✈️', title: '프리미엄 서비스', desc: '최고급 기내 경험' },
-            { icon: '🌏', title: '글로벌 네트워크', desc: '전 세계 주요 도시 연결' },
-            { icon: '📦', title: '화물 특송', desc: 'AI 최적화 배송 경로' }
-        ]
-    },
     'global-logistics': {
         name: 'GLOBAL LOGISTICS',
         tagline: '세계를 연결하는 물류 네트워크',
-        desc: '135개국을 하나로',
+        desc: '135개국을 하나로 연결하는 글로벌 물류 플랫폼',
         gradient: 'from-purple-500 via-pink-500 to-rose-600',
         videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
         stats: [
@@ -105,6 +88,23 @@ const brandData: Record<string, any> = {
             { icon: '🌍', title: '글로벌 네트워크', desc: '전 세계 실시간 배송' },
             { icon: '📊', title: 'AI 최적화', desc: '가장 빠른 경로 자동 계산' },
             { icon: '🔄', title: '통합 시스템', desc: 'NEXUS OS 기반 관리' }
+        ]
+    },
+    'kaus-coin': {
+        name: 'KAUS COIN',
+        tagline: 'RFID를 넘어선 미래 금융',
+        desc: '블록체인 기반 RFID 태그로 공급망 투명성을 혁신하는 플랫폼',
+        gradient: 'from-orange-400 via-red-500 to-orange-600',
+        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        stats: [
+            { value: '100B+', label: '검증된 태그' },
+            { value: '₩180', label: '태그당 가격' },
+            { value: '99.9%', label: '정확도' }
+        ],
+        features: [
+            { icon: '🪙', title: '블록체인 인증', desc: '변조 불가능한 RFID 태그' },
+            { icon: '🔗', title: '실시간 추적', desc: '모든 제품의 생애주기 추적' },
+            { icon: '🌐', title: '글로벌 네트워크', desc: '전 세계 공급망 투명성' }
         ]
     }
 };
