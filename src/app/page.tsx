@@ -256,6 +256,19 @@ export default function HomePage() {
                                     <span>NEXUS OS</span>
                                 </span>
                             </Link>
+                            <Link
+                                href="/nexus-satellite"
+                                className="group relative px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold text-lg overflow-hidden hover:scale-105 transition-all shadow-lg shadow-purple-500/50"
+                            >
+                                <span className="relative z-10 flex items-center gap-3">
+                                    <span>🛰️</span>
+                                    <span>위성 네트워크</span>
+                                    <svg className="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -362,6 +375,7 @@ export default function HomePage() {
                             <ul className="space-y-2 text-sm text-gray-400">
                                 <li><Link href="/dashboard/global" className="hover:text-white transition">글로벌 대시보드</Link></li>
                                 <li><Link href="/nexus" className="hover:text-white transition">NEXUS OS</Link></li>
+                                <li><Link href="/nexus-satellite" className="hover:text-white transition">위성 네트워크</Link></li>
                                 <li><Link href="/kaus-empire" className="hover:text-white transition">KAUS 제국</Link></li>
                                 <li><Link href="/metaverse" className="hover:text-white transition">메타버스</Link></li>
                             </ul>
