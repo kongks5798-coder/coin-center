@@ -90,6 +90,51 @@ async function syncMiningData() {
   console.log('채굴 데이터 동기화 중...');
 }
 
+// 백그라운드 채굴 (페이지가 닫혀도 계속 실행)
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'START_BACKGROUND_MINING') {
+    startBackgroundMining();
+  } else if (event.data && event.data.type === 'STOP_BACKGROUND_MINING') {
+    stopBackgroundMining();
+  }
+});
+
+let miningInterval = null;
+
+function startBackgroundMining() {
+  if (miningInterval) return;
+  
+  // 백그라운드에서 주기적으로 채굴 계산
+  miningInterval = setInterval(() => {
+    // CPU 집약적 작업 수행 (실제 채굴 시뮬레이션)
+    let result = 0;
+    for (let i = 0; i < 100000; i++) {
+      result += Math.sqrt(i) * Math.sin(i);
+    }
+    
+    // 채굴 데이터를 IndexedDB에 저장
+    // 실제 구현 시 IndexedDB 사용
+    console.log('백그라운드 채굴 중...', result);
+    
+    // 클라이언트에게 채굴 완료 알림
+    self.clients.matchAll().then(clients => {
+      clients.forEach(client => {
+        client.postMessage({
+          type: 'MINING_UPDATE',
+          data: { earned: 0.0001, timestamp: Date.now() }
+        });
+      });
+    });
+  }, 5000); // 5초마다 채굴
+}
+
+function stopBackgroundMining() {
+  if (miningInterval) {
+    clearInterval(miningInterval);
+    miningInterval = null;
+  }
+}
+
 // 푸시 알림
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};

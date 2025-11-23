@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useAutoMining } from '@/hooks/useAutoMining';
 
 // 실시간 채굴 로직
 const useMining = () => {
@@ -251,12 +252,13 @@ export default function MiningPage() {
     const { tapCount, combo, earned: tapEarned, isActive: tapActive, handleTap } = useInteractiveMining();
     const { shakeCount, earned: shakeEarned, isSupported: motionSupported } = useMotionMining();
     const { score, earned: gameEarned, blocks, isPlaying, startGame, stopGame, hitBlock } = useBlockGameMining();
+    const { isMining: isAutoMining, stats: autoStats, batteryLevel, startMining: startAutoMining, stopMining: stopAutoMining } = useAutoMining();
     const daysRemaining = useListingCountdown();
-    const [activeTab, setActiveTab] = useState<'auto' | 'tap' | 'shake' | 'game'>('auto');
+    const [activeTab, setActiveTab] = useState<'auto' | 'tap' | 'shake' | 'game' | 'background'>('background');
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    // 총 획득량
-    const totalEarned = minedAmount + tapEarned + shakeEarned + gameEarned;
+    // 총 획득량 (백그라운드 채굴 포함)
+    const totalEarned = minedAmount + tapEarned + shakeEarned + gameEarned + autoStats.totalEarned;
 
     // 시간 포맷
     const formatTime = (seconds: number) => {
@@ -429,6 +431,111 @@ export default function MiningPage() {
                         {totalEarned.toFixed(4)} KAUS
                     </div>
                 </div>
+
+                {/* 백그라운드 채굴 탭 */}
+                {activeTab === 'background' && (
+                    <div className="max-w-4xl w-full space-y-6">
+                        <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-2 border-emerald-500/30 rounded-3xl p-8 backdrop-blur-xl">
+                            <div className="text-center mb-6">
+                                <div className="text-6xl mb-4">⚡</div>
+                                <h2 className="text-3xl font-black text-white mb-2">백그라운드 자동 채굴</h2>
+                                <p className="text-gray-300">
+                                    디바이스를 켜놓으면 알아서 채굴합니다!<br />
+                                    실제 리소스 사용량에 따라 보상을 받습니다.
+                                </p>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-6 mb-6">
+                                <div className="bg-black/30 rounded-2xl p-6">
+                                    <div className="text-sm text-gray-400 mb-2">총 획득량</div>
+                                    <div className="text-4xl font-black text-emerald-400">
+                                        {autoStats.totalEarned.toFixed(6)} KAUS
+                                    </div>
+                                </div>
+                                <div className="bg-black/30 rounded-2xl p-6">
+                                    <div className="text-sm text-gray-400 mb-2">시간당 채굴 속도</div>
+                                    <div className="text-4xl font-black text-teal-400">
+                                        {autoStats.miningRate.toFixed(4)} KAUS/h
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-4 mb-6">
+                                <div className="bg-black/30 rounded-xl p-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm text-gray-400">CPU 사용량</span>
+                                        <span className="text-lg font-bold text-green-400">{autoStats.cpuUsage.toFixed(1)}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-700 rounded-full h-2">
+                                        <div 
+                                            className="bg-gradient-to-r from-green-500 to-cyan-500 h-2 rounded-full transition-all"
+                                            style={{ width: `${Math.min(100, autoStats.cpuUsage)}%` }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="bg-black/30 rounded-xl p-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm text-gray-400">네트워크 활동</span>
+                                        <span className="text-lg font-bold text-blue-400">{autoStats.networkActivity.toFixed(2)} MB</span>
+                                    </div>
+                                    <div className="w-full bg-gray-700 rounded-full h-2">
+                                        <div 
+                                            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all"
+                                            style={{ width: `${Math.min(100, autoStats.networkActivity * 10)}%` }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="bg-black/30 rounded-xl p-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm text-gray-400">화면 활성 시간</span>
+                                        <span className="text-lg font-bold text-yellow-400">
+                                            {Math.floor(autoStats.screenTime / 3600)}h {Math.floor((autoStats.screenTime % 3600) / 60)}m
+                                        </span>
+                                    </div>
+                                    <div className="text-xs text-gray-500">디바이스가 활성화된 시간</div>
+                                </div>
+
+                                <div className="bg-black/30 rounded-xl p-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm text-gray-400">배터리 소모</span>
+                                        <span className="text-lg font-bold text-orange-400">
+                                            {autoStats.batteryDrain.toFixed(2)}%
+                                        </span>
+                                    </div>
+                                    {batteryLevel !== null && (
+                                        <div className="text-xs text-gray-500">
+                                            현재 배터리: {(batteryLevel * 100).toFixed(0)}%
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={isAutoMining ? stopAutoMining : startAutoMining}
+                                className={`w-full py-4 rounded-xl font-bold text-xl transition-all ${
+                                    isAutoMining
+                                        ? 'bg-red-500 hover:bg-red-600'
+                                        : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:scale-105 shadow-lg shadow-emerald-500/50'
+                                }`}
+                            >
+                                {isAutoMining ? '⏸️ 백그라운드 채굴 중지' : '▶️ 백그라운드 채굴 시작'}
+                            </button>
+
+                            <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                                <div className="text-sm text-yellow-400 font-bold mb-2">💡 채굴 원리</div>
+                                <ul className="text-xs text-gray-300 space-y-1">
+                                    <li>• CPU 사용량: 실제 계산 작업 수행 (Web Workers)</li>
+                                    <li>• 네트워크 활동: 데이터 전송량 기반 보상</li>
+                                    <li>• 화면 활성 시간: 디바이스 사용 시간 기반 보상</li>
+                                    <li>• 배터리 소모: 실제 에너지 소비 기반 보상</li>
+                                    <li>• 백그라운드에서도 계속 채굴됩니다 (Service Worker)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* 자동 채굴 탭 */}
                 {activeTab === 'auto' && (
