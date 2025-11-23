@@ -282,6 +282,19 @@ export default function HomePage() {
                                 </span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             </Link>
+                            <Link
+                                href="/activity-mining"
+                                className="group relative px-8 py-4 bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400 rounded-xl font-bold text-lg overflow-hidden hover:scale-105 transition-all shadow-lg shadow-green-400/50 animate-pulse"
+                            >
+                                <span className="relative z-10 flex items-center gap-3">
+                                    <span>⚡</span>
+                                    <span>활동 기반 채굴</span>
+                                    <svg className="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </Link>
                         </div>
                     </div>
                 </div>
