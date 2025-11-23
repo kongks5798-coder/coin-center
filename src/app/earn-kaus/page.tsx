@@ -19,9 +19,9 @@ interface EarningMethod {
 // 사용자 KAUS 보유량
 const useKausBalance = () => {
     const [balance, setBalance] = useState({
-        total: 125000.5,
-        available: 85000.0, // 거래 가능
-        locked: 40000.5, // 락업 중
+        total: 12500.5, // 더 현실적인 수치로 조정 (1/10로 감소)
+        available: 8500.0, // 거래 가능
+        locked: 4000.5, // 락업 중
         pending: 0, // 대기 중
     });
 
