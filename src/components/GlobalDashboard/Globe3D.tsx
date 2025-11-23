@@ -35,13 +35,13 @@ function Earth({ dataCenters, drones }: { dataCenters: DataCenter[]; drones: Dro
     const markersRef = useRef<THREE.Group>(null);
     const droneLinesRef = useRef<THREE.Group>(null);
 
-    // 실제 지구 텍스처 로드 (NASA Blue Marble)
+    // 실제 지구 텍스처 로드 (NASA Blue Marble 및 공개 텍스처)
     const [earthTexture, normalMap, specularMap, cloudsTexture, nightTexture] = useTexture([
-        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg', // 지구 표면
-        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg', // 노말맵 (지형)
-        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_specular_2048.jpg', // 스펙큘러맵 (물 반사)
-        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_clouds_1024.png', // 구름
-        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_lights_2048.jpg', // 야간 조명
+        'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg', // 지구 표면
+        'https://threejs.org/examples/textures/planets/earth_normal_2048.jpg', // 노말맵 (지형)
+        'https://threejs.org/examples/textures/planets/earth_specular_2048.jpg', // 스펙큘러맵 (물 반사)
+        'https://threejs.org/examples/textures/planets/earth_clouds_1024.png', // 구름
+        'https://threejs.org/examples/textures/planets/earth_lights_2048.jpg', // 야간 조명
     ]);
 
     // 텍스처 설정
