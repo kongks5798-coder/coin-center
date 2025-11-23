@@ -287,6 +287,26 @@ export const useAutoMining = () => {
         setStats(prev => ({ ...prev, batteryDrain }));
     }, [batteryDrain]);
 
+    // Service Worker 메시지 리스너 (백그라운드 채굴 업데이트)
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            const handleMessage = (event: MessageEvent) => {
+                if (event.data && event.data.type === 'MINING_UPDATE') {
+                    setStats(prev => ({
+                        ...prev,
+                        totalEarned: prev.totalEarned + event.data.data.earned
+                    }));
+                }
+            };
+
+            navigator.serviceWorker.addEventListener('message', handleMessage);
+            
+            return () => {
+                navigator.serviceWorker.removeEventListener('message', handleMessage);
+            };
+        }
+    }, []);
+
     return {
         isMining,
         stats,
