@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useMemo, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Stars, Text } from '@react-three/drei';
+import { Canvas, useFrame, useLoader } from '@react-three/fiber';
+import { OrbitControls, PerspectiveCamera, Stars, Text, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
 // 양자 데이터센터 위치 데이터
@@ -30,13 +30,34 @@ interface Drone {
 // 3D 지구본 컴포넌트
 function Earth({ dataCenters, drones }: { dataCenters: DataCenter[]; drones: Drone[] }) {
     const earthRef = useRef<THREE.Mesh>(null);
+    const cloudsRef = useRef<THREE.Mesh>(null);
+    const atmosphereRef = useRef<THREE.Mesh>(null);
     const markersRef = useRef<THREE.Group>(null);
     const droneLinesRef = useRef<THREE.Group>(null);
+
+    // 실제 지구 텍스처 로드 (NASA Blue Marble)
+    const [earthTexture, normalMap, specularMap, cloudsTexture, nightTexture] = useTexture([
+        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg', // 지구 표면
+        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg', // 노말맵 (지형)
+        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_specular_2048.jpg', // 스펙큘러맵 (물 반사)
+        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_clouds_1024.png', // 구름
+        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_lights_2048.jpg', // 야간 조명
+    ]);
+
+    // 텍스처 설정
+    useEffect(() => {
+        [earthTexture, normalMap, specularMap, cloudsTexture, nightTexture].forEach(texture => {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        });
+    }, [earthTexture, normalMap, specularMap, cloudsTexture, nightTexture]);
 
     // 지구본 회전
     useFrame((state) => {
         if (earthRef.current) {
             earthRef.current.rotation.y += 0.001;
+        }
+        if (cloudsRef.current) {
+            cloudsRef.current.rotation.y += 0.0005; // 구름은 더 느리게
         }
     });
 
@@ -52,24 +73,41 @@ function Earth({ dataCenters, drones }: { dataCenters: DataCenter[]; drones: Dro
 
     return (
         <>
-            {/* 지구본 */}
+            {/* 지구본 - 실제 텍스처 사용 */}
             <mesh ref={earthRef}>
-                <sphereGeometry args={[1, 64, 64]} />
-                <meshStandardMaterial
-                    color="#1e3a8a"
-                    emissive="#0f172a"
-                    emissiveIntensity={0.2}
+                <sphereGeometry args={[1, 128, 64]} />
+                <meshPhongMaterial
+                    map={earthTexture}
+                    normalMap={normalMap}
+                    specularMap={specularMap}
+                    emissiveMap={nightTexture}
+                    emissive={new THREE.Color(0x000000)}
+                    emissiveIntensity={0.3}
+                    shininess={10}
+                    transparent={false}
                 />
             </mesh>
 
-            {/* 대륙 윤곽선 (간단한 그리드) */}
-            <mesh>
-                <sphereGeometry args={[1.01, 32, 32]} />
+            {/* 구름 레이어 */}
+            <mesh ref={cloudsRef}>
+                <sphereGeometry args={[1.005, 128, 64]} />
+                <meshPhongMaterial
+                    map={cloudsTexture}
+                    transparent={true}
+                    opacity={0.4}
+                    depthWrite={false}
+                    blending={THREE.AdditiveBlending}
+                />
+            </mesh>
+
+            {/* 대기 효과 (Atmosphere) */}
+            <mesh ref={atmosphereRef}>
+                <sphereGeometry args={[1.02, 64, 64]} />
                 <meshBasicMaterial
-                    color="#3b82f6"
-                    wireframe
-                    transparent
-                    opacity={0.1}
+                    color="#4a90e2"
+                    transparent={true}
+                    opacity={0.15}
+                    side={THREE.BackSide}
                 />
             </mesh>
 
@@ -170,12 +208,22 @@ export default function Globe3D({ dataCenters, drones }: { dataCenters: DataCent
         <div className="w-full h-full">
             <Canvas
                 camera={{ position: [0, 0, 3], fov: 50 }}
-                gl={{ antialias: true, alpha: true }}
+                gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
             >
                 <PerspectiveCamera makeDefault position={[0, 0, 3]} />
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1} />
-                <pointLight position={[-10, -10, -10]} intensity={0.5} color="#3b82f6" />
+                
+                {/* 태양광 (주 조명) */}
+                <directionalLight
+                    position={[5, 3, 5]}
+                    intensity={1.5}
+                    castShadow={false}
+                />
+                
+                {/* 환경광 */}
+                <ambientLight intensity={0.4} />
+                
+                {/* 보조 조명 (어두운 면 밝히기) */}
+                <pointLight position={[-5, -3, -5]} intensity={0.3} color="#4a90e2" />
                 
                 <Earth dataCenters={dataCenters} drones={drones} />
                 
