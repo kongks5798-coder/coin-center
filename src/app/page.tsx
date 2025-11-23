@@ -409,9 +409,10 @@ export default function HomePage() {
                                 <li><Link href="/reserves" className="hover:text-white transition">리저브 대시보드</Link></li>
                                 <li><Link href="/mining" className="hover:text-white transition">KAUS 채굴</Link></li>
                                 <li><Link href="/earn-kaus" className="hover:text-white transition">KAUS 획득하기</Link></li>
-                                <li><Link href="/activity-mining" className="hover:text-white transition">활동 기반 채굴</Link></li>
-                                <li><Link href="/kaus-empire" className="hover:text-white transition">KAUS 제국</Link></li>
-                                <li><Link href="/metaverse" className="hover:text-white transition">메타버스</Link></li>
+                                       <li><Link href="/activity-mining" className="hover:text-white transition">활동 기반 채굴</Link></li>
+                                       <li><Link href="/kaus-empire" className="hover:text-white transition">KAUS 제국</Link></li>
+                                       <li><Link href="/metaverse" className="hover:text-white transition">메타버스</Link></li>
+                                       <li><Link href="/app-install" className="hover:text-white transition">📱 앱 설치</Link></li>
                             </ul>
                         </div>
                         <div>
