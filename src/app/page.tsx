@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import InstallPrompt from '@/components/PWA/InstallPrompt';
 
 // 브랜드 카테고리 데이터
 const brandCategories = [
