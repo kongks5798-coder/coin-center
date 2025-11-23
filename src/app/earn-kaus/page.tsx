@@ -40,9 +40,9 @@ export default function EarnKausPage() {
         {
             id: 'mining',
             name: '채굴 (Mining)',
-            description: '24시간 자동 채굴로 KAUS 획득',
+            description: '24시간 자동 채굴로 KAUS 획득 (일일 한도: 4.8 KAUS)',
             icon: '⚡',
-            kausAmount: 24.0, // 24시간당
+            kausAmount: 4.8, // 24시간당 (기존 24.0에서 1/5로 감소)
             available: true,
             category: 'mining',
             action: () => window.location.href = '/mining',
@@ -51,7 +51,7 @@ export default function EarnKausPage() {
         {
             id: 'filluminate',
             name: 'FILLUMINATE 구매',
-            description: 'FILLUMINATE 제품 구매 시 구매 금액의 5% KAUS 적립',
+            description: 'FILLUMINATE 제품 구매 시 구매 금액의 2% KAUS 적립 (최대 100 KAUS/일)',
             icon: '💎',
             kausAmount: 0, // 구매 금액에 따라
             available: true,
@@ -61,7 +61,7 @@ export default function EarnKausPage() {
         {
             id: 'mardmard',
             name: 'MARD MARD 구매',
-            description: 'MARD MARD 제품 구매 시 구매 금액의 5% KAUS 적립',
+            description: 'MARD MARD 제품 구매 시 구매 금액의 2% KAUS 적립 (최대 100 KAUS/일)',
             icon: '👗',
             kausAmount: 0, // 구매 금액에 따라
             available: true,
@@ -71,7 +71,7 @@ export default function EarnKausPage() {
         {
             id: 'fieldnine',
             name: 'FIELD NINE 제품 구매',
-            description: 'FIELD NINE 제품 구매 시 구매 금액의 10% KAUS 적립',
+            description: 'FIELD NINE 제품 구매 시 구매 금액의 3% KAUS 적립 (최대 150 KAUS/일)',
             icon: '🚀',
             kausAmount: 0, // 구매 금액에 따라
             available: true,
@@ -82,10 +82,10 @@ export default function EarnKausPage() {
         {
             id: 'employee',
             name: '임직원 보상',
-            description: 'FIELD NINE 임직원 월급의 20% KAUS로 지급',
+            description: 'FIELD NINE 임직원 월급의 10% KAUS로 지급 (락업 90일)',
             icon: '👔',
             kausAmount: 0, // 월급에 따라
-            cooldown: 30, // 30일 락업
+            cooldown: 90, // 90일 락업 (기존 30일에서 증가)
             available: true,
             category: 'employee',
         },
@@ -103,7 +103,7 @@ export default function EarnKausPage() {
         {
             id: 'delivery',
             name: '배송 완료 보상',
-            description: '배송 완료 시 배송 금액의 3% KAUS 적립',
+            description: '배송 완료 시 배송 금액의 1% KAUS 적립 (최대 50 KAUS/일)',
             icon: '🚚',
             kausAmount: 0, // 배송 금액에 따라
             available: true,

@@ -21,12 +21,12 @@ const useMining = () => {
         setStartTime(Date.now());
         setTimeRemaining(24 * 60 * 60);
         
-        // 실시간 채굴 (100ms마다 업데이트)
+        // 실시간 채굴 (100ms마다 업데이트) - 더 타이트하게 조정
         intervalRef.current = setInterval(() => {
             setMinedAmount(prev => {
-                // 시간당 1.0 KAUS = 초당 0.0002777... KAUS
-                // 100ms마다 = 0.00002777... KAUS
-                const increment = (0.0002777777777777778 / 10) * boostMultiplier;
+                // 시간당 0.2 KAUS = 초당 0.0000555... KAUS (기존의 1/5로 감소)
+                // 100ms마다 = 0.00000555... KAUS
+                const increment = (0.00005555555555555556 / 10) * boostMultiplier;
                 return prev + increment;
             });
         }, 100);
