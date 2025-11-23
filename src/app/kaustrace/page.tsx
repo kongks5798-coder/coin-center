@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import RFIDTagVisual from '@/components/KausTrace/RFIDTagVisual';
+import ProductTrackingMap from '@/components/KausTrace/ProductTrackingMap';
+import BlockchainTransactionList from '@/components/KausTrace/BlockchainTransactionList';
 
 // 실시간 통계 훅
 const useKausTraceStats = () => {
@@ -264,68 +267,179 @@ export default function KausTracePage() {
                     </div>
                 </section>
 
-                {/* 핵심 기능 섹션 */}
+                {/* 실제 RFID 태그 시각화 섹션 */}
                 <section className="relative py-32">
                     <div className="max-w-7xl mx-auto px-4">
                         <div className="text-center mb-16">
                             <h2 className="text-6xl md:text-8xl font-black mb-6">
                                 <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                                    핵심 기능
+                                    실제 RFID 태그
+                                </span>
+                            </h2>
+                            <p className="text-xl text-gray-400">실제 제품에 부착되는 KAUS TRACE RFID 태그</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-8 mb-16">
+                            <RFIDTagVisual
+                                tagId="RFID-KT-001234"
+                                productName="프리미엄 스니커즈"
+                                status="active"
+                                location="Seoul, South Korea"
+                                blockchainHash="0x7a3f8b2c9d1e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0"
+                                kausPaid={1250}
+                            />
+                            <RFIDTagVisual
+                                tagId="RFID-KT-005678"
+                                productName="럭셔리 핸드백"
+                                status="in-transit"
+                                location="New York, USA"
+                                blockchainHash="0x9b2e4c6d8f0a1b3c5d7e9f0a2b4c6d8e0f1a3b5c7d9e1f2a4b6c8d0e2f3a5b7"
+                                kausPaid={5000}
+                            />
+                            <RFIDTagVisual
+                                tagId="RFID-KT-009012"
+                                productName="스마트 워치"
+                                status="delivered"
+                                location="Tokyo, Japan"
+                                blockchainHash="0x4c8a1d3e5f7a9b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2f4a6b8"
+                                kausPaid={800}
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* 실제 제품 추적 섹션 */}
+                <section className="relative py-32">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-16">
+                            <h2 className="text-6xl md:text-8xl font-black mb-6">
+                                <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                                    실시간 제품 추적
+                                </span>
+                            </h2>
+                            <p className="text-xl text-gray-400">지도에서 실시간으로 제품 이동 경로 확인</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <ProductTrackingMap
+                                productId="PROD-12345"
+                                productName="프리미엄 스니커즈"
+                                trackingPoints={[
+                                    { id: '1', name: '이탈리아 공장', lat: 41.9028, lng: 12.4964, timestamp: '2025-11-20 10:00', status: 'warehouse' },
+                                    { id: '2', name: '인천항', lat: 37.4563, lng: 126.6322, timestamp: '2025-11-21 14:30', status: 'in-transit' },
+                                    { id: '3', name: '서울 창고', lat: 37.5665, lng: 126.9780, timestamp: '2025-11-22 09:15', status: 'warehouse' },
+                                    { id: '4', name: '강남 매장', lat: 37.4979, lng: 127.0276, timestamp: '2025-11-23 11:00', status: 'delivered' },
+                                ]}
+                            />
+                            <ProductTrackingMap
+                                productId="PROD-67890"
+                                productName="럭셔리 핸드백"
+                                trackingPoints={[
+                                    { id: '1', name: '프랑스 공장', lat: 48.8566, lng: 2.3522, timestamp: '2025-11-19 08:00', status: 'warehouse' },
+                                    { id: '2', name: '런던 창고', lat: 51.5074, lng: -0.1278, timestamp: '2025-11-20 16:00', status: 'warehouse' },
+                                    { id: '3', name: '뉴욕 항구', lat: 40.7128, lng: -74.0060, timestamp: '2025-11-22 10:30', status: 'in-transit' },
+                                    { id: '4', name: '뉴욕 매장', lat: 40.7589, lng: -73.9851, timestamp: '2025-11-23 15:00', status: 'delivered' },
+                                ]}
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* 실제 블록체인 거래 내역 섹션 */}
+                <section className="relative py-32">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-16">
+                            <h2 className="text-6xl md:text-8xl font-black mb-6">
+                                <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                                    블록체인 거래 내역
+                                </span>
+                            </h2>
+                            <p className="text-xl text-gray-400">실제 KAUS 코인 거래 기록 및 블록체인 해시</p>
+                        </div>
+
+                        <BlockchainTransactionList />
+                    </div>
+                </section>
+
+                {/* 실제 사용 사례 섹션 */}
+                <section className="relative py-32">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="text-center mb-16">
+                            <h2 className="text-6xl md:text-8xl font-black mb-6">
+                                <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                                    실제 사용 사례
                                 </span>
                             </h2>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-8">
+                        <div className="grid md:grid-cols-3 gap-8">
                             <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border-2 border-purple-500/30 rounded-3xl p-8 backdrop-blur-xl">
-                                <div className="text-5xl mb-4">📡</div>
-                                <h3 className="text-3xl font-bold text-purple-400 mb-4">RFID 추적</h3>
-                                <p className="text-gray-300 text-lg mb-4">
-                                    실시간 위치 추적과 위성 네트워크 기반 글로벌 커버리지로 전 세계 어디서나 추적 가능합니다.
-                                </p>
-                                <ul className="space-y-2 text-gray-400">
-                                    <li>✅ 99.8% 글로벌 커버리지</li>
-                                    <li>✅ 250개 위성 네트워크</li>
-                                    <li>✅ 실시간 위치 업데이트</li>
-                                </ul>
+                                <div className="text-5xl mb-4">👟</div>
+                                <h3 className="text-2xl font-bold text-purple-400 mb-4">프리미엄 스니커즈</h3>
+                                <div className="space-y-3 text-gray-300">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>이탈리아 → 한국 배송 추적</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>정품 인증 완료</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>1,250 KAUS 결제</span>
+                                    </div>
+                                    <div className="mt-4 pt-4 border-t border-gray-700">
+                                        <div className="text-sm text-gray-400">블록체인 해시</div>
+                                        <div className="text-xs font-mono text-purple-400 break-all">0x7a3f...f9a0</div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30 rounded-3xl p-8 backdrop-blur-xl">
-                                <div className="text-5xl mb-4">⛓️</div>
-                                <h3 className="text-3xl font-bold text-blue-400 mb-4">블록체인 인증</h3>
-                                <p className="text-gray-300 text-lg mb-4">
-                                    모든 거래와 이동을 블록체인에 기록하여 변조 불가능한 공급망 추적을 제공합니다.
-                                </p>
-                                <ul className="space-y-2 text-gray-400">
-                                    <li>✅ 변조 불가능한 기록</li>
-                                    <li>✅ NFT 인증서 발급</li>
-                                    <li>✅ 99.9% 정확도</li>
-                                </ul>
+                                <div className="text-5xl mb-4">👜</div>
+                                <h3 className="text-2xl font-bold text-blue-400 mb-4">럭셔리 핸드백</h3>
+                                <div className="space-y-3 text-gray-300">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-yellow-400">🚚</span>
+                                        <span>프랑스 → 뉴욕 배송 중</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>위성 추적 활성</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>5,000 KAUS 결제</span>
+                                    </div>
+                                    <div className="mt-4 pt-4 border-t border-gray-700">
+                                        <div className="text-sm text-gray-400">블록체인 해시</div>
+                                        <div className="text-xs font-mono text-blue-400 break-all">0x9b2e...f3a5</div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-2 border-cyan-500/30 rounded-3xl p-8 backdrop-blur-xl">
-                                <div className="text-5xl mb-4">🪙</div>
-                                <h3 className="text-3xl font-bold text-cyan-400 mb-4">KAUS 코인 결제</h3>
-                                <p className="text-gray-300 text-lg mb-4">
-                                    통합 결제 시스템으로 모든 거래를 KAUS 코인으로 처리하고 실시간 정산합니다.
-                                </p>
-                                <ul className="space-y-2 text-gray-400">
-                                    <li>✅ 통합 결제 시스템</li>
-                                    <li>✅ 실시간 환율</li>
-                                    <li>✅ 자동 정산</li>
-                                </ul>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-purple-500/10 via-blue-500/10 to-cyan-500/10 border-2 border-purple-500/30 rounded-3xl p-8 backdrop-blur-xl">
-                                <div className="text-5xl mb-4">🛰️</div>
-                                <h3 className="text-3xl font-bold text-purple-400 mb-4">위성 네트워크</h3>
-                                <p className="text-gray-300 text-lg mb-4">
-                                    250개 위성으로 구성된 글로벌 네트워크로 24/7 실시간 추적이 가능합니다.
-                                </p>
-                                <ul className="space-y-2 text-gray-400">
-                                    <li>✅ 250개 위성 (LEO/MEO/GEO)</li>
-                                    <li>✅ 24/7 실시간 추적</li>
-                                    <li>✅ 글로벌 커버리지</li>
-                                </ul>
+                                <div className="text-5xl mb-4">⌚</div>
+                                <h3 className="text-2xl font-bold text-cyan-400 mb-4">스마트 워치</h3>
+                                <div className="space-y-3 text-gray-300">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>배송 완료</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>고객 수령 확인</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-green-400">✅</span>
+                                        <span>800 KAUS 결제</span>
+                                    </div>
+                                    <div className="mt-4 pt-4 border-t border-gray-700">
+                                        <div className="text-sm text-gray-400">블록체인 해시</div>
+                                        <div className="text-xs font-mono text-cyan-400 break-all">0x4c8a...f4a6</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
