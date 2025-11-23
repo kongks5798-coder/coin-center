@@ -206,7 +206,7 @@ export default function AnomalyDetection() {
         <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 border border-orange-500/30 rounded-xl p-6">
           <div className="text-gray-400 text-sm mb-2">False Positive Rate</div>
           <div className="text-4xl font-bold text-orange-400">{modelStats.falsePositiveRate}%</div>
-          <div className="text-xs text-gray-500 mt-2">Industry best: <3%</div>
+          <div className="text-xs text-gray-500 mt-2">Industry best: {'<3%'}</div>
         </div>
         
         <div className="bg-gradient-to-br from-yellow-500/10 to-green-500/10 border border-yellow-500/30 rounded-xl p-6">
