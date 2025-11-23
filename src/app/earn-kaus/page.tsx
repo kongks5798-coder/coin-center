@@ -47,6 +47,16 @@ export default function EarnKausPage() {
             category: 'mining',
             action: () => window.location.href = '/mining',
         },
+        {
+            id: 'activity',
+            name: '활동 기반 채굴 (Proof of Activity)',
+            description: 'FIELD NINE 생태계 활동으로 KAUS 획득 (일일 최대 5.0 KAUS)',
+            icon: '🎯',
+            kausAmount: 5.0, // 일일 최대
+            available: true,
+            category: 'mining',
+            action: () => window.location.href = '/activity-mining',
+        },
         // 제품 구매
         {
             id: 'filluminate',
