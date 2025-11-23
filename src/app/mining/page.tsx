@@ -351,6 +351,20 @@ export default function MiningPage() {
                         )}
                     </div>
 
+                    {/* 활동 기반 채굴 링크 */}
+                    <div className="text-center mb-8">
+                        <Link
+                            href="/activity-mining"
+                            className="inline-flex items-center gap-3 px-12 py-6 bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 rounded-2xl font-bold text-xl hover:scale-105 transition-all shadow-lg shadow-green-500/50"
+                        >
+                            <span>🎯</span>
+                            <span>활동 기반 채굴로 더 많이 획득하기</span>
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </Link>
+                    </div>
+
                     {/* 홈으로 돌아가기 */}
                     <div className="text-center">
                         <Link 
