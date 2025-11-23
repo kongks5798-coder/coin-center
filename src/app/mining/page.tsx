@@ -54,7 +54,6 @@ const useMining = () => {
             clearInterval(timerRef.current);
             timerRef.current = null;
         }
-        alert('24시간 채굴이 완료되었습니다. 다시 활성화하세요.');
     };
 
     // 정리
@@ -76,13 +75,163 @@ const useMining = () => {
     };
 };
 
-// 상장 카운트다운
-const useListingCountdown = () => {
-    const [daysRemaining, setDaysRemaining] = useState(45); // D-45 예시
+// 인터랙티브 채굴 - 터치/클릭 기반
+const useInteractiveMining = () => {
+    const [tapCount, setTapCount] = useState(0);
+    const [combo, setCombo] = useState(0);
+    const [earned, setEarned] = useState(0);
+    const [isActive, setIsActive] = useState(false);
+    const lastTapTime = useRef<number>(0);
+    const comboTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    const handleTap = () => {
+        const now = Date.now();
+        const timeDiff = now - lastTapTime.current;
+        
+        // 콤보 시스템 (1초 내에 탭하면 콤보 증가)
+        if (timeDiff < 1000) {
+            setCombo(prev => prev + 1);
+            // 콤보 보너스: 콤보가 높을수록 더 많은 보상
+            const bonus = Math.min(combo / 10, 5); // 최대 5x 보너스
+            const reward = (0.001 + bonus * 0.0005) * (1 + combo * 0.1);
+            setEarned(prev => prev + reward);
+        } else {
+            setCombo(1);
+            setEarned(prev => prev + 0.001);
+        }
+        
+        setTapCount(prev => prev + 1);
+        lastTapTime.current = now;
+        setIsActive(true);
+        
+        // 콤보 리셋 타이머
+        if (comboTimeout.current) clearTimeout(comboTimeout.current);
+        comboTimeout.current = setTimeout(() => {
+            setCombo(0);
+        }, 1000);
+    };
+
+    return {
+        tapCount,
+        combo,
+        earned,
+        isActive,
+        handleTap,
+    };
+};
+
+// 디바이스 움직임 감지 채굴
+const useMotionMining = () => {
+    const [shakeCount, setShakeCount] = useState(0);
+    const [earned, setEarned] = useState(0);
+    const [isSupported, setIsSupported] = useState(false);
+    const lastShakeTime = useRef<number>(0);
 
     useEffect(() => {
-        // 실제로는 상장 예정일을 기준으로 계산
-        const targetDate = new Date('2026-01-07'); // 예시 날짜
+        if (typeof window !== 'undefined' && 'DeviceMotionEvent' in window) {
+            setIsSupported(true);
+            
+            const handleMotion = (e: DeviceMotionEvent) => {
+                if (!e.accelerationIncludingGravity) return;
+                
+                const { x, y, z } = e.accelerationIncludingGravity;
+                const acceleration = Math.sqrt(x! * x! + y! * y! + z! * z!);
+                
+                // 움직임이 감지되면 (임계값: 15)
+                if (acceleration > 15) {
+                    const now = Date.now();
+                    // 1초에 한 번만 보상 (스팸 방지)
+                    if (now - lastShakeTime.current > 1000) {
+                        setShakeCount(prev => prev + 1);
+                        setEarned(prev => prev + 0.01); // 흔들 때마다 0.01 KAUS
+                        lastShakeTime.current = now;
+                    }
+                }
+            };
+
+            window.addEventListener('devicemotion', handleMotion);
+            return () => window.removeEventListener('devicemotion', handleMotion);
+        }
+    }, []);
+
+    return {
+        shakeCount,
+        earned,
+        isSupported,
+    };
+};
+
+// 미니게임 채굴 - 블록 터치 게임
+const useBlockGameMining = () => {
+    const [score, setScore] = useState(0);
+    const [earned, setEarned] = useState(0);
+    const [blocks, setBlocks] = useState<Array<{ id: number; x: number; y: number; color: string }>>([]);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const gameInterval = useRef<NodeJS.Timeout | null>(null);
+
+    const startGame = () => {
+        setIsPlaying(true);
+        setScore(0);
+        setBlocks([]);
+        
+        // 블록 생성 (1초마다)
+        gameInterval.current = setInterval(() => {
+            setBlocks(prev => {
+                const newBlock = {
+                    id: Date.now(),
+                    x: Math.random() * 80 + 10, // 10-90%
+                    y: -10,
+                    color: ['#00FF94', '#00BFFF', '#FFD700', '#FF69B4'][Math.floor(Math.random() * 4)]
+                };
+                return [...prev, newBlock];
+            });
+        }, 1000);
+
+        // 블록 이동 (60fps)
+        const moveInterval = setInterval(() => {
+            setBlocks(prev => prev.map(block => ({
+                ...block,
+                y: block.y + 2
+            })).filter(block => block.y < 110)); // 화면 밖으로 나가면 제거
+        }, 16);
+
+        return () => {
+            clearInterval(moveInterval);
+        };
+    };
+
+    const stopGame = () => {
+        setIsPlaying(false);
+        if (gameInterval.current) {
+            clearInterval(gameInterval.current);
+            gameInterval.current = null;
+        }
+        setBlocks([]);
+    };
+
+    const hitBlock = (blockId: number) => {
+        setBlocks(prev => prev.filter(b => b.id !== blockId));
+        setScore(prev => prev + 1);
+        setEarned(prev => prev + 0.005); // 블록당 0.005 KAUS
+    };
+
+    return {
+        score,
+        earned,
+        blocks,
+        isPlaying,
+        startGame,
+        stopGame,
+        hitBlock,
+    };
+};
+
+// 상장 카운트다운
+const useListingCountdown = () => {
+    const [daysRemaining, setDaysRemaining] = useState(45);
+
+    useEffect(() => {
+        const targetDate = new Date('2026-01-07');
         const updateCountdown = () => {
             const now = new Date();
             const diff = targetDate.getTime() - now.getTime();
@@ -90,7 +239,7 @@ const useListingCountdown = () => {
             setDaysRemaining(Math.max(0, days));
         };
         updateCountdown();
-        const interval = setInterval(updateCountdown, 1000 * 60 * 60); // 1시간마다 업데이트
+        const interval = setInterval(updateCountdown, 1000 * 60 * 60);
         return () => clearInterval(interval);
     }, []);
 
@@ -98,18 +247,26 @@ const useListingCountdown = () => {
 };
 
 export default function MiningPage() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const hexagonRef = useRef<HTMLDivElement>(null);
-    const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-    const [isPulsing, setIsPulsing] = useState(false);
-    const [showListingModal, setShowListingModal] = useState(false);
-    const [showInviteModal, setShowInviteModal] = useState(false);
-    const [inviteCode] = useState('KAUS2025-' + Math.random().toString(36).substring(2, 8).toUpperCase());
-    
     const { isMining, minedAmount, timeRemaining, boostMultiplier, setBoostMultiplier, startMining, stopMining } = useMining();
+    const { tapCount, combo, earned: tapEarned, isActive: tapActive, handleTap } = useInteractiveMining();
+    const { shakeCount, earned: shakeEarned, isSupported: motionSupported } = useMotionMining();
+    const { score, earned: gameEarned, blocks, isPlaying, startGame, stopGame, hitBlock } = useBlockGameMining();
     const daysRemaining = useListingCountdown();
+    const [activeTab, setActiveTab] = useState<'auto' | 'tap' | 'shake' | 'game'>('auto');
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    // 배경 스캔 애니메이션
+    // 총 획득량
+    const totalEarned = minedAmount + tapEarned + shakeEarned + gameEarned;
+
+    // 시간 포맷
+    const formatTime = (seconds: number) => {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    };
+
+    // 홀로그램 배경 효과
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -124,82 +281,77 @@ export default function MiningPage() {
         setCanvasSize();
         window.addEventListener('resize', setCanvasSize);
 
-        let scanY = 0;
+        const particles: Array<{
+            x: number;
+            y: number;
+            vx: number;
+            vy: number;
+            size: number;
+            opacity: number;
+        }> = [];
+
+        for (let i = 0; i < 150; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * 2 + 1,
+                opacity: Math.random() * 0.5 + 0.2,
+            });
+        }
+
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 스캔 라인
-            const gradient = ctx.createLinearGradient(0, scanY - 100, 0, scanY + 100);
-            gradient.addColorStop(0, 'rgba(0, 255, 148, 0)');
-            gradient.addColorStop(0.5, 'rgba(0, 255, 148, 0.3)');
-            gradient.addColorStop(1, 'rgba(0, 255, 148, 0)');
-            
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, scanY - 100, canvas.width, 200);
-            
-            scanY += 2;
-            if (scanY > canvas.height + 100) scanY = -100;
-            
+            particles.forEach((particle, i) => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+
+                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 255, 148, ${particle.opacity})`;
+                ctx.fill();
+
+                particles.slice(i + 1).forEach(other => {
+                    const dx = particle.x - other.x;
+                    const dy = particle.y - other.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(other.x, other.y);
+                        ctx.strokeStyle = `rgba(0, 255, 148, ${0.1 * (1 - distance / 150)})`;
+                        ctx.stroke();
+                    }
+                });
+            });
+
             requestAnimationFrame(animate);
         };
 
         animate();
     }, []);
 
-    // 마우스 추적
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({
-                x: (e.clientX / window.innerWidth) * 100,
-                y: (e.clientY / window.innerHeight) * 100
-            });
-        };
-        window.addEventListener('mousemove', handleMouseMove, { passive: true });
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
-
-    // 육각형 펄스 효과
-    const handleHexagonClick = () => {
-        setIsPulsing(true);
-        setTimeout(() => setIsPulsing(false), 300);
-    };
-
-    // 시간 포맷팅
-    const formatTime = (seconds: number) => {
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    };
-
-    // 초대 코드 복사
-    const copyInviteCode = () => {
-        navigator.clipboard.writeText(inviteCode);
-        alert(`초대 코드가 복사되었습니다: ${inviteCode}`);
-    };
-
-    // 부스터 활성화
-    const activateBoost = () => {
-        setBoostMultiplier(2);
-        setShowInviteModal(false);
-        alert('채굴 속도가 2배로 증가했습니다! 🚀');
-    };
-
     return (
-        <div className="fixed inset-0 bg-[#050505] text-white overflow-auto relative">
-            {/* 배경 스캔 애니메이션 캔버스 */}
+        <div className="fixed inset-0 bg-black text-white overflow-auto relative">
+            {/* 홀로그램 배경 */}
             <canvas 
                 ref={canvasRef}
                 className="fixed inset-0 pointer-events-none opacity-30 z-0"
             />
 
-            {/* 상장 카운트다운 배너 */}
+            {/* 상장 배너 */}
             <div 
-                className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-cyan-500/20 border-b border-purple-500/50 backdrop-blur-xl"
-                onClick={() => setShowListingModal(true)}
+                className="fixed top-0 left-0 right-0 bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 border-b border-yellow-500/30 backdrop-blur-xl z-20 cursor-pointer"
+                onClick={() => alert('상장 심사 진행 중입니다. 현재 채굴한 코인은 상장 후 1:1로 교환됩니다.')}
             >
-                <div className="max-w-7xl mx-auto px-4 py-3 text-center cursor-pointer hover:bg-purple-500/10 transition-all">
-                    <div className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400">
+                <div className="max-w-7xl mx-auto px-4 py-3 text-center cursor-pointer hover:bg-yellow-500/10 transition-all">
+                    <div className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400">
                         🌍 Global Exchange Listing: D-{daysRemaining}
                     </div>
                     <div className="text-xs text-gray-400 mt-1">클릭하여 자세히 보기</div>
@@ -225,252 +377,307 @@ export default function MiningPage() {
                     </div>
                 </header>
 
-                {/* 3D 육각형 코어 */}
-                <div className="relative mb-12">
-                    <div
-                        ref={hexagonRef}
-                        className={`relative w-64 h-64 transition-all duration-300 ${
-                            isPulsing ? 'scale-110' : 'scale-100'
-                        } ${isMining ? 'animate-spin-slow' : ''}`}
-                        onClick={handleHexagonClick}
-                        style={{
-                            animation: isMining ? 'rotate 20s linear infinite' : 'none',
-                        }}
-                    >
-                        {/* 외부 육각형 */}
-                        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 200">
-                            <defs>
-                                <linearGradient id="hexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#00FF94" stopOpacity="0.8" />
-                                    <stop offset="50%" stopColor="#00D4FF" stopOpacity="0.6" />
-                                    <stop offset="100%" stopColor="#00FF94" stopOpacity="0.8" />
-                                </linearGradient>
-                                <filter id="glow">
-                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                    <feMerge>
-                                        <feMergeNode in="coloredBlur"/>
-                                        <feMergeNode in="SourceGraphic"/>
-                                    </feMerge>
-                                </filter>
-                            </defs>
-                            <polygon
-                                points="100,20 180,60 180,140 100,180 20,140 20,60"
-                                fill="none"
-                                stroke="url(#hexGradient)"
-                                strokeWidth="3"
-                                filter="url(#glow)"
-                                className="animate-pulse"
-                            />
-                            <polygon
-                                points="100,40 160,70 160,130 100,160 40,130 40,70"
-                                fill="none"
-                                stroke="url(#hexGradient)"
-                                strokeWidth="2"
-                                opacity="0.5"
-                            />
-                            <polygon
-                                points="100,60 140,80 140,120 100,140 60,120 60,80"
-                                fill="url(#hexGradient)"
-                                opacity="0.3"
-                            />
-                        </svg>
-
-                        {/* 중앙 코어 */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className={`w-24 h-24 rounded-full bg-gradient-to-br from-green-400 to-cyan-400 ${
-                                isMining ? 'animate-pulse' : ''
-                            }`} style={{
-                                boxShadow: isMining 
-                                    ? '0 0 40px rgba(0, 255, 148, 0.8), 0 0 80px rgba(0, 255, 148, 0.4)'
-                                    : '0 0 20px rgba(0, 255, 148, 0.4)'
-                            }}>
-                                <div className="w-full h-full flex items-center justify-center text-3xl">
-                                    {isMining ? '⚡' : '💎'}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* 채굴된 KAUS 양 */}
-                <div className="text-center mb-8">
-                    <div className="text-sm text-gray-400 mb-2">채굴된 KAUS</div>
-                    <div className="text-7xl md:text-9xl font-mono font-black bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                        {minedAmount.toFixed(6)}
-                    </div>
-                    <div className="text-lg text-gray-400">KAUS</div>
-                </div>
-
-                {/* 채굴 상태 */}
-                {isMining && (
-                    <div className="mb-8 text-center">
-                        <div className="text-sm text-gray-400 mb-1">남은 시간</div>
-                        <div className="text-3xl font-mono font-bold text-green-400">
-                            {formatTime(timeRemaining)}
-                        </div>
-                        <div className="text-xs text-gray-500 mt-1">
-                            속도: {boostMultiplier}x 🚀
-                        </div>
-                    </div>
-                )}
-
-                {/* 채굴 시작 버튼 */}
-                {!isMining && (
+                {/* 탭 메뉴 */}
+                <div className="mb-8 flex gap-4 flex-wrap justify-center">
                     <button
-                        onClick={startMining}
-                        className="px-12 py-6 bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 rounded-2xl font-bold text-xl hover:scale-105 transition-all shadow-2xl shadow-green-500/50 mb-8"
+                        onClick={() => setActiveTab('auto')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                            activeTab === 'auto'
+                                ? 'bg-gradient-to-r from-green-500 to-cyan-500 shadow-lg shadow-green-500/50'
+                                : 'bg-white/5 hover:bg-white/10'
+                        }`}
                     >
-                        채굴 시작 (Start Mining)
+                        🤖 자동 채굴
                     </button>
-                )}
+                    <button
+                        onClick={() => setActiveTab('tap')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                            activeTab === 'tap'
+                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/50'
+                                : 'bg-white/5 hover:bg-white/10'
+                        }`}
+                    >
+                        👆 터치 채굴
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('shake')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                            activeTab === 'shake'
+                                ? 'bg-gradient-to-r from-orange-500 to-red-500 shadow-lg shadow-orange-500/50'
+                                : 'bg-white/5 hover:bg-white/10'
+                        }`}
+                        disabled={!motionSupported}
+                    >
+                        📱 흔들기 채굴 {!motionSupported && '(미지원)'}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('game')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                            activeTab === 'game'
+                                ? 'bg-gradient-to-r from-pink-500 to-violet-500 shadow-lg shadow-pink-500/50'
+                                : 'bg-white/5 hover:bg-white/10'
+                        }`}
+                    >
+                        🎮 게임 채굴
+                    </button>
+                </div>
 
-                {/* 부스터 & 위젯 */}
-                <div className="w-full max-w-md space-y-4 mt-8">
-                    {/* 부스터 위젯 */}
-                    <div className="bg-black/40 backdrop-blur-xl border border-green-500/30 rounded-2xl p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div>
-                                <div className="text-lg font-bold text-white mb-1">현재 속도</div>
-                                <div className="text-3xl font-mono font-black text-green-400">
-                                    {boostMultiplier}x 🚀
+                {/* 총 획득량 */}
+                <div className="mb-8 text-center">
+                    <div className="text-sm text-gray-400 mb-2">총 획득량</div>
+                    <div className="text-6xl md:text-8xl font-black bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                        {totalEarned.toFixed(4)} KAUS
+                    </div>
+                </div>
+
+                {/* 자동 채굴 탭 */}
+                {activeTab === 'auto' && (
+                    <div className="max-w-2xl w-full space-y-6">
+                        {/* 3D 육각형 코어 */}
+                        <div className="relative h-64 flex items-center justify-center">
+                            <div 
+                                className={`relative w-48 h-48 transition-all duration-300 ${
+                                    isMining ? 'animate-spin' : ''
+                                }`}
+                                style={{
+                                    transform: 'perspective(1000px) rotateX(60deg) rotateY(0deg)',
+                                }}
+                            >
+                                <div className="absolute inset-0 border-4 border-green-500/50 rounded-lg transform rotate-45"></div>
+                                <div className="absolute inset-0 border-4 border-cyan-500/50 rounded-lg transform -rotate-45"></div>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className={`text-6xl ${isMining ? 'animate-pulse' : ''}`}>
+                                        {isMining ? '⚡' : '💎'}
+                                    </div>
                                 </div>
                             </div>
-                            {boostMultiplier === 1 && (
-                                <button
-                                    onClick={() => setShowInviteModal(true)}
-                                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-500 rounded-xl font-bold text-sm hover:scale-105 transition-all"
-                                >
-                                    친구 초대하고<br />2배 빠르게
-                                </button>
-                            )}
                         </div>
-                        {boostMultiplier === 2 && (
-                            <div className="text-sm text-green-400 text-center">
-                                ✅ 부스터 활성화됨! 채굴 속도 2배 증가
+
+                        {/* 채굴 정보 */}
+                        <div className="bg-gradient-to-br from-green-500/10 to-cyan-500/10 border-2 border-green-500/30 rounded-3xl p-8 backdrop-blur-xl">
+                            <div className="grid md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <div className="text-sm text-gray-400 mb-1">채굴 속도</div>
+                                    <div className="text-3xl font-black text-green-400">
+                                        {boostMultiplier}x 🚀
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-sm text-gray-400 mb-1">남은 시간</div>
+                                    <div className="text-3xl font-black text-cyan-400">
+                                        {formatTime(timeRemaining)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={isMining ? stopMining : startMining}
+                                className={`w-full py-4 rounded-xl font-bold text-xl transition-all ${
+                                    isMining
+                                        ? 'bg-red-500 hover:bg-red-600'
+                                        : 'bg-gradient-to-r from-green-500 to-cyan-500 hover:scale-105 shadow-lg shadow-green-500/50'
+                                }`}
+                            >
+                                {isMining ? '⏸️ 채굴 중지' : '▶️ 채굴 시작'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* 터치 채굴 탭 */}
+                {activeTab === 'tap' && (
+                    <div className="max-w-2xl w-full space-y-6">
+                        <div 
+                            className="relative h-96 bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-2 border-blue-500/30 rounded-3xl flex items-center justify-center cursor-pointer select-none"
+                            onClick={handleTap}
+                            onTouchStart={handleTap}
+                        >
+                            <div className="text-center">
+                                <div className={`text-9xl mb-4 transition-transform ${tapActive ? 'scale-150' : 'scale-100'}`}>
+                                    {tapActive ? '💥' : '👆'}
+                                </div>
+                                <div className="text-2xl font-bold text-white mb-2">
+                                    화면을 빠르게 탭하세요!
+                                </div>
+                                <div className="text-lg text-gray-300">
+                                    콤보가 높을수록 더 많은 보상
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-2 border-blue-500/30 rounded-3xl p-8 backdrop-blur-xl">
+                            <div className="grid md:grid-cols-3 gap-6 text-center">
+                                <div>
+                                    <div className="text-sm text-gray-400 mb-1">탭 횟수</div>
+                                    <div className="text-3xl font-black text-blue-400">{tapCount}</div>
+                                </div>
+                                <div>
+                                    <div className="text-sm text-gray-400 mb-1">콤보</div>
+                                    <div className="text-3xl font-black text-purple-400">{combo}x</div>
+                                </div>
+                                <div>
+                                    <div className="text-sm text-gray-400 mb-1">획득량</div>
+                                    <div className="text-3xl font-black text-green-400">{tapEarned.toFixed(4)} KAUS</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 흔들기 채굴 탭 */}
+                {activeTab === 'shake' && (
+                    <div className="max-w-2xl w-full space-y-6">
+                        {motionSupported ? (
+                            <>
+                                <div className="relative h-96 bg-gradient-to-br from-orange-500/20 to-red-500/20 border-2 border-orange-500/30 rounded-3xl flex items-center justify-center">
+                                    <div className="text-center">
+                                        <div className="text-9xl mb-4 animate-bounce">📱</div>
+                                        <div className="text-2xl font-bold text-white mb-2">
+                                            디바이스를 흔들어주세요!
+                                        </div>
+                                        <div className="text-lg text-gray-300">
+                                            가속도계가 움직임을 감지합니다
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 border-2 border-orange-500/30 rounded-3xl p-8 backdrop-blur-xl">
+                                    <div className="grid md:grid-cols-2 gap-6 text-center">
+                                        <div>
+                                            <div className="text-sm text-gray-400 mb-1">흔든 횟수</div>
+                                            <div className="text-3xl font-black text-orange-400">{shakeCount}</div>
+                                        </div>
+                                        <div>
+                                            <div className="text-sm text-gray-400 mb-1">획득량</div>
+                                            <div className="text-3xl font-black text-green-400">{shakeEarned.toFixed(4)} KAUS</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="bg-gradient-to-br from-gray-500/10 to-gray-600/10 border-2 border-gray-500/30 rounded-3xl p-8 backdrop-blur-xl text-center">
+                                <div className="text-6xl mb-4">⚠️</div>
+                                <div className="text-xl font-bold text-white mb-2">
+                                    이 기능은 모바일 디바이스에서만 지원됩니다
+                                </div>
+                                <div className="text-gray-400">
+                                    가속도계가 있는 기기에서만 사용할 수 있습니다
+                                </div>
                             </div>
                         )}
                     </div>
+                )}
 
-                    {/* 활동 기반 채굴 링크 */}
-                    <div className="text-center mb-8">
-                        <Link
-                            href="/activity-mining"
-                            className="inline-flex items-center gap-3 px-12 py-6 bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 rounded-2xl font-bold text-xl hover:scale-105 transition-all shadow-lg shadow-green-500/50"
-                        >
-                            <span>🎯</span>
-                            <span>활동 기반 채굴로 더 많이 획득하기</span>
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                        </Link>
-                    </div>
+                {/* 게임 채굴 탭 */}
+                {activeTab === 'game' && (
+                    <div className="max-w-2xl w-full space-y-6">
+                        <div className="relative h-96 bg-gradient-to-br from-pink-500/20 to-violet-500/20 border-2 border-pink-500/30 rounded-3xl overflow-hidden">
+                            {!isPlaying ? (
+                                <div className="h-full flex items-center justify-center">
+                                    <button
+                                        onClick={startGame}
+                                        className="px-8 py-4 bg-gradient-to-r from-pink-500 to-violet-500 rounded-xl font-bold text-xl hover:scale-105 transition-all shadow-lg shadow-pink-500/50"
+                                    >
+                                        🎮 게임 시작
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className="absolute inset-0">
+                                        {blocks.map(block => (
+                                            <div
+                                                key={block.id}
+                                                onClick={() => hitBlock(block.id)}
+                                                className="absolute w-16 h-16 rounded-lg cursor-pointer transition-all hover:scale-110"
+                                                style={{
+                                                    left: `${block.x}%`,
+                                                    top: `${block.y}%`,
+                                                    backgroundColor: block.color,
+                                                    boxShadow: `0 0 20px ${block.color}`,
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                    <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-xl px-4 py-2 rounded-xl">
+                                        <div className="text-sm text-gray-400">점수</div>
+                                        <div className="text-2xl font-black text-white">{score}</div>
+                                    </div>
+                                    <button
+                                        onClick={stopGame}
+                                        className="absolute top-4 right-4 bg-red-500/80 hover:bg-red-600 px-4 py-2 rounded-xl font-bold"
+                                    >
+                                        종료
+                                    </button>
+                                </>
+                            )}
+                        </div>
 
-                    {/* 홈으로 돌아가기 */}
-                    <div className="text-center">
-                        <Link 
-                            href="/"
-                            className="inline-flex items-center gap-3 px-8 py-4 bg-white/5 backdrop-blur-xl border-2 border-white/20 rounded-xl font-bold hover:bg-white/10 transition-all"
-                        >
-                            <span>홈으로 돌아가기</span>
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
-                        </Link>
+                        <div className="bg-gradient-to-br from-pink-500/10 to-violet-500/10 border-2 border-pink-500/30 rounded-3xl p-8 backdrop-blur-xl">
+                            <div className="grid md:grid-cols-2 gap-6 text-center">
+                                <div>
+                                    <div className="text-sm text-gray-400 mb-1">점수</div>
+                                    <div className="text-3xl font-black text-pink-400">{score}</div>
+                                </div>
+                                <div>
+                                    <div className="text-sm text-gray-400 mb-1">획득량</div>
+                                    <div className="text-3xl font-black text-green-400">{gameEarned.toFixed(4)} KAUS</div>
+                                </div>
+                            </div>
+                            <div className="mt-4 text-center text-sm text-gray-400">
+                                떨어지는 블록을 클릭하여 KAUS를 획득하세요!
+                            </div>
+                        </div>
                     </div>
+                )}
+
+                {/* 부스터 및 초대 */}
+                <div className="mt-8 max-w-2xl w-full bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-2 border-yellow-500/30 rounded-3xl p-6 backdrop-blur-xl">
+                    <div className="flex items-center justify-between mb-4">
+                        <div>
+                            <div className="text-lg font-bold text-white mb-1">채굴 속도 부스터</div>
+                            <div className="text-sm text-gray-400">현재 속도: {boostMultiplier}x 🚀</div>
+                        </div>
+                        <button
+                            onClick={() => {
+                                const code = 'KAUS2025';
+                                navigator.clipboard.writeText(code);
+                                alert(`초대 코드가 복사되었습니다: ${code}\n친구를 초대하면 2x 속도로 채굴할 수 있습니다!`);
+                                setBoostMultiplier(2);
+                            }}
+                            className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl font-bold hover:scale-105 transition-all"
+                        >
+                            친구 초대하기
+                        </button>
+                    </div>
+                </div>
+
+                {/* 활동 기반 채굴 링크 */}
+                <div className="text-center mt-8 mb-8">
+                    <Link
+                        href="/activity-mining"
+                        className="inline-flex items-center gap-3 px-12 py-6 bg-gradient-to-r from-green-500 via-cyan-500 to-blue-500 rounded-2xl font-bold text-xl hover:scale-105 transition-all shadow-lg shadow-green-500/50"
+                    >
+                        <span>🎯</span>
+                        <span>활동 기반 채굴로 더 많이 획득하기</span>
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </Link>
+                </div>
+
+                {/* 홈으로 돌아가기 */}
+                <div className="text-center">
+                    <Link 
+                        href="/"
+                        className="inline-flex items-center gap-3 px-8 py-4 bg-white/5 backdrop-blur-xl border-2 border-white/20 rounded-xl font-bold hover:bg-white/10 transition-all"
+                    >
+                        <span>홈으로 돌아가기</span>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                    </Link>
                 </div>
             </div>
-
-            {/* 상장 모달 */}
-            {showListingModal && (
-                <div 
-                    className="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 flex items-center justify-center p-4"
-                    onClick={() => setShowListingModal(false)}
-                >
-                    <div 
-                        className="bg-gradient-to-br from-gray-900 to-black border-2 border-purple-500/30 rounded-3xl p-8 max-w-md w-full"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-2xl font-bold text-purple-400">Global Exchange Listing</h3>
-                            <button
-                                onClick={() => setShowListingModal(false)}
-                                className="text-gray-400 hover:text-white text-3xl"
-                            >
-                                &times;
-                            </button>
-                        </div>
-                        <div className="space-y-4">
-                            <div className="text-lg text-white">
-                                상장 심사 진행 중입니다.
-                            </div>
-                            <div className="text-gray-300">
-                                현재 채굴된 코인은 상장 후 1:1 교환됩니다.
-                            </div>
-                            <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4">
-                                <div className="text-sm text-purple-400 font-bold mb-2">예상 상장일</div>
-                                <div className="text-xl font-bold text-white">2026년 1월 7일</div>
-                                <div className="text-sm text-gray-400 mt-1">D-{daysRemaining}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* 친구 초대 모달 */}
-            {showInviteModal && (
-                <div 
-                    className="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 flex items-center justify-center p-4"
-                    onClick={() => setShowInviteModal(false)}
-                >
-                    <div 
-                        className="bg-gradient-to-br from-gray-900 to-black border-2 border-green-500/30 rounded-3xl p-8 max-w-md w-full"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-2xl font-bold text-green-400">친구 초대하고 2배 빠르게</h3>
-                            <button
-                                onClick={() => setShowInviteModal(false)}
-                                className="text-gray-400 hover:text-white text-3xl"
-                            >
-                                &times;
-                            </button>
-                        </div>
-                        <div className="space-y-4">
-                            <div className="text-gray-300">
-                                친구를 초대하면 채굴 속도가 2배로 증가합니다!
-                            </div>
-                            <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
-                                <div className="text-sm text-green-400 font-bold mb-2">내 초대 코드</div>
-                                <div className="text-2xl font-mono font-bold text-white mb-3">{inviteCode}</div>
-                                <button
-                                    onClick={copyInviteCode}
-                                    className="w-full px-4 py-2 bg-green-500/20 border border-green-500/50 rounded-lg font-bold text-sm hover:bg-green-500/30 transition-all"
-                                >
-                                    코드 복사
-                                </button>
-                            </div>
-                            <button
-                                onClick={activateBoost}
-                                className="w-full px-6 py-4 bg-gradient-to-r from-green-500 to-cyan-500 rounded-xl font-bold text-lg hover:scale-105 transition-all"
-                            >
-                                부스터 활성화
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* CSS 애니메이션 */}
-            <style jsx>{`
-                @keyframes rotate {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                .animate-spin-slow {
-                    animation: rotate 20s linear infinite;
-                }
-            `}</style>
         </div>
     );
 }
-
