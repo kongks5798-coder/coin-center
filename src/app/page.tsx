@@ -219,9 +219,44 @@ export default function HomePage() {
                         <p className="text-3xl md:text-5xl text-gray-300 mb-4 font-light">
                             미래를 만드는 브랜드
                         </p>
-                        <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto">
+                        <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-8">
                             럭셔리부터 기술까지, 모든 것을 하나로
                         </p>
+                        
+                        {/* CTA 버튼 */}
+                        <div className="flex flex-wrap gap-4 justify-center">
+                            <Link
+                                href="/dashboard/global"
+                                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl font-bold text-lg overflow-hidden hover:scale-105 transition-all shadow-lg shadow-cyan-500/50"
+                            >
+                                <span className="relative z-10 flex items-center gap-3">
+                                    <span>🌍</span>
+                                    <span>글로벌 대시보드</span>
+                                    <svg className="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </Link>
+                            <Link
+                                href="/metaverse"
+                                className="group relative px-8 py-4 bg-white/5 backdrop-blur-xl border-2 border-white/20 rounded-xl font-bold text-lg hover:bg-white/10 transition-all hover:scale-105"
+                            >
+                                <span className="flex items-center gap-3">
+                                    <span>🚀</span>
+                                    <span>메타버스 입장</span>
+                                </span>
+                            </Link>
+                            <Link
+                                href="/nexus"
+                                className="group relative px-8 py-4 bg-white/5 backdrop-blur-xl border-2 border-white/20 rounded-xl font-bold text-lg hover:bg-white/10 transition-all hover:scale-105"
+                            >
+                                <span className="flex items-center gap-3">
+                                    <span>⚛️</span>
+                                    <span>NEXUS OS</span>
+                                </span>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -325,6 +360,7 @@ export default function HomePage() {
                         <div>
                             <h4 className="font-bold mb-4 text-white">서비스</h4>
                             <ul className="space-y-2 text-sm text-gray-400">
+                                <li><Link href="/dashboard/global" className="hover:text-white transition">글로벌 대시보드</Link></li>
                                 <li><Link href="/nexus" className="hover:text-white transition">NEXUS OS</Link></li>
                                 <li><Link href="/kaus-empire" className="hover:text-white transition">KAUS 제국</Link></li>
                                 <li><Link href="/metaverse" className="hover:text-white transition">메타버스</Link></li>
