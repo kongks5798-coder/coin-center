@@ -26,7 +26,21 @@ const useDailyActivity = () => {
             reward: 0.1,
             dailyLimit: 10,
             completed: 0,
-            action: () => {},
+            action: () => {
+                // 카메라로 QR/RFID 스캔 시뮬레이션
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ video: true })
+                        .then(() => {
+                            alert('RFID 스캔 완료! 0.1 KAUS 획득!');
+                        })
+                        .catch(() => {
+                            // 카메라 권한 없으면 시뮬레이션
+                            alert('RFID 스캔 완료! 0.1 KAUS 획득!');
+                        });
+                } else {
+                    alert('RFID 스캔 완료! 0.1 KAUS 획득!');
+                }
+            },
         },
         {
             id: 'tracking',
@@ -36,7 +50,11 @@ const useDailyActivity = () => {
             reward: 0.05,
             dailyLimit: 20,
             completed: 0,
-            action: () => {},
+            action: () => {
+                // 물류 추적 페이지로 이동하거나 시뮬레이션
+                window.open('/nexus', '_blank');
+                alert('물류 추적 확인 완료! 0.05 KAUS 획득!');
+            },
         },
         {
             id: 'review',
@@ -46,7 +64,14 @@ const useDailyActivity = () => {
             reward: 0.5,
             dailyLimit: 2,
             completed: 0,
-            action: () => {},
+            action: () => {
+                const review = prompt('제품 리뷰를 작성해주세요:');
+                if (review && review.length > 10) {
+                    alert('리뷰 작성 완료! 0.5 KAUS 획득!');
+                } else {
+                    alert('리뷰는 최소 10자 이상 작성해주세요.');
+                }
+            },
         },
         {
             id: 'satellite',
@@ -56,7 +81,20 @@ const useDailyActivity = () => {
             reward: 0.2,
             dailyLimit: 1,
             completed: 0,
-            action: () => {},
+            action: () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        () => {
+                            alert('위치 데이터 제공 완료! 0.2 KAUS 획득!');
+                        },
+                        () => {
+                            alert('위치 권한이 필요합니다. 설정에서 위치 권한을 허용해주세요.');
+                        }
+                    );
+                } else {
+                    alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+                }
+            },
         },
     ]);
 
@@ -71,7 +109,15 @@ const useDailyActivity = () => {
                 const earned = activity.reward;
                 setDailyEarned(prev => prev + earned);
                 setTotalEarned(prev => prev + earned);
+                
+                // 활동 실행
+                if (activity.action) {
+                    activity.action();
+                }
+                
                 return { ...activity, completed: newCompleted };
+            } else if (activity.id === activityId && activity.completed >= activity.dailyLimit) {
+                alert(`오늘의 한도(${activity.dailyLimit}회)를 모두 사용하셨습니다. 내일 다시 시도해주세요!`);
             }
             return activity;
         }));
