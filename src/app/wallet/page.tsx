@@ -71,7 +71,7 @@ export default function WalletPage() {
         { id: 'BTC', symbol: 'BTC', name: 'Bitcoin', icon: '₿', balance: 0.5, usdPrice: prices.BTC, change24h: 2.5, address: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh' },
         { id: 'ETH', symbol: 'ETH', name: 'Ethereum', icon: 'Ξ', balance: 12.5, usdPrice: prices.ETH, change24h: -1.2, address: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb6' },
         { id: 'XRP', symbol: 'XRP', name: 'Ripple', icon: '💧', balance: 5000, usdPrice: prices.XRP, change24h: 3.8, address: 'rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH' },
-        { id: 'KAUS', symbol: 'KAUS', name: 'KAUS Coin', icon: '🪙', balance: 1250000, usdPrice: prices.KAUS, change24h: 5.2, address: '0xKAUS...TRACE' },
+        { id: 'KAUS', symbol: 'KAUS', name: 'KAUS Stablecoin', icon: '💵', balance: 1250000, usdPrice: prices.KAUS, change24h: 0.0, address: '0xKAUS...TRACE' }, // $1.00 USD-Pegged Stablecoin
         { id: 'USDT', symbol: 'USDT', name: 'Tether', icon: '💵', balance: 50000, usdPrice: prices.USDT, change24h: 0.1, address: '0xUSDT...ADDR' },
     ]);
 
