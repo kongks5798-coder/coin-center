@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NEXUS The Field Nine</title>
+
+    <!-- Tailwind CSS -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React & ReactDOM -->
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel for JSX -->
+
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    
+
+    <style>
+
+        /* Custom Animations */
+
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes slide-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        
+
+        .animate-fade-in { animation: fade-in 0.5s ease-out; }
+
+        .animate-fade-in-up { animation: fade-in-up 0.8s ease-out; }
+
+        .animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
+
+        .animate-spin-slow { animation: spin-slow 10s linear infinite; }
+
+        
+
+        /* Scrollbar Hide */
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    </style>
+
+</head>
+
+<body class="bg-black text-slate-200 font-sans antialiased">
+
+    <div id="root"></div>
+
+
+
+    <script type="text/babel">
+
+        const { useState, useEffect } = React;
+
+
+
+        // --- Icon Components (Lucide Replacement for Browser) ---
+
+        const Icon = ({ path, className, ...props }) => (
+
+            <svg 
+
+                xmlns="http://www.w3.org/2000/svg" 
+
+                viewBox="0 0 24 24" 
+
+                fill="none" 
+
+                stroke="currentColor" 
+
+                strokeWidth="2" 
+
+                strokeLinecap="round" 
+
+                strokeLinejoin="round" 
+
+                className={className} 
+
+                {...props}
+
+            >
+
+                {path}
+
+            </svg>
+
+        );
+
+
+
+        const Icons = {
+
+            ArrowRight: (p) => <Icon {...p} path={<><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>} />,
+
+            Box: (p) => <Icon {...p} path={<><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></>} />,
+
+            Cpu: (p) => <Icon {...p} path={<><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></>} />,
+
+            Layers: (p) => <Icon {...p} path={<><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>} />,
+
+            Zap: (p) => <Icon {...p} path={<><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>} />,
+
+            Globe: (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></>} />,
+
+            TrendingUp: (p) => <Icon {...p} path={<><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></>} />,
+
+            ShieldCheck: (p) => <Icon {...p} path={<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></>} />,
+
+            Menu: (p) => <Icon {...p} path={<><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="18" x2="20" y2="18"/></>} />,
+
+            X: (p) => <Icon {...p} path={<><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>} />,
+
+            Play: (p) => <Icon {...p} path={<><polygon points="5 3 19 12 5 21 5 3"/></>} />,
+
+            ChevronRight: (p) => <Icon {...p} path={<><polyline points="9 18 15 12 9 6"/></>} />,
+
+            Folder: (p) => <Icon {...p} path={<><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></>} />,
+
+            FileText: (p) => <Icon {...p} path={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></>} />,
+
+            ImageIcon: (p) => <Icon {...p} path={<><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></>} />,
+
+            MoreVertical: (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></>} />,
+
+            Clock: (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>} />,
+
+            Star: (p) => <Icon {...p} path={<><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></>} />,
+
+            Cloud: (p) => <Icon {...p} path={<><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></>} />,
+
+            Users: (p) => <Icon {...p} path={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>} />,
+
+            Plus: (p) => <Icon {...p} path={<><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></>} />,
+
+            Search: (p) => <Icon {...p} path={<><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></>} />,
+
+            Settings: (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></>} />,
+
+            Grid: (p) => <Icon {...p} path={<><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></>} />,
+
+            List: (p) => <Icon {...p} path={<><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></>} />,
+
+            Tag: (p) => <Icon {...p} path={<><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></>} />,
+
+            HardDrive: (p) => <Icon {...p} path={<><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></>} />,
+
+            Share2: (p) => <Icon {...p} path={<><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></>} />,
+
+            Download: (p) => <Icon {...p} path={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></>} />,
+
+            LogOut: (p) => <Icon {...p} path={<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>} />
+
+        };
+
+
+
+
+
+        // --- Mock Data ---
+
+        const mockFiles = [
+
+            { id: 'f1', name: '2025 S/S Collection', type: 'folder', modified: '2025. 10. 24', owner: 'Design Team' },
+
+            { id: 'f2', name: 'Tech Packs - Outerwear', type: 'folder', modified: '2025. 10. 22', owner: 'Production' },
+
+            { id: 'd1', name: 'Lookbook_Draft_v2.pdf', type: 'doc', size: '24.5 MB', modified: '10 min ago', owner: 'Kim MD', kTagId: 'KT-8821-X', status: 'Draft' },
+
+            { id: 'i1', name: 'Hero_Jacket_Front.png', type: 'image', size: '4.2 MB', modified: '1 hr ago', owner: 'Lee Designer', kTagId: 'KT-9901-A', status: 'Sample' },
+
+            { id: 'm1', name: '3D_Modeling_Pants.obj', type: '3d', size: '156 MB', modified: 'Yesterday', owner: 'Park 3D', kTagId: 'KT-7712-Z', status: 'Production' },
+
+        ];
+
+
+
+        const historyLog = [
+
+            { id: 1, user: 'Kim MD', action: 'Uploaded file', time: '10:42 AM' },
+
+            { id: 2, user: 'Lee Designer', action: 'Verified K-Tag™', time: '10:30 AM' },
+
+            { id: 3, user: 'System', action: 'Auto-saved version 3.2', time: '09:15 AM' },
+
+        ];
+
+
+
+        // --- Workspace Components ---
+
+        const SidebarItem = ({ icon: Icon, label, active, onClick }) => (
+
+            <button onClick={onClick} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-r-full text-sm font-medium transition-colors mb-1 ${active ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600' : 'text-slate-600 hover:bg-slate-100 border-l-4 border-transparent'}`}>
+
+                <Icon className={`w-5 h-5 ${active ? 'fill-blue-600/20' : ''}`} />
+
+                {label}
+
+            </button>
+
+        );
+
+
+
+        const FileCard = ({ file, onSelect, selected }) => (
+
+            <div onClick={onSelect} className={`group relative p-4 rounded-xl border transition-all cursor-pointer flex flex-col gap-3 ${selected ? 'bg-blue-50 border-blue-200 ring-1 ring-blue-300 shadow-sm' : 'bg-white border-slate-200 hover:border-blue-200 hover:shadow-md'}`}>
+
+                <div className="flex justify-between items-start">
+
+                    <div className={`p-3 rounded-lg ${file.type === 'folder' ? 'bg-slate-100 text-slate-500 fill-slate-500/20' : ''} ${file.type === 'image' ? 'bg-purple-50 text-purple-500' : ''} ${file.type === 'doc' ? 'bg-red-50 text-red-500' : ''} ${file.type === '3d' ? 'bg-orange-50 text-orange-500' : ''}`}>
+
+                        {file.type === 'folder' && <Icons.Folder className="w-6 h-6 fill-slate-400 text-slate-400" />}
+
+                        {file.type === 'image' && <Icons.ImageIcon className="w-6 h-6" />}
+
+                        {file.type === 'doc' && <Icons.FileText className="w-6 h-6" />}
+
+                        {file.type === '3d' && <Icons.Box className="w-6 h-6" />}
+
+                    </div>
+
+                    <button className="opacity-0 group-hover:opacity-100 p-1 hover:bg-slate-100 rounded-full transition-opacity"><Icons.MoreVertical className="w-4 h-4 text-slate-400" /></button>
+
+                </div>
+
+                <div>
+
+                    <h3 className="font-medium text-slate-700 truncate text-sm" title={file.name}>{file.name}</h3>
+
+                    <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+
+                        {file.type === 'folder' ? file.modified : file.size}
+
+                        {file.kTagId && <span className="w-2 h-2 rounded-full bg-green-500 ml-1" title="K-Tag Active" />}
+
+                    </p>
+
+                </div>
+
+                {file.kTagId && (
+
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+
+                        <div className="bg-white/90 backdrop-blur border border-slate-200 shadow-sm px-2 py-0.5 rounded text-[10px] font-mono text-slate-500">K-TAG</div>
+
+                    </div>
+
+                )}
+
+            </div>
+
+        );
+
+
+
+        const NexusWorkspace = ({ onLogout }) => {
+
+            const [activeMenu, setActiveMenu] = useState('drive');
+
+            const [selectedFile, setSelectedFile] = useState(null);
+
+
+
+            return (
+
+                <div className="flex h-screen bg-white font-sans text-slate-900 overflow-hidden animate-fade-in">
+
+                    <aside className="w-64 flex flex-col py-4 pr-4 bg-white border-r border-slate-100">
+
+                        <div className="px-6 mb-6 flex items-center gap-2 cursor-pointer" onClick={onLogout}>
+
+                            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">N</div>
+
+                            <span className="text-xl font-bold tracking-tight text-slate-800">NEXUS</span>
+
+                        </div>
+
+                        <div className="px-4 mb-6">
+
+                            <button className="w-full flex items-center gap-2 bg-white border border-slate-200 hover:shadow-md transition-shadow px-4 py-3 rounded-2xl text-slate-700 font-medium shadow-sm">
+
+                                <Icons.Plus className="w-5 h-5 text-blue-600" />
+
+                                <span>New Upload</span>
+
+                            </button>
+
+                        </div>
+
+                        <nav className="flex-1 space-y-1">
+
+                            <SidebarItem icon={Icons.HardDrive} label="My Workspace" active={activeMenu === 'drive'} onClick={() => setActiveMenu('drive')} />
+
+                            <SidebarItem icon={Icons.Users} label="Team Drives" active={activeMenu === 'team'} onClick={() => setActiveMenu('team')} />
+
+                            <SidebarItem icon={Icons.Clock} label="Recent" active={activeMenu === 'recent'} onClick={() => setActiveMenu('recent')} />
+
+                            <SidebarItem icon={Icons.Star} label="Starred" active={activeMenu === 'starred'} onClick={() => setActiveMenu('starred')} />
+
+                            <div className="my-4 border-t border-slate-100 mx-4"></div>
+
+                            <SidebarItem icon={Icons.Cloud} label="Asset Cloud" active={activeMenu === 'storage'} onClick={() => setActiveMenu('storage')} />
+
+                            <SidebarItem icon={Icons.Tag} label="K-Tag™ Manager" active={activeMenu === 'ktag'} onClick={() => setActiveMenu('ktag')} />
+
+                        </nav>
+
+                        <div className="px-6 mt-auto">
+
+                            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+
+                                <div className="flex justify-between items-center mb-2 text-sm"><span className="font-medium text-slate-600">Storage</span><span className="text-blue-600">82%</span></div>
+
+                                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mb-2"><div className="w-[82%] h-full bg-blue-600 rounded-full"></div></div>
+
+                                <p className="text-xs text-slate-400">8.2 TB of 10 TB used</p>
+
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                    <main className="flex-1 flex flex-col bg-white">
+
+                        <header className="h-16 border-b border-slate-100 flex items-center justify-between px-6 bg-white">
+
+                            <div className="flex-1 max-w-2xl">
+
+                                <div className="relative group">
+
+                                    <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+
+                                    <input type="text" placeholder="Search assets, K-Tags, or design files..." className="w-full bg-slate-100 hover:bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-100 focus:outline-none border border-transparent focus:border-blue-200 rounded-full py-2.5 pl-10 pr-4 transition-all text-sm" />
+
+                                </div>
+
+                            </div>
+
+                            <div className="flex items-center gap-3 ml-4">
+
+                                <button className="p-2 hover:bg-slate-100 rounded-full text-slate-500"><Icons.Settings className="w-5 h-5" /></button>
+
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 text-white flex items-center justify-center text-sm font-bold shadow-sm">C</div>
+
+                                <button onClick={onLogout} className="ml-2 p-2 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full transition-colors" title="Logout"><Icons.LogOut className="w-5 h-5" /></button>
+
+                            </div>
+
+                        </header>
+
+                        <div className="flex-1 flex overflow-hidden">
+
+                            <div className="flex-1 overflow-y-auto p-6">
+
+                                <div className="flex items-center justify-between mb-6">
+
+                                    <div className="flex items-center gap-2 text-sm text-slate-500">
+
+                                        <span className="hover:bg-slate-100 px-2 py-1 rounded cursor-pointer">My Workspace</span>
+
+                                        <Icons.ChevronRight className="w-4 h-4" />
+
+                                        <span className="font-medium text-slate-900 bg-slate-100 px-2 py-1 rounded">2025 S/S Collection</span>
+
+                                    </div>
+
+                                    <div className="flex gap-1 border border-slate-200 rounded-lg p-1">
+
+                                        <button className="p-1.5 bg-slate-100 rounded text-slate-700"><Icons.Grid className="w-4 h-4" /></button>
+
+                                        <button className="p-1.5 hover:bg-slate-50 rounded text-slate-400"><Icons.List className="w-4 h-4" /></button>
+
+                                    </div>
+
+                                </div>
+
+                                <div className="mb-8"><h2 className="text-sm font-medium text-slate-500 mb-4 px-1">Folders</h2><div className="grid grid-cols-4 gap-4">{mockFiles.filter(f => f.type === 'folder').map(file => <FileCard key={file.id} file={file} onSelect={() => setSelectedFile(file)} selected={selectedFile?.id === file.id} />)}</div></div>
+
+                                <div><h2 className="text-sm font-medium text-slate-500 mb-4 px-1">Assets & Files</h2><div className="grid grid-cols-4 gap-4">{mockFiles.filter(f => f.type !== 'folder').map(file => <FileCard key={file.id} file={file} onSelect={() => setSelectedFile(file)} selected={selectedFile?.id === file.id} />)}</div></div>
+
+                            </div>
+
+                            {selectedFile && selectedFile.type !== 'folder' && (
+
+                                <aside className="w-80 border-l border-slate-200 bg-white p-6 overflow-y-auto shadow-[-5px_0_15px_rgba(0,0,0,0.02)] animate-slide-in-right">
+
+                                    <div className="flex items-start justify-between mb-6"><h3 className="font-bold text-lg text-slate-800 leading-tight">{selectedFile.name}</h3><button onClick={() => setSelectedFile(null)} className="text-slate-400 hover:text-slate-600"><Icons.Plus className="w-5 h-5 rotate-45" /></button></div>
+
+                                    <div className="aspect-video bg-slate-50 rounded-lg border border-slate-100 mb-6 flex items-center justify-center text-slate-400">
+
+                                        {selectedFile.type === 'image' && <Icons.ImageIcon className="w-12 h-12 opacity-20" />}
+
+                                        {selectedFile.type === 'doc' && <Icons.FileText className="w-12 h-12 opacity-20" />}
+
+                                        {selectedFile.type === '3d' && <Icons.Box className="w-12 h-12 opacity-20" />}
+
+                                    </div>
+
+                                    <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 mb-6">
+
+                                        <div className="flex items-center gap-2 mb-3"><Icons.Tag className="w-4 h-4 text-blue-600" /><span className="font-bold text-sm text-blue-900">K-Tag™ (RFID)</span></div>
+
+                                        <div className="space-y-3">
+
+                                            <div className="flex justify-between text-xs"><span className="text-slate-500">Digital ID</span><span className="font-mono text-slate-700 bg-white px-2 py-0.5 rounded border border-blue-100">{selectedFile.kTagId}</span></div>
+
+                                            <div className="flex justify-between text-xs"><span className="text-slate-500">Status</span><span className="font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">{selectedFile.status}</span></div>
+
+                                            <div className="flex justify-between text-xs"><span className="text-slate-500">Location</span><span className="text-slate-700">Zone A-1 (Warehouse)</span></div>
+
+                                        </div>
+
+                                        <button className="w-full mt-3 py-2 bg-white border border-blue-200 text-blue-600 text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">View Asset History</button>
+
+                                    </div>
+
+                                    <div className="space-y-4 mb-6">
+
+                                        <div className="flex items-center justify-between text-sm"><span className="text-slate-500">Owner</span><div className="flex items-center gap-2"><div className="w-5 h-5 rounded-full bg-slate-200" /><span className="text-slate-700 font-medium">{selectedFile.owner}</span></div></div>
+
+                                        <div className="flex items-center justify-between text-sm"><span className="text-slate-500">Size</span><span className="text-slate-700 font-mono">{selectedFile.size}</span></div>
+
+                                        <div className="flex items-center justify-between text-sm"><span className="text-slate-500">Modified</span><span className="text-slate-700">{selectedFile.modified}</span></div>
+
+                                    </div>
+
+                                    <div>
+
+                                        <h4 className="font-bold text-sm text-slate-800 mb-3 flex items-center gap-2"><Icons.Clock className="w-4 h-4 text-slate-400" />Activity History</h4>
+
+                                        <div className="space-y-4 relative before:absolute before:left-1.5 before:top-2 before:bottom-2 before:w-px before:bg-slate-100">
+
+                                            {historyLog.map((log) => (
+
+                                                <div key={log.id} className="relative pl-6 text-sm"><div className="absolute left-0 top-1.5 w-3 h-3 bg-white border-2 border-slate-200 rounded-full"></div><p className="text-slate-700 font-medium">{log.action}</p><p className="text-xs text-slate-400 mt-0.5">{log.user} • {log.time}</p></div>
+
+                                            ))}
+
+                                        </div>
+
+                                    </div>
+
+                                </aside>
+
+                            )}
+
+                        </div>
+
+                    </main>
+
+                </div>
+
+            );
+
+        };
+
+
+
+        const Nav = ({ onLogin }) => {
+
+            const [isScrolled, setIsScrolled] = useState(false);
+
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+            useEffect(() => { const handleScroll = () => setIsScrolled(window.scrollY > 50); window.addEventListener('scroll', handleScroll); return () => window.removeEventListener('scroll', handleScroll); }, []);
+
+            const navLinks = [{ name: 'Ecosystem', href: '#ecosystem' }, { name: 'The Solution', href: '#solution' }, { name: 'K-Tag', href: '#k-tag' }, { name: 'Company', href: '#company' }];
+
+            return (
+
+                <>
+
+                    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
+
+                        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+
+                            <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}><div className="w-8 h-8 bg-white text-black flex items-center justify-center font-bold text-lg rounded-sm">N</div><span className="text-white font-bold tracking-widest text-lg">NEXUS</span></div>
+
+                            <div className="hidden md:flex gap-8 text-sm font-medium text-slate-300">{navLinks.map((link) => <a key={link.name} href={link.href} className="hover:text-white transition-colors relative group">{link.name}<span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all group-hover:w-full"></span></a>)}</div>
+
+                            <div className="hidden md:flex items-center gap-4"><button onClick={onLogin} className="px-6 py-2 bg-white text-black text-sm font-bold hover:bg-slate-200 transition-colors rounded-sm">Partner Login</button></div>
+
+                            <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>{mobileMenuOpen ? <Icons.X /> : <Icons.Menu />}</button>
+
+                        </div>
+
+                    </nav>
+
+                    {mobileMenuOpen && <div className="fixed inset-0 z-40 bg-black pt-24 px-6 md:hidden animate-fade-in"><div className="flex flex-col gap-6 text-2xl font-bold text-white">{navLinks.map((link) => <a key={link.name} href={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between border-b border-white/10 pb-4">{link.name}<Icons.ChevronRight className="w-5 h-5 text-slate-500" /></a>)}<button onClick={onLogin} className="mt-4 w-full py-4 bg-white text-black text-lg font-bold rounded-sm">Partner Login</button></div></div>}
+
+                </>
+
+            );
+
+        };
+
+
+
+        const Hero = ({ onExplore }) => (
+
+            <section className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
+
+                <div className="absolute inset-0 opacity-40">
+
+                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,_rgba(59,130,246,0.2),_transparent_70%)]"></div>
+
+                    <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-[radial-gradient(circle_at_50%_50%,_rgba(147,51,234,0.15),_transparent_70%)]"></div>
+
+                    <div className="grid grid-cols-12 h-full w-full opacity-20">{Array.from({ length: 12 }).map((_, i) => <div key={i} className="border-r border-slate-800 h-full"></div>)}</div>
+
+                </div>
+
+                <div className="relative z-10 text-center max-w-4xl px-6 pt-20">
+
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-bold tracking-widest mb-8 animate-fade-in-up"><span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>OPERATING SYSTEM FOR FASHION</div>
+
+                    <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight mb-8">We Digitize <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Physical Movement.</span></h1>
+
+                    <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">Nexus The Field Nine은 단순한 물류가 아닙니다. <br className="hidden md:block"/>AI 데이터베이스와 로지스틱스가 결합된, 패션 비즈니스의 심장입니다.</p>
+
+                    <div className="flex flex-col md:flex-row gap-4 justify-center">
+
+                        <button onClick={onExplore} className="px-8 py-4 bg-white text-black font-bold text-sm tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-2 group rounded-sm">EXPLORE SOLUTION<Icons.ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></button>
+
+                        <button className="px-8 py-4 border border-white/20 text-white font-bold text-sm tracking-widest hover:bg-white/5 transition-all flex items-center justify-center gap-2 backdrop-blur-sm rounded-sm"><Icons.Play className="w-4 h-4" />WATCH VISION</button>
+
+                    </div>
+
+                </div>
+
+                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce"><span className="text-[10px] text-white tracking-widest">SCROLL</span><div className="w-px h-12 bg-gradient-to-b from-white to-transparent"></div></div>
+
+            </section>
+
+        );
+
+
+
+        const BentoGrid = () => (
+
+            <section id="ecosystem" className="py-24 bg-slate-950 px-6 scroll-mt-20">
+
+                <div className="max-w-7xl mx-auto">
+
+                    <div className="mb-16"><h2 className="text-3xl md:text-4xl font-bold text-white mb-4">The Nexus Ecosystem</h2><p className="text-slate-400">물류, 데이터, 브랜드가 하나로 연결되는 초격차 인프라.</p></div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 grid-rows-2 gap-4 h-auto md:h-[600px]">
+
+                        <div className="h-[400px] md:h-auto md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-2xl bg-slate-900 border border-white/5">
+
+                            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700"></div><div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+
+                            <div className="absolute bottom-0 left-0 p-8"><div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4 text-white"><Icons.Box className="w-6 h-6" /></div><h3 className="text-2xl font-bold text-white mb-2">Smart Fulfillment Hub</h3><p className="text-slate-300 max-w-md text-sm leading-relaxed">5,000평 규모의 자동화 허브. 자율주행 로봇(AMR)과 AI 비전 스캐닝을 통해 입고부터 출고까지 99.9%의 정확도를 보장합니다.</p></div>
+
+                        </div>
+
+                        <div className="h-[300px] md:h-auto relative group overflow-hidden rounded-2xl bg-slate-900 border border-white/5 p-8 flex flex-col justify-between hover:border-purple-500/30 transition-colors">
+
+                            <div className="absolute top-0 right-0 p-8 opacity-20"><Icons.Cpu className="w-32 h-32 text-purple-500" /></div>
+
+                            <div className="relative z-10"><h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2"><span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>AI Data Center</h3><p className="text-slate-400 text-sm">패션 트렌드 분석 및 재고 예측 알고리즘. <br/>데이터가 비즈니스의 방향을 제시합니다.</p></div>
+
+                            <div className="w-full bg-slate-800 h-1 rounded-full mt-4 overflow-hidden"><div className="bg-purple-500 h-full w-[70%] animate-[width_2s_ease-in-out_infinite]"></div></div>
+
+                        </div>
+
+                        <div className="h-[300px] md:h-auto relative group overflow-hidden rounded-2xl bg-slate-900 border border-white/5 p-8 hover:border-blue-500/30 transition-colors">
+
+                            <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-blue-900/20"></div>
+
+                            <div className="relative z-10"><Icons.Layers className="w-8 h-8 text-blue-400 mb-4" /><h3 className="text-xl font-bold text-white mb-2">Brand Acceleration</h3><p className="text-slate-400 text-sm">신진 브랜드 인큐베이팅 및 글로벌 진출 지원. <br/>단순 물류 대행을 넘어 브랜드의 성장을 함께합니다.</p></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        );
+
+
+
+        const SolutionShowcase = ({ onExplore }) => (
+
+            <section id="solution" className="py-24 bg-black overflow-hidden relative scroll-mt-20">
+
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full"></div>
+
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+
+                    <div className="text-center mb-16">
+
+                        <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">The OS for Fashion</h2>
+
+                        <p className="text-slate-400 max-w-2xl mx-auto text-lg mb-8">구글 워크스페이스처럼 쉽지만, 테슬라처럼 강력합니다. <br/>디자인 파일 관리부터 물류 추적까지 하나의 솔루션으로 해결하십시오.</p>
+
+                        <button onClick={onExplore} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-sm transition-colors inline-flex items-center gap-2"><Icons.Zap className="w-4 h-4" /> LAUNCH WORKSPACE</button>
+
+                    </div>
+
+                    <div className="relative rounded-xl border border-white/10 bg-slate-900/50 backdrop-blur-xl shadow-2xl overflow-hidden transform md:hover:scale-[1.01] transition-transform duration-500 cursor-pointer" onClick={onExplore}>
+
+                        <div className="h-12 border-b border-white/10 bg-black/40 flex items-center px-4 gap-2">
+
+                            <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500/50"></div><div className="w-3 h-3 rounded-full bg-yellow-500/50"></div><div className="w-3 h-3 rounded-full bg-green-500/50"></div></div>
+
+                            <div className="ml-4 px-3 py-1 rounded bg-white/5 text-[10px] text-slate-400 font-mono flex items-center gap-2"><Icons.ShieldCheck className="w-3 h-3" /> nexus.fieldnine.io/workspace</div>
+
+                        </div>
+
+                        <div className="grid grid-cols-12 h-[500px]">
+
+                            <div className="col-span-2 border-r border-white/10 bg-black/20 p-4 hidden md:block">
+
+                                <div className="space-y-4">
+
+                                    <div className="h-8 bg-blue-600/20 border border-blue-500/30 rounded flex items-center px-3 text-xs text-blue-400 font-bold">Dashboard</div>
+
+                                    <div className="h-8 text-slate-500 flex items-center px-3 text-xs">Asset Cloud</div>
+
+                                    <div className="mt-8 pt-8 border-t border-white/5"><div className="h-8 text-white flex items-center px-3 text-xs font-bold gap-2"><Icons.Zap className="w-3 h-3 text-yellow-400" /> K-Tag Control</div></div>
+
+                                </div>
+
+                            </div>
+
+                            <div className="col-span-12 md:col-span-10 p-8 bg-gradient-to-br from-slate-900/50 to-black/50">
+
+                                <div className="flex justify-between items-end mb-8"><div><h3 className="text-2xl font-bold text-white">2025 S/S Collection</h3><p className="text-slate-400 text-sm">Last updated by Design Team</p></div><div className="px-4 py-2 bg-white text-black text-xs font-bold rounded">UPLOAD ASSETS</div></div>
+
+                                <div className="grid grid-cols-3 gap-4">{[1, 2, 3].map((i) => <div key={i} className="aspect-video bg-white/5 border border-white/10 rounded-lg p-4 flex flex-col justify-between"><div className="flex justify-between"><div className="w-8 h-8 rounded bg-slate-800 flex items-center justify-center"><Icons.Box className="w-4 h-4 text-slate-400" /></div>{i === 1 && <span className="px-2 py-1 rounded bg-green-500/20 text-green-400 text-[10px] font-bold border border-green-500/30">K-Tag Active</span>}</div><div><div className="h-2 w-24 bg-slate-700 rounded mb-2"></div><div className="h-2 w-16 bg-slate-800 rounded"></div></div></div>)}</div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        );
+
+
+
+        const KTagFeature = () => (
+
+            <section id="k-tag" className="py-32 bg-slate-950 border-t border-white/5 relative overflow-hidden scroll-mt-20">
+
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(30,41,59,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(30,41,59,0.2)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"></div>
+
+                <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10">
+
+                    <div>
+
+                        <div className="flex items-center gap-2 mb-4"><div className="text-blue-500 font-bold tracking-widest text-sm">PROPRIETARY TECHNOLOGY</div><div className="px-2 py-0.5 border border-slate-700 rounded text-[10px] text-slate-400 font-mono">PATENT PENDING: PCT/KR2025/009xxx</div></div>
+
+                        <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">K-Tag™</h2>
+
+                        <p className="text-xl text-slate-400 mb-8 leading-relaxed">물리적 제품과 디지털 데이터의 경계를 지웁니다. <br/>단 한 번의 터치로 이력 추적, 정품 인증, 그리고 재고 자산화까지.</p>
+
+                        <ul className="space-y-6">
+
+                            {[
+
+                                { title: "Military-Grade Encryption", desc: "AES-256 암호화 및 비가시 워터마킹 기술 적용" },
+
+                                { title: "Blockchain Immutability", desc: "위변조가 불가능한 분산 원장 기술(DLT) 기반" },
+
+                                { title: "Global IP Protection", desc: "국제 특허(PCT) 출원을 통한 전 세계적 법적 보호" }
+
+                            ].map((item, i) => (
+
+                                <li key={i} className="flex gap-4">
+
+                                    <div className="w-12 h-12 rounded-full bg-blue-900/20 border border-blue-500/30 flex items-center justify-center shrink-0"><Icons.ShieldCheck className="w-5 h-5 text-blue-400" /></div>
+
+                                    <div><h4 className="text-white font-bold text-lg">{item.title}</h4><p className="text-slate-500 text-sm">{item.desc}</p></div>
+
+                                </li>
+
+                            ))}
+
+                        </ul>
+
+                    </div>
+
+                    <div className="relative">
+
+                        <div className="aspect-square rounded-full bg-gradient-to-tr from-blue-900/20 to-purple-900/20 border border-white/10 flex items-center justify-center relative overflow-hidden group">
+
+                            <div className="absolute inset-0 animate-[spin_10s_linear_infinite] opacity-30"><div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border-t border-b border-blue-500/50 rotate-45"></div><div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border-l border-r border-purple-500/50 -rotate-45"></div></div>
+
+                            <div className="absolute inset-0 bg-blue-500/5 rounded-full blur-xl group-hover:bg-blue-500/10 transition-colors duration-500"></div>
+
+                            <div className="w-48 h-48 bg-black border border-blue-500/50 rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(59,130,246,0.3)] z-10 backdrop-blur-md relative">
+
+                                <div className="absolute -top-3 -right-3 bg-blue-600 text-white text-[8px] font-bold px-2 py-1 rounded-sm border border-blue-400">SECURE</div>
+
+                                <div className="text-center"><div className="text-5xl font-black text-white mb-1">K</div><div className="text-[10px] tracking-[0.3em] text-blue-500">TAG SERIES</div></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        );
+
+
+
+        const Footer = () => (
+
+            <footer id="company" className="bg-black border-t border-white/10 py-16 px-6 scroll-mt-20">
+
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+
+                    <div>
+
+                        <div className="flex items-center gap-2 mb-6"><div className="w-6 h-6 bg-white text-black flex items-center justify-center font-bold text-xs rounded-sm">N</div><span className="text-white font-bold tracking-widest">NEXUS</span></div>
+
+                        <p className="text-slate-500 text-sm max-w-xs mb-6">NEXUS The Field Nine <br/>Redefining the physics of fashion logistics.</p>
+
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-sm">
+
+                        <div><h4 className="text-white font-bold mb-4">Company</h4><ul className="space-y-2 text-slate-500"><li className="hover:text-white cursor-pointer">About Us</li><li className="hover:text-white cursor-pointer">Careers</li></ul></div>
+
+                        <div><h4 className="text-white font-bold mb-4">Business</h4><ul className="space-y-2 text-slate-500"><li className="hover:text-white cursor-pointer">Logistics</li><li className="hover:text-white cursor-pointer">AI Center</li></ul></div>
+
+                        <div><h4 className="text-white font-bold mb-4">Solution</h4><ul className="space-y-2 text-slate-500"><li className="hover:text-white cursor-pointer">Nexus Workspace</li><li className="hover:text-white cursor-pointer">K-Tag™</li></ul></div>
+
+                        <div><h4 className="text-white font-bold mb-4">Legal</h4><ul className="space-y-2 text-slate-500"><li className="hover:text-white cursor-pointer">Privacy Policy</li><li className="hover:text-white cursor-pointer flex items-center gap-2"><Icons.ShieldCheck className="w-3 h-3" />IP Protection</li></ul></div>
+
+                    </div>
+
+                </div>
+
+                <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-600">
+
+                    <div><p>© 2025 NEXUS The Field Nine. All rights reserved.</p><p className="mt-2 text-slate-700 max-w-lg">K-Tag™ and the K-Tag logo are trademarks of NEXUS The Field Nine. Technology protected by international patents pending (PCT). Unauthorized use strictly prohibited.</p></div>
+
+                    <p>Seoul, Republic of Korea</p>
+
+                </div>
+
+            </footer>
+
+        );
+
+
+
+        const NexusApp = () => {
+
+            const [view, setView] = useState('landing');
+
+            return (
+
+                <>
+
+                    {view === 'landing' ? (
+
+                        <div className="bg-black min-h-screen text-slate-200 selection:bg-blue-500/30 font-sans">
+
+                            <Nav onLogin={() => setView('app')} />
+
+                            <Hero onExplore={() => setView('app')} />
+
+                            <BentoGrid />
+
+                            <SolutionShowcase onExplore={() => setView('app')} />
+
+                            <KTagFeature />
+
+                            <Footer />
+
+                        </div>
+
+                    ) : (
+
+                        <NexusWorkspace onLogout={() => setView('landing')} />
+
+                    )}
+
+                </>
+
+            );
+
+        };
+
+
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+
+        root.render(<NexusApp />);
+
+    </script>
+
+</body>
+
+</html>
+

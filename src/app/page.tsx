@@ -1,27 +1,34 @@
-import { HeroSection } from "@/components/hero-section"
-import { Navigation } from "@/components/navigation"
-import { BusinessEcosystem } from "@/components/business-ecosystem"
-import { RFIDLogisticsSystem } from "@/components/rfid-logistics-system"
-import { FulfillmentIntegration } from "@/components/fulfillment-integration"
-import { KausTechnology } from "@/components/kaus-technology"
-import { VisionSection } from "@/components/vision-section"
-import { BusinessDivisions } from "@/components/business-divisions"
-import { CTASection } from "@/components/cta-section"
-import { Footer } from "@/components/footer"
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { NexusNav } from "@/components/nexus/NexusNav"
+import { NexusHero } from "@/components/nexus/NexusHero"
+import { NexusBentoGrid } from "@/components/nexus/NexusBentoGrid"
+import { NexusSolutionShowcase } from "@/components/nexus/NexusSolutionShowcase"
+import { NexusKTagFeature } from "@/components/nexus/NexusKTagFeature"
+import { NexusFooter } from "@/components/nexus/NexusFooter"
 
 export default function Home() {
+  const router = useRouter()
+  const [view, setView] = useState<'landing' | 'workspace'>('landing')
+
+  const handleExplore = () => {
+    router.push('/workspace')
+  }
+
+  const handleLogin = () => {
+    router.push('/workspace')
+  }
+
   return (
-    <main className="min-h-screen bg-background">
-      <Navigation />
-      <HeroSection />
-      <BusinessEcosystem />
-      <RFIDLogisticsSystem />
-      <FulfillmentIntegration />
-      <KausTechnology />
-      <BusinessDivisions />
-      <VisionSection />
-      <CTASection />
-      <Footer />
-    </main>
+    <div className="bg-black min-h-screen text-slate-200 selection:bg-blue-500/30 font-sans">
+      <NexusNav onLogin={handleLogin} />
+      <NexusHero onExplore={handleExplore} />
+      <NexusBentoGrid />
+      <NexusSolutionShowcase onExplore={handleExplore} />
+      <NexusKTagFeature />
+      <NexusFooter />
+    </div>
   )
 }

@@ -125,3 +125,18 @@
     scroll-behavior: smooth;
   }
 }
+
+/* Custom Animations for NEXUS */
+@keyframes width {
+  0%, 100% { width: 70%; }
+  50% { width: 85%; }
+}
+
+/* Scrollbar Hide */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
