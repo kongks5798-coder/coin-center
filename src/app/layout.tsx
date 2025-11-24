@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import NexusAdmin from "@/components/NexusAdmin";
 
 export const metadata: Metadata = {
   title: "FIELD NINE - AI 기반 물류 자동화 플랫폼 | NEXUS OS",
@@ -64,7 +65,10 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <NexusAdmin />
+      </body>
     </html>
   );
 }
