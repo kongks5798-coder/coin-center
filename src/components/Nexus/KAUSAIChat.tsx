@@ -152,9 +152,17 @@ export default function KAUSAIChat() {
                                             : 'bg-[#111111] text-[#E0E0E0] border border-white/10 nexus-glass'
                                     }`}
                                 >
-                                    <p className="text-base font-['Inter',sans-serif] whitespace-pre-wrap leading-relaxed">
-                                        {message.content}
-                                    </p>
+                                    <div 
+                                        className="text-base font-['Inter',sans-serif] whitespace-pre-wrap leading-relaxed prose prose-invert max-w-none"
+                                        dangerouslySetInnerHTML={{
+                                            __html: message.content
+                                                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#00FF94]">$1</strong>')
+                                                .replace(/https?:\/\/[^\s]+/g, '<a href="$&" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors">$&</a>')
+                                                .replace(/fieldnine\.io/gi, '<a href="https://www.fieldnine.io" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors font-medium">fieldnine.io</a>')
+                                                .replace(/www\.fieldnine\.io/gi, '<a href="https://www.fieldnine.io" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors font-medium">www.fieldnine.io</a>')
+                                                .replace(/\n/g, '<br />')
+                                        }}
+                                    />
                                 </div>
                                 {message.role === 'user' && (
                                     <div className="w-10 h-10 rounded-full bg-[#00C2FF]/20 flex items-center justify-center flex-shrink-0 border border-[#00C2FF]/30">
@@ -227,9 +235,23 @@ export default function KAUSAIChat() {
                             </div>
                         </div>
                     </div>
-                    <p className="text-center text-xs text-[#888888] mt-4 font-['JetBrains_Mono',monospace]">
-                        KAUS AI v1.0 | FIELD NINE Enterprise AI
-                    </p>
+                    <div className="text-center mt-4 space-y-2">
+                        <p className="text-xs text-[#888888] font-['JetBrains_Mono',monospace]">
+                            KAUS AI v1.0 | FIELD NINE Enterprise AI
+                        </p>
+                        <a
+                            href="https://www.fieldnine.io"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#00FF94] hover:text-[#00C2FF] border border-[#00FF94]/30 hover:border-[#00C2FF]/50 rounded-lg transition-all nexus-glow-green"
+                        >
+                            <span>🌐</span>
+                            <span>최종 링크: www.fieldnine.io</span>
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
                 </motion.div>
             </div>
         </div>
