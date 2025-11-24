@@ -1,14 +1,18 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @theme {
-  --color-field-bg: #020617;
-  --color-field-surface: #020617;
+  --color-field-bg: #050505;
+  --color-field-surface: #050505;
   --color-field-accent: #22d3ee;
   --color-field-accent-soft: #0e7490;
+  --color-kaus-green: #00FF94;
 }
 
 :root {
   color-scheme: dark;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
@@ -42,4 +46,22 @@ a {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Typography */
+.font-inter {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
 }

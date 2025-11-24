@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Metrics = {
     facilityStatus: string;
@@ -35,71 +36,106 @@ export function AdminWidget() {
     return (
         <>
             {/* 플로팅 버튼 */}
-            <button
+            <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 type="button"
                 onClick={() => setOpen((o) => !o)}
-                className="fixed bottom-6 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-field-accent-soft bg-black/80 text-[11px] font-semibold text-field-accent shadow-xl shadow-black/70 backdrop-blur hover:border-field-accent md:right-6"
+                className="glass fixed bottom-6 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full text-sm font-semibold text-[#00FF94] shadow-xl hover:bg-white/10 hover:border-[#00FF94]/50 transition-all duration-300 md:right-6"
             >
-                KAUS
-            </button>
+                <span className="font-mono text-xs">KAUS</span>
+            </motion.button>
 
             {/* 패널 */}
-            {open && (
-                <div className="fixed bottom-20 right-4 z-40 w-80 rounded-xl border border-slate-800 bg-black/90 p-4 text-xs text-slate-100 shadow-2xl shadow-black/80 backdrop-blur md:right-6">
-                    <div className="mb-3 flex items-center justify-between">
-                        <div>
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-field-accent">
-                                KAUS ADMIN
-                            </p>
-                            <p className="mt-1 text-[11px] text-slate-400">
-                                실물 허브 &amp; 온체인 상태 스냅샷
-                            </p>
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                        className="glass fixed bottom-24 right-4 z-40 w-80 rounded-2xl p-6 text-sm text-white/90 shadow-2xl md:right-6"
+                    >
+                        <div className="mb-4 flex items-center justify-between">
+                            <div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#00FF94] font-inter">
+                                    KAUS ADMIN
+                                </p>
+                                <p className="mt-1 text-xs text-white/50 font-inter">
+                                    실물 허브 &amp; 온체인 상태 스냅샷
+                                </p>
+                            </div>
+                            <button
+                                className="rounded-full border border-white/10 px-2 py-1 text-xs text-white/40 hover:border-white/20 hover:text-white/60 transition-all duration-300"
+                                onClick={() => setOpen(false)}
+                                type="button"
+                            >
+                                ✕
+                            </button>
                         </div>
-                        <button
-                            className="rounded-full border border-slate-700 px-2 py-1 text-[10px] text-slate-400 hover:border-slate-500"
-                            onClick={() => setOpen(false)}
-                            type="button"
-                        >
-                            닫기
-                        </button>
-                    </div>
 
-                    <div className="space-y-2 text-[11px]">
-                        <div className="flex justify-between">
-                            <span className="text-slate-400">Facility</span>
-                            <span className="font-medium text-slate-100">
-                                {metrics ? metrics.facilityStatus.toUpperCase() : "LOADING"}
-                            </span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-slate-400">Utilization</span>
-                            <span className="font-medium">
-                                {utilizationPercent !== null ? `${utilizationPercent}%` : "–"}
-                            </span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-slate-400">Today Orders</span>
-                            <span className="font-medium">
-                                {metrics ? metrics.todayOrders.toLocaleString() : "–"}
-                            </span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-slate-400">KAUS Collateral</span>
-                            <span className="font-medium text-field-accent">
-                                {collateralPercent !== null ? `${collateralPercent}%` : "–"}
-                            </span>
-                        </div>
-                        <div className="pt-2 text-[10px] text-slate-500">
-                            {metrics && (
-                                <span>
-                                    Last sync · {new Date(metrics.updatedAt).toLocaleString()}
+                        <div className="space-y-3 text-xs">
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.1 }}
+                                className="flex justify-between items-center"
+                            >
+                                <span className="text-white/50 font-inter">Facility</span>
+                                <span className="font-medium text-white/90 font-mono">
+                                    {metrics ? metrics.facilityStatus.toUpperCase() : "LOADING"}
                                 </span>
-                            )}
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.15 }}
+                                className="flex justify-between items-center"
+                            >
+                                <span className="text-white/50 font-inter">Utilization</span>
+                                <span className="font-medium text-white/90 font-mono">
+                                    {utilizationPercent !== null ? `${utilizationPercent}%` : "–"}
+                                </span>
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="flex justify-between items-center"
+                            >
+                                <span className="text-white/50 font-inter">Today Orders</span>
+                                <span className="font-medium text-white/90 font-mono">
+                                    {metrics ? metrics.todayOrders.toLocaleString() : "–"}
+                                </span>
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.25 }}
+                                className="flex justify-between items-center"
+                            >
+                                <span className="text-white/50 font-inter">KAUS Collateral</span>
+                                <span className="font-medium text-[#00FF94] font-mono">
+                                    {collateralPercent !== null ? `${collateralPercent}%` : "–"}
+                                </span>
+                            </motion.div>
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.3 }}
+                                className="pt-3 text-xs text-white/30 border-t border-white/10"
+                            >
+                                {metrics && (
+                                    <span className="font-mono">
+                                        Last sync · {new Date(metrics.updatedAt).toLocaleString()}
+                                    </span>
+                                )}
+                            </motion.div>
                         </div>
-                    </div>
-                </div>
-            )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }
-
