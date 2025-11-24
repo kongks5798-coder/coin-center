@@ -1,76 +1,51 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { SiteShell } from "@/components/layout/SiteShell";
-import { AdminWidget } from "@/components/kaus/AdminWidget";
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from 'next/font/google'
+import "./globals.css"
+import { AdminWidget } from "@/components/kaus/AdminWidget"
+
+// Using Inter font for Tesla-like clean typography
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
-  title: "FIELD NINE · KAUS",
-  description: "Physical AI Computing Infrastructure for Real-World Assets · FIELD NINE & KAUS",
-  keywords: ["FIELD NINE", "NEXUS OS", "KAUS Coin", "AI 물류", "드론 네트워크", "블록체인", "양자 블록체인", "FILLUMINATE", "MARD MARD"],
-  authors: [{ name: "FIELD NINE" }],
-  creator: "FIELD NINE",
-  publisher: "FIELD NINE Corporation",
-  metadataBase: new URL('https://www.fieldnine.io'),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: "FIELD NINE - AI 기반 물류 자동화 플랫폼",
-    description: "AI, 드론, 블록체인으로 전 세계를 연결하는 혁신 플랫폼",
-    url: "https://www.fieldnine.io",
-    siteName: "FIELD NINE",
-    locale: "ko_KR",
-    type: "website",
-    images: [
+  title: "FieldNine | AI-Powered Business Ecosystem | 넥서스 더 필드나인",
+  description:
+    "AI 물류, 풀필먼트, 브랜드, 패션 사업을 선도하는 대한민국의 혁신 기업. KAUS AI와 KAUS Coin으로 미래를 만듭니다.",
+  generator: "v0.app",
+  icons: {
+    icon: [
       {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "FIELD NINE - 미래를 만드는 기술",
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/icon.svg",
+        type: "image/svg+xml",
       },
     ],
+    apple: "/apple-icon.png",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "FIELD NINE - AI 기반 물류 자동화 플랫폼",
-    description: "AI, 드론, 블록체인으로 전 세계를 연결하는 혁신 플랫폼",
-    images: ["/og-image.png"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="ko">
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#00FF94" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="KAUS" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-      </head>
-      <body>
+    <html lang="ko" className="dark">
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
         <AdminWidget />
       </body>
     </html>
-  );
+  )
 }
-
