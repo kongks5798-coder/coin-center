@@ -1,7 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
+
+// Lazy load heavy components for better performance
+const SearchBar = dynamic(() => import('@/components/SearchBar').then(mod => ({ default: mod.SearchBar })), {
+  loading: () => <div className="w-full max-w-md h-10 bg-white/5 rounded-lg animate-pulse" />,
+  ssr: false
+});
+
+const AnalyticsDashboard = dynamic(() => import('@/components/AnalyticsDashboard').then(mod => ({ default: mod.AnalyticsDashboard })), {
+  loading: () => (
+    <div className="space-y-6">
+      <div className="h-8 bg-white/5 rounded-lg animate-pulse w-1/3" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="bg-white/5 border border-white/10 rounded-lg p-6 animate-pulse">
+            <div className="h-4 bg-white/10 rounded w-1/2 mb-4" />
+            <div className="h-8 bg-white/10 rounded w-3/4" />
+          </div>
+        ))}
+      </div>
+    </div>
+  ),
+  ssr: false
+});
 
 // 타입 정의
 type UserRole = 'admin' | 'manager' | 'staff' | 'executive' | 'general_manager' | 'director' | 'team_leader' | 'lead' | 'senior' | 'intern';
@@ -167,78 +191,99 @@ export default function WorkspacePage() {
     <div className="min-h-screen bg-[#02010a] text-white">
       {/* 헤더 */}
       <header className="border-b border-white/10 bg-black/40 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-[1800px] mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <Link href="/" className="flex items-center gap-3">
-                <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 w-full sm:w-auto">
+              <Link href="/" className="flex items-center gap-2 sm:gap-3">
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
                   FIELD NINE
                 </div>
-                <span className="text-sm text-white/40">Workspace</span>
+                <span className="text-xs sm:text-sm text-white/40">Workspace</span>
               </Link>
               
-              <nav className="flex gap-2">
+              {/* Search Bar - Mobile */}
+              <div className="w-full sm:hidden">
+                <Suspense fallback={<div className="w-full h-10 bg-white/5 rounded-lg animate-pulse" />}>
+                  <SearchBar />
+                </Suspense>
+              </div>
+              
+              <nav className="flex flex-wrap gap-2">
                 {(['dashboard', 'tasks', 'team', 'analytics'] as const).map(v => (
                   <button
                     key={v}
                     onClick={() => setView(v)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
                       view === v 
                         ? 'bg-white/10 text-white' 
                         : 'text-white/50 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    {v.charAt(0).toUpperCase() + v.slice(1)}
+                    {v === 'dashboard' ? '대시보드' : 
+                     v === 'tasks' ? '작업' :
+                     v === 'team' ? '팀' :
+                     v === 'analytics' ? '분석' : v}
                   </button>
                 ))}
                 <Link
                   href="/data-management"
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-white/50 hover:text-white hover:bg-white/5 transition-all"
+                  className="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-white/50 hover:text-white hover:bg-white/5 transition-all"
                 >
-                  📊 데이터 관리
+                  📊 데이터
                 </Link>
               </nav>
             </div>
 
             {currentUser && (
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+                {/* Search Bar - Desktop */}
+                <div className="hidden sm:block">
+                  <Suspense fallback={<div className="w-64 h-10 bg-white/5 rounded-lg animate-pulse" />}>
+                    <SearchBar />
+                  </Suspense>
+                </div>
+
                 {/* 슈퍼 관리자 전용 버튼 */}
                 {(currentUser.role === 'executive' || currentUser.role === 'general_manager') && (
                   <Link
                     href="/executive-dashboard"
-                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 rounded-lg font-medium transition-all flex items-center gap-2 shadow-lg shadow-purple-500/50"
+                    className="px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 rounded-lg font-medium transition-all flex items-center gap-2 shadow-lg shadow-purple-500/50 text-sm"
                   >
                     <span>👑</span>
-                    <span>슈퍼 관리자 대시보드</span>
+                    <span className="hidden sm:inline">슈퍼 관리자 대시보드</span>
+                    <span className="sm:hidden">관리자</span>
                   </Link>
                 )}
                 
-                <span className="text-sm text-white/60">{currentUser.department}</span>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10">
-                  <span className="text-xl">{currentUser.avatar}</span>
-                  <div>
-                    <div className="text-sm font-medium">{currentUser.name}</div>
-                    <div className="text-xs text-white/40 capitalize">{currentUser.role}</div>
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <span className="hidden sm:inline text-sm text-white/60">{currentUser.department}</span>
+                  <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white/5 rounded-lg border border-white/10 flex-1 sm:flex-initial">
+                    <span className="text-lg sm:text-xl">{currentUser.avatar}</span>
+                    <div className="flex-1 sm:flex-initial">
+                      <div className="text-xs sm:text-sm font-medium">{currentUser.name}</div>
+                      <div className="text-xs text-white/40 capitalize">{currentUser.role}</div>
+                    </div>
                   </div>
+                  <button
+                    onClick={handleLogout}
+                    className="px-3 sm:px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg text-xs sm:text-sm text-red-300 hover:bg-red-500/20 transition-all"
+                    title="로그아웃"
+                  >
+                    <span className="hidden sm:inline">🚪 로그아웃</span>
+                    <span className="sm:hidden">🚪</span>
+                  </button>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-300 hover:bg-red-500/20 transition-all"
-                  title="로그아웃"
-                >
-                  🚪 로그아웃
-                </button>
               </div>
             )}
           </div>
         </div>
       </header>
 
-      <main className="max-w-[1800px] mx-auto px-6 py-8">
+      <main className="max-w-[1800px] mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {view === 'dashboard' && (
           <div className="space-y-8">
             {/* 통계 카드 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
               <div className="bg-gradient-to-br from-purple-500/10 to-fuchsia-500/10 border border-purple-500/20 rounded-xl p-6">
                 <div className="text-3xl font-bold text-purple-300">{stats.total}</div>
                 <div className="text-sm text-white/60 mt-1">전체 작업</div>
@@ -259,8 +304,8 @@ export default function WorkspacePage() {
 
             {/* 나의 작업 */}
             <div>
-              <h2 className="text-2xl font-bold mb-4">나의 작업</h2>
-              <div className="grid md:grid-cols-2 gap-4">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">나의 작업</h2>
+              <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                 {tasks.filter(t => t.assignee.id === currentUser?.id).map(task => (
                   <div
                     key={task.id}
@@ -303,7 +348,7 @@ export default function WorkspacePage() {
 
             {/* 최근 활동 */}
             <div>
-              <h2 className="text-2xl font-bold mb-4">최근 활동</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">최근 활동</h2>
               <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4">
                 {activityLogs.map(log => (
                   <div key={log.id} className="flex items-start gap-4 pb-4 border-b border-white/10 last:border-0">
@@ -334,12 +379,12 @@ export default function WorkspacePage() {
         )}
 
         {view === 'tasks' && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">전체 작업</h2>
-              <div className="flex gap-3">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <h2 className="text-xl sm:text-2xl font-bold">전체 작업</h2>
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                 <select 
-                  className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm"
+                  className="flex-1 sm:flex-initial bg-white/5 border border-white/10 rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as any)}
                 >
@@ -350,7 +395,7 @@ export default function WorkspacePage() {
                   <option value="completed">완료</option>
                 </select>
                 <select 
-                  className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm"
+                  className="flex-1 sm:flex-initial bg-white/5 border border-white/10 rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm"
                   value={filterPriority}
                   onChange={(e) => setFilterPriority(e.target.value as any)}
                 >
@@ -410,10 +455,105 @@ export default function WorkspacePage() {
         )}
 
         {view === 'analytics' && (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">📊</div>
-            <h2 className="text-2xl font-bold mb-2">분석 & 리포트</h2>
-            <p className="text-white/60">곧 출시됩니다</p>
+          <div className="space-y-6">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <h2 className="text-xl sm:text-2xl font-bold">분석 & 리포트</h2>
+              <div className="flex gap-2">
+                <button className="px-3 sm:px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs sm:text-sm hover:bg-white/10 transition-colors">
+                  📥 내보내기
+                </button>
+                <button className="px-3 sm:px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs sm:text-sm hover:bg-white/10 transition-colors">
+                  📧 공유
+                </button>
+              </div>
+            </div>
+            
+            {/* NEXUS OS Analytics Dashboard */}
+            <Suspense fallback={<div className="text-center py-12 text-white/60">로딩 중...</div>}>
+              <AnalyticsDashboard />
+            </Suspense>
+            
+            {/* Workspace Analytics Content */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {/* Task Completion Rate */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                <h3 className="text-lg font-semibold mb-4">작업 완료율</h3>
+                <div className="text-4xl font-bold text-green-400 mb-2">
+                  {stats.completed > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}%
+                </div>
+                <div className="text-sm text-white/60">
+                  {stats.completed} / {stats.total} 완료
+                </div>
+                <div className="mt-4 w-full bg-white/10 rounded-full h-2">
+                  <div 
+                    className="bg-green-500 h-2 rounded-full transition-all"
+                    style={{ width: `${stats.completed > 0 ? (stats.completed / stats.total) * 100 : 0}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Average Progress */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                <h3 className="text-lg font-semibold mb-4">평균 진행률</h3>
+                <div className="text-4xl font-bold text-cyan-400 mb-2">
+                  {stats.avgProgress.toFixed(1)}%
+                </div>
+                <div className="text-sm text-white/60">
+                  전체 작업 평균
+                </div>
+                <div className="mt-4 w-full bg-white/10 rounded-full h-2">
+                  <div 
+                    className="bg-cyan-500 h-2 rounded-full transition-all"
+                    style={{ width: `${stats.avgProgress}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Urgent Tasks */}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                <h3 className="text-lg font-semibold mb-4">긴급 작업</h3>
+                <div className="text-4xl font-bold text-red-400 mb-2">
+                  {stats.urgent}
+                </div>
+                <div className="text-sm text-white/60">
+                  즉시 처리 필요
+                </div>
+                {stats.urgent > 0 && (
+                  <div className="mt-4 text-xs text-red-400">
+                    ⚠️ 우선순위 높음
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Task Status Distribution */}
+            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+              <h3 className="text-lg font-semibold mb-6">작업 상태 분포</h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-gray-400">{stats.pending}</div>
+                  <div className="text-sm text-white/60 mt-1">대기</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-400">{stats.inProgress}</div>
+                  <div className="text-sm text-white/60 mt-1">진행중</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-yellow-400">{stats.review}</div>
+                  <div className="text-sm text-white/60 mt-1">검토</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-400">{stats.completed}</div>
+                  <div className="text-sm text-white/60 mt-1">완료</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-400">
+                    {tasks.filter(t => t.status === 'blocked').length}
+                  </div>
+                  <div className="text-sm text-white/60 mt-1">차단</div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </main>
