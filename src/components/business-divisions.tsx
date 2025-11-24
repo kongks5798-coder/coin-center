@@ -84,7 +84,8 @@ export function BusinessDivisions() {
             <button
               key={index}
               onClick={() => handleDivisionClick(division.id)}
-              className="bg-card border border-border p-8 hover:border-accent/50 transition-all duration-300 group text-left w-full cursor-pointer"
+              className="bg-card border border-border p-8 hover:border-accent/50 transition-all duration-300 group text-left w-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
+              aria-label={`Learn more about ${division.title}`}
             >
               <div className="w-14 h-14 bg-accent/10 rounded-sm flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
                 <division.icon className="w-7 h-7 text-accent" />

@@ -15,7 +15,59 @@ export const metadata: Metadata = {
   title: "FieldNine | AI-Powered Business Ecosystem | 넥서스 더 필드나인",
   description:
     "AI 물류, 풀필먼트, 브랜드, 패션 사업을 선도하는 대한민국의 혁신 기업. KAUS AI와 KAUS Coin으로 미래를 만듭니다.",
-  generator: "v0.app",
+  keywords: [
+    "FieldNine",
+    "넥서스 더 필드나인",
+    "KAUS AI",
+    "KAUS Coin",
+    "AI 물류",
+    "RFID",
+    "풀필먼트",
+    "블록체인",
+    "물류 자동화",
+    "DePIN",
+    "RWA",
+  ],
+  authors: [{ name: "FieldNine" }],
+  creator: "FieldNine",
+  publisher: "FieldNine Corporation",
+  metadataBase: new URL("https://www.fieldnine.io"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: "https://www.fieldnine.io",
+    siteName: "FieldNine",
+    title: "FieldNine | AI-Powered Business Ecosystem",
+    description: "AI 물류, 풀필먼트, 브랜드, 패션 사업을 선도하는 대한민국의 혁신 기업",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "FieldNine - AI-Powered Business Ecosystem",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FieldNine | AI-Powered Business Ecosystem",
+    description: "AI 물류, 풀필먼트, 브랜드, 패션 사업을 선도하는 대한민국의 혁신 기업",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: [
       {

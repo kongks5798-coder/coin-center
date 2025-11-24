@@ -92,7 +92,8 @@ export function BusinessPresentation({ onClose, business }: BusinessPresentation
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="p-2 rounded-lg hover:bg-card transition-colors"
+                className="p-2 rounded-lg hover:bg-card transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
+                aria-label={isPlaying ? "Pause presentation" : "Play presentation"}
               >
                 {isPlaying ? (
                   <Pause className="w-5 h-5 text-foreground" />

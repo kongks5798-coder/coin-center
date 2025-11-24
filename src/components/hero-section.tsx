@@ -33,6 +33,11 @@ export function HeroSection() {
           <Button
             size="lg"
             className="bg-primary text-primary-foreground hover:bg-primary/90 text-base font-medium px-8 py-6 h-auto"
+            onClick={() => {
+              const element = document.getElementById("ecosystem")
+              element?.scrollIntoView({ behavior: "smooth" })
+            }}
+            aria-label="Explore our business ecosystem"
           >
             Explore Ecosystem
           </Button>
@@ -41,6 +46,7 @@ export function HeroSection() {
             variant="outline"
             className="border-2 border-foreground/20 text-foreground hover:bg-foreground/10 text-base font-medium px-8 py-6 h-auto bg-transparent"
             onClick={() => setShowPresentation(true)}
+            aria-label="Watch FieldNine presentation"
           >
             Watch Presentation
           </Button>
