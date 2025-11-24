@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import KausAdminWidget from "@/components/KausAdminWidget";
+import { SiteShell } from "@/components/layout/SiteShell";
+import { AdminWidget } from "@/components/kaus/AdminWidget";
 
 export const metadata: Metadata = {
-  title: "FIELD NINE - AI 기반 물류 자동화 플랫폼 | NEXUS OS",
-  description: "AI, 드론, 블록체인으로 전 세계를 연결하는 혁신 플랫폼. NEXUS OS, KAUS Coin, 위성 네트워크로 미래를 만듭니다.",
+  title: "FIELD NINE · KAUS",
+  description: "Physical AI Computing Infrastructure for Real-World Assets · FIELD NINE & KAUS",
   keywords: ["FIELD NINE", "NEXUS OS", "KAUS Coin", "AI 물류", "드론 네트워크", "블록체인", "양자 블록체인", "FILLUMINATE", "MARD MARD"],
   authors: [{ name: "FIELD NINE" }],
   creator: "FIELD NINE",
@@ -66,8 +67,8 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
       </head>
       <body>
-        {children}
-        <KausAdminWidget />
+        <SiteShell>{children}</SiteShell>
+        <AdminWidget />
       </body>
     </html>
   );
