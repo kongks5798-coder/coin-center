@@ -82,36 +82,37 @@ export default function KAUSAIChat() {
 
     const generateResponse = (userInput: string): string => {
         const lowerInput = userInput.toLowerCase();
+        const finalLink = '\n\n---\n\nFIELD NINE: https://www.fieldnine.io';
         
         if (lowerInput.includes('안녕') || lowerInput.includes('hello') || lowerInput.includes('hi')) {
-            return 'System Ready.';
+            return 'System Ready.' + finalLink;
         }
         
         if (lowerInput.includes('nexus') || lowerInput.includes('넥서스')) {
-            return 'NEXUS OS Status:\n\nOperational across 250 countries.\n1.25M autonomous drones active.\nSafety rate: 99.999%\nAI prediction accuracy: 94.7%\n\nPowered by quantum computing and neural AI. Real-time conversion of physical assets to digital twins. Fully integrated with 5,000-pyeong logistics hub.\n\nAll processes automated: inventory tracking to delivery optimization.';
+            return 'NEXUS OS Status:\n\nOperational across 250 countries.\n1.25M autonomous drones active.\nSafety rate: 99.999%\nAI prediction accuracy: 94.7%\n\nPowered by quantum computing and neural AI. Real-time conversion of physical assets to digital twins. Fully integrated with 5,000-pyeong logistics hub.\n\nAll processes automated: inventory tracking to delivery optimization.' + finalLink;
         }
         
         if (lowerInput.includes('kaus') && (lowerInput.includes('coin') || lowerInput.includes('코인'))) {
-            return 'KAUS Coin Market Data:\n\nPrice: $1.00 USD (1:1 USD pegged)\n24h Change: +2.4%\nVolume: 124B KAUS\nActive Users: 50M+\nNetwork: 250 countries\nTotal AUM: ₩54T\nGas Fee: 12 Gwei\n\nTechnical:\nQuantum blockchain infrastructure. Real-time RFID tracking. 10B+ verified transactions. Zero security incidents. 99.99% uptime. Average transaction speed: 0.001s.\n\nCore Value: Instant liquidity of physical inventory. Fully integrated with FIELD NINE logistics hub. Inventory becomes blockchain assets.';
+            return 'KAUS Coin Market Data:\n\nPrice: $1.00 USD (1:1 USD pegged)\n24h Change: +2.4%\nVolume: 124B KAUS\nActive Users: 50M+\nNetwork: 250 countries\nTotal AUM: ₩54T\nGas Fee: 12 Gwei\n\nTechnical:\nQuantum blockchain infrastructure. Real-time RFID tracking. 10B+ verified transactions. Zero security incidents. 99.99% uptime. Average transaction speed: 0.001s.\n\nCore Value: Instant liquidity of physical inventory. Fully integrated with FIELD NINE logistics hub. Inventory becomes blockchain assets.' + finalLink;
         }
         
         if (lowerInput.includes('기능') || lowerInput.includes('능력') || lowerInput.includes('뭐') || lowerInput.includes('what') || lowerInput.includes('할수')) {
-            return 'KAUS AI Capabilities:\n\n• Code generation and review\n• Natural language processing\n• Real-time data analysis (NEXUS OS integrated)\n• Multi-language support (50+ languages)\n• Technical document analysis\n• Logistics optimization predictions\n• Blockchain transaction verification\n\nSpecialized in FIELD NINE logistics ecosystem. Real-time access to all systems: NEXUS OS, KAUS Coin, satellite networks.';
+            return 'KAUS AI Capabilities:\n\n• Code generation and review\n• Natural language processing\n• Real-time data analysis (NEXUS OS integrated)\n• Multi-language support (50+ languages)\n• Technical document analysis\n• Logistics optimization predictions\n• Blockchain transaction verification\n\nSpecialized in FIELD NINE logistics ecosystem. Real-time access to all systems: NEXUS OS, KAUS Coin, satellite networks.' + finalLink;
         }
         
         if (lowerInput.includes('가격') || lowerInput.includes('price') || lowerInput.includes('시세')) {
-            return 'KAUS Coin: $1.00 USD\n24h: +2.4%\nVolume: 124B KAUS\nMarket Cap: ₩54T\nGas: 12 Gwei\nActive Nodes: 5,000\n\nPegged 1:1 with USD. Backed by FIELD NINE logistics assets. 5,000-pyeong hub + global inventory as collateral. Auto-adjustment maintains $1.00.\n\nQuantum blockchain security. Zero incidents. 250-country network enables instant trading.\n\nUptrend continues. Usage expanding with global network growth.';
+            return 'KAUS Coin: $1.00 USD\n24h: +2.4%\nVolume: 124B KAUS\nMarket Cap: ₩54T\nGas: 12 Gwei\nActive Nodes: 5,000\n\nPegged 1:1 with USD. Backed by FIELD NINE logistics assets. 5,000-pyeong hub + global inventory as collateral. Auto-adjustment maintains $1.00.\n\nQuantum blockchain security. Zero incidents. 250-country network enables instant trading.\n\nUptrend continues. Usage expanding with global network growth.' + finalLink;
         }
         
         if (lowerInput.includes('투자') || lowerInput.includes('invest') || lowerInput.includes('구매') || lowerInput.includes('사고')) {
-            return 'KAUS Coin Investment:\n\nStability: USD 1:1 peg. Logistics assets as collateral minimize downside risk. Quantum blockchain makes hacking virtually impossible. Zero security incidents.\n\nGrowth: Expanding to 250 countries. 50M+ active users. Monthly volume growth 15%+. Direct integration with FIELD NINE logistics network.\n\nLiquidity: Instant inventory asset liquidation. Real-time trading across 250 countries. Average speed: 0.001s. DeFi protocol integration enables additional yield.\n\nTransparency: All transactions on-chain. Real-time AUM public (₩54T). Regular audits and reports. Full traceability.\n\nAcquisition:\n• Official exchanges\n• FIELD NINE product purchases (auto-credit)\n• Logistics service rewards\n• DeFi staking yields\n\nAs FIELD NINE logistics network expands, KAUS Coin usage and value increase. Monthly volume growth 15%+. Continued growth expected.';
+            return 'KAUS Coin Investment:\n\nStability: USD 1:1 peg. Logistics assets as collateral minimize downside risk. Quantum blockchain makes hacking virtually impossible. Zero security incidents.\n\nGrowth: Expanding to 250 countries. 50M+ active users. Monthly volume growth 15%+. Direct integration with FIELD NINE logistics network.\n\nLiquidity: Instant inventory asset liquidation. Real-time trading across 250 countries. Average speed: 0.001s. DeFi protocol integration enables additional yield.\n\nTransparency: All transactions on-chain. Real-time AUM public (₩54T). Regular audits and reports. Full traceability.\n\nAcquisition:\n• Official exchanges\n• FIELD NINE product purchases (auto-credit)\n• Logistics service rewards\n• DeFi staking yields\n\nAs FIELD NINE logistics network expands, KAUS Coin usage and value increase. Monthly volume growth 15%+. Continued growth expected.' + finalLink;
         }
         
         if (lowerInput.includes('최종 링크') || lowerInput.includes('final link')) {
             return 'FIELD NINE: https://www.fieldnine.io';
         }
         
-        return `Processing: "${userInput}"\n\nConnected to all FIELD NINE systems in real-time. Providing responses based on latest data.\n\nFor detailed information, ask about:\n• NEXUS OS logistics data\n• KAUS Coin market information\n• Blockchain transactions\n• Technical specifications`;
+        return `Processing: "${userInput}"\n\nConnected to all FIELD NINE systems in real-time. Providing responses based on latest data.\n\nFor detailed information, ask about:\n• NEXUS OS logistics data\n• KAUS Coin market information\n• Blockchain transactions\n• Technical specifications` + finalLink;
     };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
