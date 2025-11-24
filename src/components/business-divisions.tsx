@@ -1,10 +1,15 @@
 "use client"
 
-import { Truck, Package, Store, Shirt, TrendingUp, Boxes } from 'lucide-react'
+import { useState } from "react"
+import { Truck, Package, Store, Shirt, TrendingUp, Boxes, Brain, Coins, Database } from 'lucide-react'
+import { BusinessPresentation } from "./presentations/BusinessPresentation"
+import { businessPresentations } from "@/lib/business-data"
 
 export function BusinessDivisions() {
+  const [selectedBusiness, setSelectedBusiness] = useState<string | null>(null)
   const divisions = [
     {
+      id: "ai-logistics",
       icon: Truck,
       title: "AI 물류 플랫폼",
       subtitle: "Smart Logistics",
@@ -12,6 +17,7 @@ export function BusinessDivisions() {
       highlights: ["실시간 경로 최적화", "예측 수요 관리", "자동화 창고 시스템"],
     },
     {
+      id: "fulfillment",
       icon: Package,
       title: "풀필먼트 서비스",
       subtitle: "Fulfillment Solutions",
@@ -19,6 +25,7 @@ export function BusinessDivisions() {
       highlights: ["주문 처리 자동화", "재고 관리 시스템", "당일 배송 서비스"],
     },
     {
+      id: "brand",
       icon: Store,
       title: "브랜드 사업",
       subtitle: "Brand Development",
@@ -26,6 +33,7 @@ export function BusinessDivisions() {
       highlights: ["브랜드 컨설팅", "마케팅 자동화", "고객 데이터 분석"],
     },
     {
+      id: "fashion",
       icon: Shirt,
       title: "패션 사업",
       subtitle: "Fashion Business",
@@ -33,20 +41,30 @@ export function BusinessDivisions() {
       highlights: ["트렌드 예측 AI", "빠른 상품화", "온오프라인 통합"],
     },
     {
-      icon: TrendingUp,
-      title: "데이터 분석",
+      id: "kaus-ai",
+      icon: Brain,
+      title: "KAUS AI",
       subtitle: "Business Intelligence",
       description: "KAUS AI로 모든 비즈니스 데이터를 분석하고 인사이트를 제공합니다.",
       highlights: ["실시간 대시보드", "예측 분석", "맞춤형 리포트"],
     },
     {
-      icon: Boxes,
-      title: "통합 플랫폼",
-      subtitle: "Integrated Platform",
+      id: "kaus-coin",
+      icon: Coins,
+      title: "KAUS Coin",
+      subtitle: "Blockchain Payment",
       description: "모든 사업부가 KAUS Coin으로 연결된 통합 비즈니스 플랫폼입니다.",
       highlights: ["단일 결제 시스템", "데이터 통합", "크로스 비즈니스"],
     },
   ]
+
+  const handleDivisionClick = (id: string) => {
+    setSelectedBusiness(id)
+  }
+
+  const selectedPresentation = selectedBusiness
+    ? businessPresentations.find((b) => b.id === selectedBusiness)
+    : null
 
   return (
     <section id="business" className="py-24 lg:py-32 bg-background relative overflow-hidden">
@@ -63,9 +81,10 @@ export function BusinessDivisions() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {divisions.map((division, index) => (
-            <div
+            <button
               key={index}
-              className="bg-card border border-border p-8 hover:border-accent/50 transition-all duration-300 group"
+              onClick={() => handleDivisionClick(division.id)}
+              className="bg-card border border-border p-8 hover:border-accent/50 transition-all duration-300 group text-left w-full cursor-pointer"
             >
               <div className="w-14 h-14 bg-accent/10 rounded-sm flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors">
                 <division.icon className="w-7 h-7 text-accent" />
@@ -81,10 +100,17 @@ export function BusinessDivisions() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </button>
           ))}
         </div>
       </div>
+
+      {selectedPresentation && (
+        <BusinessPresentation
+          onClose={() => setSelectedBusiness(null)}
+          business={selectedPresentation}
+        />
+      )}
     </section>
   )
 }
