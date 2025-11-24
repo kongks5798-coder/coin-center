@@ -2,21 +2,21 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KAUS Coin - Futuristic Crypto Control Center",
-  description: "KAUS Coin Control Center - Monitor markets, track wallets, and manage your crypto assets with full on-chain transparency",
-  keywords: ["KAUS", "KAUS Coin", "Crypto", "DeFi", "Blockchain", "Web3", "Cryptocurrency"],
-  authors: [{ name: "KAUS Team" }],
-  creator: "KAUS",
-  publisher: "KAUS",
-  metadataBase: new URL('https://kaus.io'),
+  title: "FIELD NINE - AI 기반 물류 자동화 플랫폼 | NEXUS OS",
+  description: "AI, 드론, 블록체인으로 전 세계를 연결하는 혁신 플랫폼. NEXUS OS, KAUS Coin, 위성 네트워크로 미래를 만듭니다.",
+  keywords: ["FIELD NINE", "NEXUS OS", "KAUS Coin", "AI 물류", "드론 네트워크", "블록체인", "양자 블록체인", "FILLUMINATE", "MARD MARD"],
+  authors: [{ name: "FIELD NINE" }],
+  creator: "FIELD NINE",
+  publisher: "FIELD NINE Corporation",
+  metadataBase: new URL('https://www.fieldnine.io'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: "KAUS Coin - Futuristic Crypto Control Center",
-    description: "Monitor markets, track wallets, and manage your crypto assets with full on-chain transparency",
-    url: "https://kaus.io",
-    siteName: "KAUS Coin",
+    title: "FIELD NINE - AI 기반 물류 자동화 플랫폼",
+    description: "AI, 드론, 블록체인으로 전 세계를 연결하는 혁신 플랫폼",
+    url: "https://www.fieldnine.io",
+    siteName: "FIELD NINE",
     locale: "ko_KR",
     type: "website",
     images: [
@@ -24,14 +24,14 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "KAUS Coin",
+        alt: "FIELD NINE - 미래를 만드는 기술",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "KAUS Coin - Futuristic Crypto Control Center",
-    description: "Monitor markets, track wallets, and manage your crypto assets",
+    title: "FIELD NINE - AI 기반 물류 자동화 플랫폼",
+    description: "AI, 드론, 블록체인으로 전 세계를 연결하는 혁신 플랫폼",
     images: ["/og-image.png"],
   },
   robots: {
