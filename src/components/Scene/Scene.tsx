@@ -1,70 +1,77 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Suspense, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Float } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { ParticleContainer } from './ParticleContainer';
 import * as THREE from 'three';
 
-function CameraController({ scrollProgress }: { scrollProgress: number }) {
-    const { camera } = useThree();
-    
-    useFrame(() => {
-        // Camera flies through particles as user scrolls
-        const z = -5 + scrollProgress * 15; // Fly forward through container
-        const y = scrollProgress * 2; // Slight upward movement
-        
-        camera.position.z = THREE.MathUtils.lerp(camera.position.z, z, 0.05);
-        camera.position.y = THREE.MathUtils.lerp(camera.position.y, y, 0.05);
-        camera.lookAt(0, 0, 0);
+function NexusCube() {
+    const meshRef = useRef<THREE.Mesh>(null);
+
+    useFrame((state, delta) => {
+        if (meshRef.current) {
+            // Extremely slow rotation on X and Y axes
+            meshRef.current.rotation.x += delta * 0.2;
+            meshRef.current.rotation.y += delta * 0.2;
+        }
     });
-    
-    return null;
+
+    return (
+        <Float
+            speed={0.5}
+            rotationIntensity={0.2}
+            floatIntensity={0.3}
+        >
+            <mesh ref={meshRef} rotation={[0, 0, 0]}>
+                <boxGeometry args={[2.5, 2.5, 2.5]} />
+                <meshStandardMaterial
+                    wireframe
+                    color="#00FF94"
+                    emissive="#00FF94"
+                    emissiveIntensity={0.2}
+                />
+            </mesh>
+        </Float>
+    );
 }
 
-function SceneContent({ mouse, scrollProgress }: { mouse: { x: number; y: number }; scrollProgress: number }) {
+function SceneContent() {
     return (
         <>
-            <ambientLight intensity={0.2} />
-            <pointLight position={[10, 10, 10]} intensity={0.5} color="#00FF94" />
-            <pointLight position={[-10, -10, -10]} intensity={0.3} color="#00C2FF" />
+            {/* Minimal Lighting */}
+            <ambientLight intensity={0.3} />
+            <directionalLight
+                position={[5, 5, 5]}
+                intensity={0.8}
+                castShadow={false}
+            />
             
-            <ParticleContainer mouse={mouse} />
+            {/* Hero Object */}
+            <NexusCube />
             
-            <CameraController scrollProgress={scrollProgress} />
-            
+            {/* Post-Processing */}
             <EffectComposer>
-                <Bloom intensity={1.5} luminanceThreshold={0.9} />
+                <Bloom
+                    intensity={1.5}
+                    luminanceThreshold={0.2}
+                    radius={0.8}
+                />
             </EffectComposer>
         </>
     );
 }
 
-export function Scene({ scrollProgress }: { scrollProgress: number }) {
-    const [mouse, setMouse] = useState({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMouse({
-                x: (e.clientX / window.innerWidth) * 2 - 1,
-                y: -(e.clientY / window.innerHeight) * 2 + 1,
-            });
-        };
-        
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
-
+export function Scene() {
     return (
         <Canvas
-            camera={{ position: [0, 0, 5], fov: 75 }}
+            camera={{ position: [0, 0, 6], fov: 50 }}
             gl={{ antialias: true, alpha: true }}
-            className="fixed inset-0 z-0"
+            className="fixed inset-0 z-0 bg-[#050505]"
         >
             <Suspense fallback={null}>
-                <SceneContent mouse={mouse} scrollProgress={scrollProgress} />
+                <SceneContent />
             </Suspense>
         </Canvas>
     );
 }
-

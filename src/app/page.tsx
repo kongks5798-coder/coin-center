@@ -1,18 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Lenis from '@studio-freight/lenis';
-import { useScroll } from 'framer-motion';
 import { Scene } from '@/components/Scene/Scene';
-import { KineticText } from '@/components/KineticText';
 import { GrainOverlay } from '@/components/GrainOverlay';
 
 export default function HomePage() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [scrollProgress, setScrollProgress] = useState(0);
-    const { scrollYProgress } = useScroll({
-        container: containerRef,
-    });
 
     useEffect(() => {
         const lenis = new Lenis({
@@ -34,44 +28,30 @@ export default function HomePage() {
 
         requestAnimationFrame(raf);
 
-        // Update scroll progress
-        const unsubscribe = scrollYProgress.on('change', (latest) => {
-            setScrollProgress(latest);
-        });
-
         return () => {
             lenis.destroy();
-            unsubscribe();
         };
-    }, [scrollYProgress]);
+    }, []);
 
     return (
-        <div ref={containerRef} className="relative h-screen overflow-y-auto bg-black">
+        <div ref={containerRef} className="relative h-screen overflow-y-auto bg-[#050505]">
             {/* WebGL Background */}
             <div className="fixed inset-0 z-0">
-                <Scene scrollProgress={scrollProgress} />
+                <Scene />
             </div>
 
             {/* Grain Overlay */}
             <GrainOverlay />
 
-            {/* Scrollable Content */}
-            <main className="relative z-10">
-                {/* Section 1: Hero - Kinetic Text */}
-                <section className="relative flex min-h-screen items-center justify-center px-4">
-                    <div className="max-w-[95vw]">
-                        <KineticText className="font-['Inter',sans-serif] text-[15vw] font-extrabold leading-[0.9] tracking-tighter text-white">
-                            FIELD
-                        </KineticText>
-                        <KineticText className="font-['Inter',sans-serif] text-[15vw] font-extrabold leading-[0.9] tracking-tighter text-white">
-                            NINE
-                        </KineticText>
-                        <p className="mt-8 text-xl text-white/60 font-light tracking-wide">
-                            Physical AI Computing Infrastructure
-                        </p>
-                    </div>
-                </section>
+            {/* Hero Typography Overlay */}
+            <div className="fixed inset-0 z-10 flex items-center justify-center pointer-events-none">
+                <h1 className="font-['Inter',sans-serif] text-8xl md:text-[12rem] font-light tracking-[1em] text-white/80 uppercase">
+                    FIELD NINE
+                </h1>
+            </div>
 
+            {/* Scrollable Content */}
+            <main className="relative z-20 pt-[100vh]">
                 {/* Section 2: Data Grid */}
                 <section className="relative min-h-screen flex items-center justify-center px-4 py-32">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-7xl mx-auto">
@@ -85,12 +65,12 @@ export default function HomePage() {
                 {/* Section 3: The Story */}
                 <section className="relative min-h-screen flex items-center justify-center px-4 py-32">
                     <div className="max-w-4xl mx-auto space-y-12">
-                        <h2 className="font-['Inter',sans-serif] text-6xl md:text-8xl font-bold text-white mb-8">
+                        <h2 className="font-['Inter',sans-serif] text-6xl md:text-8xl font-light text-white/90 mb-8 tracking-tight">
                             From Atom
                             <br />
                             to Bit
                         </h2>
-                        <div className="space-y-6 text-lg text-white/80 leading-relaxed">
+                        <div className="space-y-6 text-lg text-white/60 leading-relaxed font-light">
                             <p>
                                 FIELD NINE는 5,000평 자동화 물류 허브와 KAUS 프로토콜을 결합해
                                 실물 자산을 DePIN·RWA로 전환하는 Physical AI Computing Infrastructure입니다.
@@ -104,7 +84,7 @@ export default function HomePage() {
                 </section>
 
                 {/* Spacer for scroll effect */}
-                <div className="h-[200vh]" />
+                <div className="h-[50vh]" />
             </main>
         </div>
     );
@@ -113,13 +93,13 @@ export default function HomePage() {
 function DataCard({ label, value, unit }: { label: string; value: string; unit: string }) {
     return (
         <div className="text-center">
-            <div className="text-5xl md:text-7xl font-bold text-white mb-2 font-['Inter',sans-serif]">
+            <div className="text-5xl md:text-7xl font-light text-white/90 mb-2 font-['Inter',sans-serif]">
                 {value}
             </div>
-            <div className="text-sm text-white/60 uppercase tracking-wider mb-1">
+            <div className="text-sm text-white/50 uppercase tracking-wider mb-1">
                 {label}
             </div>
-            <div className="text-xs text-white/40">
+            <div className="text-xs text-white/30">
                 {unit}
             </div>
         </div>
