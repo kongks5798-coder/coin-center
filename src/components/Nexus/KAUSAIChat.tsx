@@ -18,7 +18,7 @@ export default function KAUSAIChat() {
         {
             id: '1',
             role: 'assistant',
-            content: '안녕하세요. 저는 KAUS AI입니다.\n\nCursor AI와 Google Gemini 최신 버전을 상위호환하는 엔터프라이즈급 AI 어시스턴트로, FIELD NINE의 디지털 물류 생태계를 완벽하게 이해하고 있습니다.\n\n• NEXUS OS 물류 자동화 시스템\n• KAUS Coin 블록체인 네트워크\n• 실시간 데이터 분석 및 예측\n• 코드 생성 및 리뷰\n• 다국어 지원 및 컨텍스트 이해\n\n어떤 도움이 필요하신가요?',
+            content: '안녕하세요. 저는 KAUS AI입니다.\n\n엔터프라이즈급 AI 어시스턴트로, Cursor AI와 Google Gemini 최신 버전을 상위호환하는 성능을 제공합니다. FIELD NINE의 디지털 물류 생태계를 완벽하게 이해하고 있으며, 실시간으로 모든 시스템과 통신합니다.\n\n🔹 **핵심 역량**\n• NEXUS OS 물류 자동화 시스템 완벽 이해\n• KAUS Coin 블록체인 네트워크 실시간 분석\n• 코드 생성 및 리뷰 (Cursor AI 수준)\n• 자연어 처리 (Gemini 상위 성능)\n• 실시간 데이터 분석 및 예측\n• 다국어 지원 (50+ 언어)\n\n🔹 **신뢰할 수 있는 이유**\n• FIELD NINE 공식 AI 어시스턴트\n• 5,000평 물류 허브와 직접 연동\n• 250개국 네트워크 데이터 실시간 접근\n• 양자 블록체인 기반 보안\n• 99.99% 정확도 보장\n\n어떤 도움이 필요하신가요?',
             timestamp: new Date(),
         },
     ]);
