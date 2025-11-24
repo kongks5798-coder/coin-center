@@ -3,8 +3,9 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Wireframe } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Mesh } from 'three';
+import { MousePointer2, Database, Shield, Zap, ScanLine, Hexagon, Coins, Lock } from 'lucide-react';
 
 // 3D Smart Logistics Node Component
 function SmartLogisticsNode({ scrollProgress }: { scrollProgress: number }) {
@@ -17,12 +18,10 @@ function SmartLogisticsNode({ scrollProgress }: { scrollProgress: number }) {
         }
     });
 
-    // Scanning effect based on scroll
     const scanIntensity = Math.min(scrollProgress * 2, 1);
 
     return (
         <group ref={meshRef}>
-            {/* Main Container Structure */}
             <mesh>
                 <boxGeometry args={[2, 1.5, 1]} />
                 <meshStandardMaterial
@@ -32,7 +31,6 @@ function SmartLogisticsNode({ scrollProgress }: { scrollProgress: number }) {
                     emissiveIntensity={scanIntensity * 0.3}
                 />
             </mesh>
-            {/* Scanning Light */}
             <mesh position={[0, -0.75 + scanIntensity * 1.5, 0]}>
                 <boxGeometry args={[2.1, 0.1, 1.1]} />
                 <meshStandardMaterial
@@ -47,7 +45,7 @@ function SmartLogisticsNode({ scrollProgress }: { scrollProgress: number }) {
 
 function Infrastructure3D({ scrollProgress }: { scrollProgress: number }) {
     return (
-        <div className="w-full h-[600px] bg-[#050505]">
+        <div className="relative w-full h-[600px] bg-[#050505]">
             <Canvas camera={{ position: [0, 0, 4], fov: 75 }}>
                 <ambientLight intensity={0.3} />
                 <pointLight position={[5, 5, 5]} intensity={0.5} />
@@ -55,7 +53,74 @@ function Infrastructure3D({ scrollProgress }: { scrollProgress: number }) {
                 <SmartLogisticsNode scrollProgress={scrollProgress} />
                 <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
             </Canvas>
+            
+            {/* Floating HUD Labels (JARVIS Style) */}
+            <div className="absolute inset-0 pointer-events-none">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    className="absolute top-20 left-10 bg-black/60 backdrop-blur-xl border border-[#00FF94]/30 rounded-lg p-3"
+                >
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#00FF94] animate-pulse" />
+                        <div className="font-['JetBrains_Mono',monospace] text-xs text-white/90">
+                            Temp: 18°C
+                        </div>
+                    </div>
+                </motion.div>
+                
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="absolute top-40 right-10 bg-black/60 backdrop-blur-xl border border-[#00FF94]/30 rounded-lg p-3"
+                >
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#00FF94] animate-pulse" />
+                        <div className="font-['JetBrains_Mono',monospace] text-xs text-white/90">
+                            Hash: #9A2F...
+                        </div>
+                    </div>
+                </motion.div>
+                
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-xl border border-[#00FF94]/30 rounded-lg p-3"
+                >
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-[#00FF94] animate-pulse" />
+                        <div className="font-['JetBrains_Mono',monospace] text-xs text-white/90">
+                            Nodes: 5,021 Active
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
         </div>
+    );
+}
+
+// Scroll Indicator Component
+function ScrollIndicator() {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.5 }}
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+            <motion.div
+                animate={{ y: [0, 8, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            >
+                <MousePointer2 className="w-6 h-6 text-white/40" strokeWidth={1.5} />
+            </motion.div>
+            <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
+        </motion.div>
     );
 }
 
@@ -83,7 +148,6 @@ export default function HomePage() {
                     >
                         <source src="/assets/hero-video.mp4" type="video/mp4" />
                     </video>
-                    {/* Heavy overlay */}
                     <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
                 </div>
 
@@ -97,51 +161,86 @@ export default function HomePage() {
                     <h1 className="font-['Inter',sans-serif] text-7xl md:text-[10rem] font-extrabold tracking-tighter text-white mb-6">
                         PROCESSING
                     </h1>
-                    <h1 className="font-['Inter',sans-serif] text-7xl md:text-[10rem] font-extrabold tracking-tighter text-white mb-8">
+                    <h1 className="font-['Inter',sans-serif] text-7xl md:text-[10rem] font-extrabold tracking-tighter text-white">
                         REALITY.
                     </h1>
-                    <p className="text-2xl md:text-3xl text-white/70 font-light tracking-wide font-['Inter',sans-serif]">
-                        Physical AI Computing Infrastructure
-                    </p>
                 </motion.div>
+
+                {/* Scroll Indicator */}
+                <ScrollIndicator />
             </section>
 
-            {/* Section 2: The Definition (Identity) */}
+            {/* Section 2: The Definition (Identity) - Split Layout */}
             <section className="min-h-screen flex items-center justify-center px-4 py-32">
                 <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+                    {/* Left: Image */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true, margin: '-100px' }}
                         transition={{ duration: 0.8 }}
+                        className="relative h-[600px] bg-[#0A0A0A] border border-white/10 rounded-lg overflow-hidden"
+                        style={{
+                            maskImage: 'radial-gradient(ellipse 80% 80% at center, black 60%, transparent 100%)',
+                        }}
                     >
-                        <div className="text-white/40 font-['JetBrains_Mono',monospace] text-xs mb-4 tracking-wider">
-                            NEXUS: THE DATABASE GUARD CENTER
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-white/10 font-['JetBrains_Mono',monospace] text-sm">
+                                [Dark Server Room / Vault Image]
+                            </div>
                         </div>
-                        <h2 className="font-['Inter',sans-serif] text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
-                            We do not just store.
-                        </h2>
-                        <h2 className="font-['Inter',sans-serif] text-5xl md:text-6xl font-bold tracking-tight text-white mb-8">
-                            We secure physical assets as immutable data blocks.
-                        </h2>
-                        <p className="text-lg text-white/60 font-['Inter',sans-serif] font-light leading-relaxed">
-                            Every physical asset in our infrastructure is digitized, verified, and secured on the blockchain. 
-                            Real-time tracking, AI vision scanning, and quantum-secured data blocks ensure complete transparency and immutability.
-                        </p>
                     </motion.div>
+
+                    {/* Right: Icon + Label Pairs */}
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true, margin: '-100px' }}
                         transition={{ duration: 0.8 }}
-                        className="relative h-[500px] bg-[#0A0A0A] border border-white/10 rounded-lg overflow-hidden"
+                        className="space-y-12"
                     >
-                        {/* Placeholder for high-quality image */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-white/20 font-['JetBrains_Mono',monospace] text-sm">
-                                [Server Rack / Safe Image]
-                            </div>
+                        <div className="text-white/40 font-['JetBrains_Mono',monospace] text-xs mb-8 tracking-wider">
+                            NEXUS: THE DATABASE GUARD CENTER
                         </div>
+                        
+                        {[
+                            {
+                                icon: Database,
+                                title: 'Data Guard',
+                                description: 'Physical assets encrypted as data.',
+                            },
+                            {
+                                icon: Shield,
+                                title: 'Zero Trust',
+                                description: 'Bio-metric access control.',
+                            },
+                            {
+                                icon: Zap,
+                                title: 'Hyper Speed',
+                                description: 'Automated processing nodes.',
+                            },
+                        ].map((feature, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                className="flex items-start gap-4"
+                            >
+                                <div className="w-12 h-12 rounded-lg bg-[#00FF94]/10 border border-[#00FF94]/30 flex items-center justify-center flex-shrink-0">
+                                    <feature.icon className="w-6 h-6 text-[#00FF94]" strokeWidth={1.5} />
+                                </div>
+                                <div>
+                                    <h3 className="font-['Inter',sans-serif] text-2xl font-bold text-white mb-2">
+                                        {feature.title}
+                                    </h3>
+                                    <p className="text-white/60 font-['Inter',sans-serif] font-light">
+                                        {feature.description}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        ))}
                     </motion.div>
                 </div>
             </section>
@@ -159,19 +258,15 @@ export default function HomePage() {
                         <div className="text-white/40 font-['JetBrains_Mono',monospace] text-xs mb-4 tracking-wider">
                             INFRASTRUCTURE VISUALIZATION
                         </div>
-                        <h2 className="font-['Inter',sans-serif] text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                        <h2 className="font-['Inter',sans-serif] text-5xl md:text-6xl font-bold tracking-tight text-white mb-4">
                             AI Vision & Blockchain Layer
                         </h2>
-                        <p className="text-lg text-white/60 font-['Inter',sans-serif] font-light max-w-2xl mx-auto">
-                            Real-time 3D visualization of our Smart Logistics Nodes. As assets move through the system, 
-                            they are scanned, digitized, and secured on-chain.
-                        </p>
                     </div>
                     <Infrastructure3D scrollProgress={section3Scroll.get()} />
                 </motion.div>
             </section>
 
-            {/* Section 4: References & Operations (The Proof) */}
+            {/* Section 4: Workflow (Bento Grid) */}
             <section className="min-h-screen flex items-center justify-center px-4 py-32">
                 <div className="max-w-7xl mx-auto w-full">
                     <motion.div
@@ -182,29 +277,39 @@ export default function HomePage() {
                         className="text-center mb-16"
                     >
                         <div className="text-white/40 font-['JetBrains_Mono',monospace] text-xs mb-4 tracking-wider">
-                            OPERATIONAL LOGIC
+                            OPERATIONAL WORKFLOW
                         </div>
-                        <h2 className="font-['Inter',sans-serif] text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+                        <h2 className="font-['Inter',sans-serif] text-5xl md:text-6xl font-bold tracking-tight text-white">
                             The System in Action
                         </h2>
                     </motion.div>
 
-                    <div className="grid md:grid-cols-3 gap-8">
+                    {/* Bento Grid (3x2) */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
                             {
-                                title: 'Automated Inbound Scanning',
-                                subtitle: 'No-Scan Technology',
-                                description: 'AI vision automatically identifies and digitizes incoming assets without manual scanning.',
+                                icon: ScanLine,
+                                title: 'No-Scan Auto Entry',
+                                description: 'AI vision automatically identifies and digitizes incoming assets.',
+                                bgPattern: 'waveform',
                             },
                             {
-                                title: 'Asset Tokenization',
-                                subtitle: 'NFT Minting',
-                                description: 'Physical assets are instantly converted to blockchain tokens with complete traceability.',
+                                icon: Hexagon,
+                                title: 'Real-time NFT Minting',
+                                description: 'Physical assets instantly converted to blockchain tokens.',
+                                bgPattern: 'code',
                             },
                             {
-                                title: 'DeFi Liquidity Pool',
-                                subtitle: 'Liquidity Generation',
-                                description: 'Inventory-backed liquidity pools enable instant asset trading and financing.',
+                                icon: Coins,
+                                title: 'Inventory-backed DeFi',
+                                description: 'Liquidity pools enable instant asset trading.',
+                                bgPattern: 'waveform',
+                            },
+                            {
+                                icon: Lock,
+                                title: 'Invisible Watermarking',
+                                description: 'Anti-theft security with geofencing technology.',
+                                bgPattern: 'code',
                             },
                         ].map((card, index) => (
                             <motion.div
@@ -213,17 +318,38 @@ export default function HomePage() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: '-50px' }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg p-8 hover:border-[#00FF94]/30 transition-all"
+                                className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg p-8 hover:border-[#00FF94]/30 transition-all overflow-hidden group"
                             >
-                                <div className="text-[#00FF94] font-['JetBrains_Mono',monospace] text-xs mb-3 tracking-wider">
-                                    {card.subtitle}
+                                {/* Background Pattern */}
+                                <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity">
+                                    {card.bgPattern === 'waveform' ? (
+                                        <div className="absolute inset-0" style={{
+                                            backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, currentColor 10px, currentColor 11px)',
+                                        }} />
+                                    ) : (
+                                        <div className="absolute inset-0 font-['JetBrains_Mono',monospace] text-xs text-white/20 p-4">
+                                            {'<>'}
+                                        </div>
+                                    )}
                                 </div>
-                                <h3 className="font-['Inter',sans-serif] text-2xl font-bold text-white mb-4">
-                                    {card.title}
-                                </h3>
-                                <p className="text-white/60 font-['Inter',sans-serif] font-light leading-relaxed text-sm">
-                                    {card.description}
-                                </p>
+
+                                {/* Content */}
+                                <div className="relative z-10">
+                                    {/* Icon in Glowing Circle */}
+                                    <div className="w-16 h-16 rounded-full bg-[#00FF94]/10 border border-[#00FF94]/30 flex items-center justify-center mb-6 group-hover:bg-[#00FF94]/20 transition-colors">
+                                        <card.icon className="w-8 h-8 text-[#00FF94]" strokeWidth={1.5} />
+                                    </div>
+
+                                    {/* Title */}
+                                    <h3 className="font-['Inter',sans-serif] text-2xl font-bold text-white mb-3">
+                                        {card.title}
+                                    </h3>
+
+                                    {/* Description */}
+                                    <p className="text-white/60 font-['Inter',sans-serif] font-light text-sm leading-relaxed">
+                                        {card.description}
+                                    </p>
+                                </div>
                             </motion.div>
                         ))}
                     </div>

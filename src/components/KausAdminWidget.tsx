@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send } from 'lucide-react';
+import { X, Send, Bot, Command } from 'lucide-react';
 import { fetchInventoryStatus, getMarketAnalysis, fetchSecurityLogs } from '@/app/actions/nexus-core';
 
 interface Message {
@@ -112,20 +112,23 @@ export default function KausAdminWidget() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     onClick={() => setIsOpen(true)}
-                    className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full hover:border-[#00FF94]/30 transition-all shadow-lg"
+                    className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full hover:border-[#00FF94]/30 transition-all shadow-lg group"
                 >
-                    <motion.div
-                        className="w-1.5 h-1.5 rounded-full bg-[#00FF94]"
-                        animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [1, 0.6, 1],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                        }}
-                    />
+                    <div className="relative">
+                        <Command className="w-4 h-4 text-white/70 group-hover:text-[#00FF94] transition-colors" strokeWidth={1.5} />
+                        <motion.div
+                            className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#00FF94]"
+                            animate={{
+                                scale: [1, 1.3, 1],
+                                opacity: [1, 0.6, 1],
+                            }}
+                            transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                            }}
+                        />
+                    </div>
                     <span className="text-white/90 font-['JetBrains_Mono',monospace] text-xs font-medium tracking-wider">
                         KAUS ADMIN
                     </span>
