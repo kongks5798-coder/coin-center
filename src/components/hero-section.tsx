@@ -1,9 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from 'lucide-react'
+import { FieldNinePresentation } from "./fieldnine-presentation"
 
 export function HeroSection() {
+  const [showPresentation, setShowPresentation] = useState(false)
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -36,8 +40,9 @@ export function HeroSection() {
             size="lg"
             variant="outline"
             className="border-2 border-foreground/20 text-foreground hover:bg-foreground/10 text-base font-medium px-8 py-6 h-auto bg-transparent"
+            onClick={() => setShowPresentation(true)}
           >
-            KAUS Technology
+            Watch Presentation
           </Button>
         </div>
       </div>
@@ -46,6 +51,10 @@ export function HeroSection() {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
         <ChevronDown className="w-8 h-8 text-muted-foreground" />
       </div>
+
+      {showPresentation && (
+        <FieldNinePresentation onClose={() => setShowPresentation(false)} />
+      )}
     </section>
   )
 }

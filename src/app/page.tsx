@@ -1,6 +1,8 @@
 import { HeroSection } from "@/components/hero-section"
 import { Navigation } from "@/components/navigation"
 import { BusinessEcosystem } from "@/components/business-ecosystem"
+import { RFIDLogisticsSystem } from "@/components/rfid-logistics-system"
+import { FulfillmentIntegration } from "@/components/fulfillment-integration"
 import { KausTechnology } from "@/components/kaus-technology"
 import { VisionSection } from "@/components/vision-section"
 import { BusinessDivisions } from "@/components/business-divisions"
@@ -13,6 +15,8 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <BusinessEcosystem />
+      <RFIDLogisticsSystem />
+      <FulfillmentIntegration />
       <KausTechnology />
       <BusinessDivisions />
       <VisionSection />
