@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import NexusAdmin from "@/components/NexusAdmin";
+import KausAdminWidget from "@/components/KausAdminWidget";
 
 export const metadata: Metadata = {
   title: "FIELD NINE - AI 기반 물류 자동화 플랫폼 | NEXUS OS",
@@ -67,7 +67,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <NexusAdmin />
+        <KausAdminWidget />
       </body>
     </html>
   );
