@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { Send } from 'lucide-react';
 
 interface Message {
     id: string;
@@ -12,22 +12,30 @@ interface Message {
 }
 
 export default function KAUSAIChat() {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            id: '1',
-            role: 'assistant',
-            content: '안녕하세요. KAUS AI입니다.\n\nFIELD NINE의 디지털 물류 인프라를 실시간으로 모니터링하고 있습니다. NEXUS OS, KAUS Coin, 위성 네트워크, 블록체인 추적 시스템에 대한 모든 질문에 답변할 수 있습니다.\n\n무엇을 도와드릴까요?',
-            timestamp: new Date(),
-        },
-    ]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showInitialState, setShowInitialState] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+    // Breathing glow animation values
+    const scale = useSpring(1, { stiffness: 50, damping: 15 });
+    const opacity = useMotionValue(0.3);
+
+    useEffect(() => {
+        // Breathing animation loop
+        const interval = setInterval(() => {
+            scale.set(1.15);
+            opacity.set(0.5);
+            setTimeout(() => {
+                scale.set(1);
+                opacity.set(0.3);
+            }, 2000);
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, [scale, opacity]);
 
     useEffect(() => {
         scrollToBottom();
@@ -37,8 +45,16 @@ export default function KAUSAIChat() {
         inputRef.current?.focus();
     }, []);
 
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     const handleSend = async () => {
         if (!input.trim() || isLoading) return;
+
+        if (showInitialState) {
+            setShowInitialState(false);
+        }
 
         const userMessage: Message = {
             id: Date.now().toString(),
@@ -68,189 +84,222 @@ export default function KAUSAIChat() {
         const lowerInput = userInput.toLowerCase();
         
         if (lowerInput.includes('안녕') || lowerInput.includes('hello') || lowerInput.includes('hi')) {
-            return '안녕하세요. KAUS AI입니다.\n\nFIELD NINE의 디지털 물류 인프라를 실시간으로 모니터링하고 있습니다. NEXUS OS, KAUS Coin, 위성 네트워크, 블록체인 추적 시스템에 대한 모든 질문에 답변할 수 있습니다.\n\n무엇을 도와드릴까요?';
+            return 'System Ready.';
         }
         
         if (lowerInput.includes('nexus') || lowerInput.includes('넥서스')) {
-            return 'NEXUS OS는 FIELD NINE의 물류 자동화 플랫폼입니다.\n\n현재 250개국에서 운영 중이며, 1.25M대의 자율비행 드론이 실시간으로 네트워크를 구성하고 있습니다. 안전률은 99.999%를 기록하고 있으며, AI 예측 정확도는 94.7%입니다.\n\n양자 컴퓨팅과 뉴럴 AI로 구동되는 이 시스템은 물리적 자산을 디지털 트윈으로 실시간 변환합니다. 5,000평 규모의 물류 허브와 완전히 통합되어 있어, 재고 추적부터 배송 최적화까지 모든 프로세스가 자동화됩니다.\n\n구체적으로 어떤 부분이 궁금하신가요?';
+            return 'NEXUS OS Status:\n\nOperational across 250 countries.\n1.25M autonomous drones active.\nSafety rate: 99.999%\nAI prediction accuracy: 94.7%\n\nPowered by quantum computing and neural AI. Real-time conversion of physical assets to digital twins. Fully integrated with 5,000-pyeong logistics hub.\n\nAll processes automated: inventory tracking to delivery optimization.';
         }
         
         if (lowerInput.includes('kaus') && (lowerInput.includes('coin') || lowerInput.includes('코인'))) {
-            return 'KAUS Coin은 물류 자산을 디지털로 변환하는 스테이블코인입니다.\n\n현재 시장 상황:\n• 가격: $1.00 USD (USD 1:1 페깅)\n• 24시간 변동: +2.4%\n• 거래량: 124B KAUS\n• 활성 사용자: 50M+\n• 네트워크: 250개국\n• 총 자산 가치: ₩54조\n• 가스 수수료: 12 Gwei\n\n기술적 특징:\n양자 블록체인 기반으로 구축되어 있으며, RFID를 통한 실시간 추적이 가능합니다. 지금까지 100억 건 이상의 거래가 검증되었고, 보안 사고는 단 한 건도 발생하지 않았습니다. 시스템 가동률은 99.99%이며, 평균 거래 속도는 0.001초입니다.\n\nKAUS Coin의 핵심 가치는 물리적 재고를 즉시 유동화할 수 있다는 점입니다. FIELD NINE의 5,000평 물류 허브와 완전히 통합되어 있어, 재고가 곧 블록체인 자산이 됩니다. USD 1:1 페깅으로 가치가 보장되며, 250개국 네트워크를 통해 어디서나 거래할 수 있습니다.\n\n투자나 기술적 세부사항에 대해 더 알고 싶으시면 말씀해주세요.';
+            return 'KAUS Coin Market Data:\n\nPrice: $1.00 USD (1:1 USD pegged)\n24h Change: +2.4%\nVolume: 124B KAUS\nActive Users: 50M+\nNetwork: 250 countries\nTotal AUM: ₩54T\nGas Fee: 12 Gwei\n\nTechnical:\nQuantum blockchain infrastructure. Real-time RFID tracking. 10B+ verified transactions. Zero security incidents. 99.99% uptime. Average transaction speed: 0.001s.\n\nCore Value: Instant liquidity of physical inventory. Fully integrated with FIELD NINE logistics hub. Inventory becomes blockchain assets.';
         }
         
         if (lowerInput.includes('기능') || lowerInput.includes('능력') || lowerInput.includes('뭐') || lowerInput.includes('what') || lowerInput.includes('할수')) {
-            return 'KAUS AI는 FIELD NINE의 모든 시스템과 실시간으로 통신하는 엔터프라이즈급 AI입니다.\n\n주요 기능:\n• 코드 생성 및 리뷰\n• 자연어 처리 및 컨텍스트 이해\n• 실시간 데이터 분석 (NEXUS OS 통합)\n• 다국어 지원 (50+ 언어)\n• 기술 문서 분석\n• 물류 최적화 예측 분석\n• 블록체인 트랜잭션 검증\n\nFIELD NINE의 물류 생태계에 특화되어 있어, NEXUS OS, KAUS Coin, 위성 네트워크 등 모든 시스템의 실시간 데이터에 접근할 수 있습니다.\n\n어떤 작업을 도와드릴까요?';
+            return 'KAUS AI Capabilities:\n\n• Code generation and review\n• Natural language processing\n• Real-time data analysis (NEXUS OS integrated)\n• Multi-language support (50+ languages)\n• Technical document analysis\n• Logistics optimization predictions\n• Blockchain transaction verification\n\nSpecialized in FIELD NINE logistics ecosystem. Real-time access to all systems: NEXUS OS, KAUS Coin, satellite networks.';
         }
         
         if (lowerInput.includes('가격') || lowerInput.includes('price') || lowerInput.includes('시세')) {
-            return 'KAUS Coin 현재 시세입니다.\n\n가격: $1.00 USD (USD 1:1 페깅)\n24시간 변동: +2.4%\n거래량: 124B KAUS\n시가총액: ₩54조\n가스 수수료: 12 Gwei\n활성 노드: 5,000개\n총 자산 가치: ₩54조\n\nKAUS Coin은 USD와 1:1로 페깅되어 있으며, FIELD NINE의 물류 자산을 담보로 합니다. 5,000평 물류 허브와 글로벌 재고가 담보 자산이며, 자동 조정 시스템으로 항상 $1.00을 유지합니다.\n\n양자 블록체인 기반으로 보안이 보장되며, 지금까지 보안 사고는 발생하지 않았습니다. 250개국 네트워크를 통해 즉시 거래가 가능합니다.\n\n현재 지속적인 상승세를 보이고 있으며, FIELD NINE의 글로벌 네트워크 확장과 함께 사용처가 증가하고 있습니다.\n\n투자나 거래에 대해 더 알고 싶으시면 질문해주세요.';
+            return 'KAUS Coin: $1.00 USD\n24h: +2.4%\nVolume: 124B KAUS\nMarket Cap: ₩54T\nGas: 12 Gwei\nActive Nodes: 5,000\n\nPegged 1:1 with USD. Backed by FIELD NINE logistics assets. 5,000-pyeong hub + global inventory as collateral. Auto-adjustment maintains $1.00.\n\nQuantum blockchain security. Zero incidents. 250-country network enables instant trading.\n\nUptrend continues. Usage expanding with global network growth.';
         }
         
         if (lowerInput.includes('투자') || lowerInput.includes('invest') || lowerInput.includes('구매') || lowerInput.includes('사고')) {
-            return 'KAUS Coin 투자에 대해 설명드리겠습니다.\n\n안정성 측면에서, USD 1:1 페깅으로 가치가 보장되며 물류 자산이 담보로 설정되어 있어 하락 리스크가 최소화됩니다. 양자 블록체인 기반으로 해킹이 사실상 불가능하며, 지금까지 보안 사고는 발생하지 않았습니다.\n\n성장성 측면에서는, 250개국으로 확장 중인 글로벌 네트워크와 50M+ 활성 사용자, 그리고 월평균 15% 이상 증가하는 거래량을 보이고 있습니다. FIELD NINE의 물류 네트워크와 직접 연동되어 있어 사용처가 지속적으로 증가하고 있습니다.\n\n유동성 측면에서, 재고 자산을 즉시 유동화할 수 있으며 250개국에서 실시간 거래가 가능합니다. 평균 거래 속도는 0.001초이며, DeFi 프로토콜 통합으로 추가 수익 창출도 가능합니다.\n\n투명성 측면에서, 모든 거래가 블록체인에 기록되며 실시간 AUM이 공개됩니다 (현재 ₩54조). 정기적인 감사와 리포트가 제공되며, 모든 거래는 완벽하게 추적 가능합니다.\n\n투자 방법:\n• 공식 거래소에서 구매\n• FIELD NINE 제품 구매 시 자동 적립\n• 물류 서비스 이용 시 보상\n• DeFi 스테이킹으로 추가 수익\n\nFIELD NINE의 물류 네트워크가 확장될수록 KAUS Coin의 사용처와 가치가 증가합니다. 현재 월평균 15% 이상의 거래량 증가를 보이고 있으며, 지속적인 성장이 예상됩니다.\n\n투자 전략이나 구매 방법에 대해 더 자세히 알고 싶으시면 말씀해주세요.';
+            return 'KAUS Coin Investment:\n\nStability: USD 1:1 peg. Logistics assets as collateral minimize downside risk. Quantum blockchain makes hacking virtually impossible. Zero security incidents.\n\nGrowth: Expanding to 250 countries. 50M+ active users. Monthly volume growth 15%+. Direct integration with FIELD NINE logistics network.\n\nLiquidity: Instant inventory asset liquidation. Real-time trading across 250 countries. Average speed: 0.001s. DeFi protocol integration enables additional yield.\n\nTransparency: All transactions on-chain. Real-time AUM public (₩54T). Regular audits and reports. Full traceability.\n\nAcquisition:\n• Official exchanges\n• FIELD NINE product purchases (auto-credit)\n• Logistics service rewards\n• DeFi staking yields\n\nAs FIELD NINE logistics network expands, KAUS Coin usage and value increase. Monthly volume growth 15%+. Continued growth expected.';
         }
         
-        return `"${userInput}"에 대해 분석하고 있습니다.\n\nFIELD NINE의 모든 시스템과 실시간으로 통신하며, 최신 데이터를 기반으로 답변을 제공합니다.\n\nNEXUS OS 물류 데이터, KAUS Coin 시장 정보, 블록체인 트랜잭션, 또는 기술적 세부사항에 대해 더 구체적으로 질문해주시면 상세히 안내해드리겠습니다.`;
+        if (lowerInput.includes('최종 링크') || lowerInput.includes('final link')) {
+            return 'FIELD NINE: https://www.fieldnine.io';
+        }
+        
+        return `Processing: "${userInput}"\n\nConnected to all FIELD NINE systems in real-time. Providing responses based on latest data.\n\nFor detailed information, ask about:\n• NEXUS OS logistics data\n• KAUS Coin market information\n• Blockchain transactions\n• Technical specifications`;
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
             e.preventDefault();
             handleSend();
         }
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 nexus-grid-bg">
+        <div className="min-h-screen bg-[#050505] relative overflow-hidden nexus-grid-bg">
+            {/* Aurora Background Effect */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <motion.div
+                    className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] opacity-20"
+                    style={{
+                        background: 'radial-gradient(ellipse at center, rgba(0, 255, 148, 0.15) 0%, rgba(0, 194, 255, 0.1) 30%, transparent 70%)',
+                    }}
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.15, 0.25, 0.15],
+                    }}
+                    transition={{
+                        duration: 8,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                    }}
+                />
+            </div>
+
             {/* Scanline overlay */}
             <div className="nexus-scanline" />
-            
-            {/* Main Chat Container - Gemini Style */}
-            <div className="w-full max-w-4xl mx-auto flex flex-col h-[calc(100vh-120px)]">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-8"
-                >
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00FF94] to-[#00C2FF] flex items-center justify-center nexus-glow-green">
-                            <Bot className="w-6 h-6 text-[#050505]" />
-                        </div>
-                        <h1 className="text-4xl md:text-5xl font-light text-[#E0E0E0] font-['Inter',sans-serif] tracking-tight">
-                            KAUS AI
-                        </h1>
-                    </div>
-                    <p className="text-sm text-[#888888] font-['Inter',sans-serif]">
-                        FIELD NINE의 엔터프라이즈급 AI 어시스턴트
-                    </p>
-                </motion.div>
 
-                {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto mb-6 space-y-6 px-4">
-                    <AnimatePresence>
-                        {messages.map((message) => (
-                            <motion.div
-                                key={message.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                            >
-                                {message.role === 'assistant' && (
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00FF94] to-[#00C2FF] flex items-center justify-center flex-shrink-0 nexus-glow-green">
-                                        <Bot className="w-5 h-5 text-[#050505]" />
-                                    </div>
-                                )}
-                                <div
-                                    className={`max-w-[85%] rounded-2xl p-4 ${
-                                        message.role === 'user'
-                                            ? 'bg-[#00FF94]/10 text-[#E0E0E0] border border-[#00FF94]/20'
-                                            : 'bg-[#111111] text-[#E0E0E0] border border-white/10 nexus-glass'
-                                    }`}
-                                >
-                                    <div 
-                                        className="text-base font-['Inter',sans-serif] whitespace-pre-wrap leading-relaxed prose prose-invert max-w-none"
-                                        dangerouslySetInnerHTML={{
-                                            __html: message.content
-                                                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#00FF94]">$1</strong>')
-                                                .replace(/https?:\/\/[^\s]+/g, '<a href="$&" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors">$&</a>')
-                                                .replace(/fieldnine\.io/gi, '<a href="https://www.fieldnine.io" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors font-medium">fieldnine.io</a>')
-                                                .replace(/www\.fieldnine\.io/gi, '<a href="https://www.fieldnine.io" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors font-medium">www.fieldnine.io</a>')
-                                                .replace(/\n/g, '<br />')
-                                        }}
-                                    />
-                                </div>
-                                {message.role === 'user' && (
-                                    <div className="w-10 h-10 rounded-full bg-[#00C2FF]/20 flex items-center justify-center flex-shrink-0 border border-[#00C2FF]/30">
-                                        <User className="w-5 h-5 text-[#00C2FF]" />
-                                    </div>
-                                )}
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
-                    
-                    {isLoading && (
+            {/* Main Container */}
+            <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-6">
+                {/* Breathing Glow Core - Center */}
+                {showInitialState && (
+                    <motion.div
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 pointer-events-none"
+                        style={{
+                            scale,
+                            opacity,
+                        }}
+                    >
+                        <div
+                            className="w-full h-full rounded-full blur-3xl"
+                            style={{
+                                background: 'radial-gradient(circle, rgba(0, 255, 148, 0.4) 0%, rgba(0, 194, 255, 0.3) 50%, transparent 70%)',
+                            }}
+                        />
+                    </motion.div>
+                )}
+
+                {/* Initial System Status */}
+                {showInitialState && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                        className="text-center space-y-4 mb-32"
+                    >
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="flex gap-4"
+                            transition={{ duration: 0.8, delay: 1 }}
+                            className="font-['JetBrains_Mono',monospace] text-[#00FF94] text-sm tracking-widest"
                         >
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#00FF94] to-[#00C2FF] flex items-center justify-center nexus-glow-green">
-                                <Bot className="w-5 h-5 text-[#050505]" />
-                            </div>
-                            <div className="bg-[#111111] border border-white/10 rounded-2xl p-4 nexus-glass">
-                                <div className="flex gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-[#00FF94] animate-bounce" style={{ animationDelay: '0ms' }} />
-                                    <div className="w-2 h-2 rounded-full bg-[#00FF94] animate-bounce" style={{ animationDelay: '150ms' }} />
-                                    <div className="w-2 h-2 rounded-full bg-[#00FF94] animate-bounce" style={{ animationDelay: '300ms' }} />
-                                </div>
-                            </div>
+                            NEXUS OS v2.0 Operational.
                         </motion.div>
-                    )}
-                    
-                    <div ref={messagesEndRef} />
-                </div>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.8, delay: 1.5 }}
+                            className="font-['JetBrains_Mono',monospace] text-[#888888] text-xs tracking-widest"
+                        >
+                            Accessing Field Nine Logistics Data...
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.8, delay: 2 }}
+                            className="font-['JetBrains_Mono',monospace] text-[#00C2FF] text-sm tracking-widest"
+                        >
+                            System Ready.
+                        </motion.div>
+                    </motion.div>
+                )}
 
-                {/* Input Area - Gemini Style */}
+                {/* Messages Area - Minimalist */}
+                {!showInitialState && (
+                    <div className="flex-1 w-full max-w-4xl mx-auto mb-32 overflow-y-auto space-y-8 px-4">
+                        <AnimatePresence>
+                            {messages.map((message) => (
+                                <motion.div
+                                    key={message.id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.4 }}
+                                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    <div
+                                        className={`max-w-[80%] ${
+                                            message.role === 'user'
+                                                ? 'text-[#00C2FF] font-["JetBrains_Mono",monospace] text-sm'
+                                                : 'text-[#E0E0E0] font-["Inter",sans-serif] font-light text-base leading-relaxed'
+                                        }`}
+                                    >
+                                        <div
+                                            className="whitespace-pre-wrap"
+                                            dangerouslySetInnerHTML={{
+                                                __html: message.content
+                                                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#00FF94]">$1</strong>')
+                                                    .replace(/https?:\/\/[^\s]+/g, '<a href="$&" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors">$&</a>')
+                                                    .replace(/fieldnine\.io/gi, '<a href="https://www.fieldnine.io" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors font-medium">fieldnine.io</a>')
+                                                    .replace(/www\.fieldnine\.io/gi, '<a href="https://www.fieldnine.io" target="_blank" rel="noopener noreferrer" class="text-[#00C2FF] hover:text-[#00FF94] underline transition-colors font-medium">www.fieldnine.io</a>')
+                                                    .replace(/\n/g, '<br />')
+                                            }}
+                                        />
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+
+                        {isLoading && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="flex justify-start"
+                            >
+                                <div className="text-[#888888] font-['JetBrains_Mono',monospace] text-sm">
+                                    <span className="inline-block w-2 h-2 bg-[#00FF94] rounded-full animate-pulse mr-2" />
+                                    Processing...
+                                </div>
+                            </motion.div>
+                        )}
+
+                        <div ref={messagesEndRef} />
+                    </div>
+                )}
+
+                {/* Floating Command Bar - MacOS Spotlight Style */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="w-full max-w-3xl mx-auto"
+                    transition={{ duration: 0.6, delay: showInitialState ? 2.5 : 0 }}
+                    className="fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-20"
                 >
                     <div className="relative">
-                        <div className="nexus-glass rounded-2xl border border-white/10 p-4 focus-within:border-[#00FF94]/50 transition-colors">
-                            <textarea
-                                ref={inputRef}
-                                value={input}
-                                onChange={(e) => {
-                                    setInput(e.target.value);
-                                    e.target.style.height = 'auto';
-                                    e.target.style.height = `${Math.min(e.target.scrollHeight, 200)}px`;
-                                }}
-                                onKeyPress={handleKeyPress}
-                                placeholder="KAUS AI에게 무엇이든 물어보세요..."
-                                className="w-full min-h-[60px] max-h-[200px] px-4 py-3 bg-transparent text-[#E0E0E0] placeholder-[#888888] font-['Inter',sans-serif] text-base resize-none focus:outline-none leading-relaxed"
-                                rows={1}
-                            />
-                            <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
-                                <div className="flex items-center gap-2">
-                                    <Sparkles className="w-4 h-4 text-[#888888]" />
-                                    <span className="text-xs text-[#888888] font-['JetBrains_Mono',monospace]">
-                                        Enter로 전송, Shift+Enter로 줄바꿈
-                                    </span>
-                                </div>
+                        <motion.div
+                            className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-6 py-4 focus-within:border-[#00FF94]/50 focus-within:bg-white/8 transition-all duration-300"
+                            whileHover={{ scale: 1.02 }}
+                            whileFocus={{ scale: 1.02 }}
+                        >
+                            <div className="flex items-center gap-4">
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    placeholder="Enter Command..."
+                                    className="flex-1 bg-transparent text-[#E0E0E0] placeholder-[#888888] font-['Inter',sans-serif] text-base focus:outline-none font-light"
+                                />
                                 <button
                                     onClick={handleSend}
                                     disabled={!input.trim() || isLoading}
-                                    className="px-6 py-2.5 bg-gradient-to-br from-[#00FF94] to-[#00C2FF] text-[#050505] rounded-xl font-medium font-['Inter',sans-serif] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity nexus-glow-green flex items-center gap-2"
+                                    className="p-2 rounded-full bg-[#00FF94]/20 hover:bg-[#00FF94]/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                                 >
-                                    <Send className="w-4 h-4" />
-                                    <span>전송</span>
+                                    <Send className="w-4 h-4 text-[#00FF94]" />
                                 </button>
                             </div>
+                        </motion.div>
+
+                        {/* Final Link - Subtle */}
+                        <div className="text-center mt-4">
+                            <a
+                                href="https://www.fieldnine.io"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 text-xs text-[#888888] hover:text-[#00FF94] font-['JetBrains_Mono',monospace] transition-colors"
+                            >
+                                <span>fieldnine.io</span>
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                            </a>
                         </div>
-                    </div>
-                    <div className="text-center mt-4 space-y-2">
-                        <p className="text-xs text-[#888888] font-['JetBrains_Mono',monospace]">
-                            KAUS AI v1.0 | FIELD NINE Enterprise AI
-                        </p>
-                        <a
-                            href="https://www.fieldnine.io"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#00FF94] hover:text-[#00C2FF] border border-[#00FF94]/30 hover:border-[#00C2FF]/50 rounded-lg transition-all nexus-glow-green"
-                        >
-                            <span>🌐</span>
-                            <span>최종 링크: www.fieldnine.io</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                        </a>
                     </div>
                 </motion.div>
             </div>
