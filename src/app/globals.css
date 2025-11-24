@@ -1,19 +1,25 @@
 @import "tailwindcss";
 
 /* ==========================================
-   FIELD NINE DESIGN SYSTEM V2.0
-   World-Class Visual Art Direction
+   NEXUS THE FIELD NINE - Digital Twin Command Center
+   Design System
    
    Philosophy:
-   - Stability: Solid foundations, trust-inspiring
-   - Trendy: Cutting-edge aesthetics
-   - Confidence: Enterprise-grade precision
-   
-   Inspired by: Stripe, Linear, Apple, Vercel
+   - Cyberpunk meets Enterprise
+   - Digital Twin Visualization
+   - Command Center Aesthetics
    ========================================== */
 
 :root {
-  /* === Color System === */
+  /* === NEXUS Color System === */
+  --nexus-black: #050505;        /* Background - Deep Void */
+  --nexus-panel: #111111;        /* Card/Panel Background */
+  --kaus-green: #00FF94;         /* Primary Accent - Growth, Money, Signal */
+  --cyber-blue: #00C2FF;         /* Secondary Accent - Data, Tech */
+  --text-main: #E0E0E0;          /* Dim White - Readability */
+  --text-muted: #888888;         /* Metadata */
+  
+  /* === Legacy Color System === */
   /* Neutrals - Precision Gray Scale */
   --gray-50: #fafafa;
   --gray-100: #f4f4f5;
