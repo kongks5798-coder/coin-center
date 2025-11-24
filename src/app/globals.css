@@ -692,3 +692,142 @@ a:focus-visible {
   h2 { font-size: var(--text-4xl); }
   h3 { font-size: var(--text-3xl); }
 }
+
+/* ==========================================
+   NEXUS THEME - Digital Twin Command Center
+   ========================================== */
+
+/* Glassmorphism Effect */
+.nexus-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scanline Effect (CRT Monitor Overlay) */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.nexus-scanline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 148, 0.1) 50%,
+    transparent 100%
+  );
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Neon Glow Effect */
+.nexus-glow {
+  transition: all 0.3s ease;
+}
+
+.nexus-glow:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 148, 0.3),
+              0 0 40px rgba(0, 255, 148, 0.2),
+              0 0 60px rgba(0, 255, 148, 0.1);
+}
+
+.nexus-glow-green {
+  box-shadow: 0 0 10px rgba(0, 255, 148, 0.5);
+}
+
+.nexus-glow-blue {
+  box-shadow: 0 0 10px rgba(0, 194, 255, 0.5);
+}
+
+/* Animated Grid Background */
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+.nexus-grid-bg {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 20s linear infinite;
+}
+
+/* Terminal Button Style */
+.nexus-terminal-btn {
+  background: transparent;
+  border: 1px solid var(--kaus-green);
+  color: var(--kaus-green);
+  padding: 12px 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nexus-terminal-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--kaus-green);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.nexus-terminal-btn:hover {
+  color: var(--nexus-black);
+  box-shadow: 0 0 20px rgba(0, 255, 148, 0.5);
+}
+
+.nexus-terminal-btn:hover::before {
+  left: 0;
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+}
+
+.nexus-glitch:hover {
+  animation: glitch 0.3s ease;
+}
+
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
