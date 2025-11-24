@@ -3,6 +3,7 @@
 import LiveTicker from '@/components/Nexus/LiveTicker';
 import HeroSection from '@/components/Nexus/HeroSection';
 import FeatureGrid from '@/components/Nexus/FeatureGrid';
+import KAUSAIChat from '@/components/Nexus/KAUSAIChat';
 
 export default function HomePage() {
     return (
@@ -15,6 +16,9 @@ export default function HomePage() {
             
             {/* Feature Grid */}
             <FeatureGrid />
+            
+            {/* KAUS AI Chat */}
+            <KAUSAIChat />
         </div>
     );
 }
