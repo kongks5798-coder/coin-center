@@ -6,34 +6,236 @@ import {
   Cpu, Layers, ChevronRight, Download, Share, PlusSquare, Camera, 
   Shirt, Sparkles, Wine, Gamepad2, Watch, CreditCard, Truck, 
   Package, Car, Armchair, Apple, Clock, BarChart3, Award, MapPin, 
-  FileText, Box
+  FileText, Box, Activity, Server, AlertTriangle, Lock, Users, DollarSign
 } from 'lucide-react';
-import { LineChart, Line, ResponsiveContainer, Tooltip } from 'recharts';
+import { LineChart, Line, ResponsiveContainer, Tooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 // ==========================================
-// [DATA] REALISTIC INVENTORY
+// [DATA] MOCK DATABASES
 // ==========================================
 
 const shopItems = [
   { id: 1, brand: "ROLEX", name: "Submariner Date", price: "$14,500", image: "⌚", condition: "New", origin: "Geneva, CH" },
   { id: 2, brand: "HERMES", name: "Birkin 30 Togo", price: "$22,000", image: "👜", condition: "A-Grade", origin: "Paris, FR" },
   { id: 3, brand: "NIKE", name: "Jordan 1 Chicago", price: "$1,800", image: "👟", condition: "New", origin: "New York, US" },
-  { id: 4, brand: "LEICA", name: "M6 Rangefinder", price: "$3,200", image: "📷", condition: "Mint", origin: "Berlin, DE" },
-  { id: 5, brand: "SUNTORY", name: "Yamazaki 18yr", price: "$980", image: "🥃", condition: "New", origin: "Osaka, JP" },
-  { id: 6, brand: "APPLE", name: "MacBook Pro M3", price: "$2,499", image: "💻", condition: "New", origin: "Seoul, KR" },
 ];
 
-// Mock Price History Data for Graph
-const priceData = [
-  { name: 'Jan', value: 13800 },
-  { name: 'Feb', value: 14100 },
-  { name: 'Mar', value: 13900 },
-  { name: 'Apr', value: 14200 },
-  { name: 'May', value: 14500 },
+const liveEventsData = [
+  { time: "10:42:01", type: "SCAN", user: "User_8291", item: "Rolex Submariner", loc: "Seoul, KR", status: "Verified" },
+  { time: "10:42:05", type: "ORDER", user: "User_1102", item: "Hermes Birkin", loc: "Tokyo, JP", status: "Pending" },
+  { time: "10:42:12", type: "AUTH", user: "Inspector_Kim", item: "Leica M6", loc: "Busan, KR", status: "Approving..." },
+  { time: "10:42:18", type: "SCAN", user: "User_3391", item: "Nike Dunk Low", loc: "New York, US", status: "Verified" },
+  { time: "10:42:25", type: "ALERT", user: "System", item: "Fraud Detected", loc: "London, UK", status: "Blocked" },
+];
+
+const revenueData = [
+  { name: '00:00', value: 4000 },
+  { name: '04:00', value: 3000 },
+  { name: '08:00', value: 2000 },
+  { name: '12:00', value: 2780 },
+  { name: '16:00', value: 1890 },
+  { name: '20:00', value: 2390 },
+  { name: '24:00', value: 3490 },
 ];
 
 // ==========================================
-// [COMPONENT] APP LOGIC (Clean & Trustworthy)
+// [COMPONENT] NEXUS ADMIN DASHBOARD (The Brain)
+// ==========================================
+
+const NexusAdmin = ({ onClose }: { onClose: () => void }) => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [events, setEvents] = useState(liveEventsData);
+
+  // Clock & Live Feed Simulation
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    const feedTimer = setInterval(() => {
+       setEvents(prev => {
+         const newEvent = prev[Math.floor(Math.random() * prev.length)];
+         return [newEvent, ...prev.slice(0, 6)];
+       });
+    }, 2500);
+    return () => { clearInterval(timer); clearInterval(feedTimer); };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black text-white font-mono overflow-hidden animate-in fade-in duration-500">
+      
+      {/* Admin Header */}
+      <header className="h-16 border-b border-gray-800 flex justify-between items-center px-6 bg-gray-900/50 backdrop-blur">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-cyan-400">
+            <Globe className="w-6 h-6 animate-pulse" />
+            <span className="font-black text-xl tracking-widest">NEXUS ADMIN</span>
+          </div>
+          <span className="text-xs text-gray-500 border-l border-gray-700 pl-4 ml-2">
+            GLOBAL OPERATIONS CENTER
+          </span>
+        </div>
+        <div className="flex items-center gap-6 text-xs">
+          <div className="flex flex-col items-end text-gray-400">
+            <span>SYSTEM TIME (UTC)</span>
+            <span className="text-white font-bold text-sm">{currentTime.toISOString().split('T')[1].split('.')[0]}</span>
+          </div>
+          <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-400 rounded border border-green-500/30">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            ALL SYSTEMS NOMINAL
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      </header>
+
+      {/* Main Grid */}
+      <main className="p-6 grid grid-cols-4 grid-rows-6 gap-6 h-[calc(100vh-64px)]">
+        
+        {/* 1. KPI Cards (Top Row) */}
+        <div className="col-span-1 bg-gray-900/50 border border-gray-800 rounded-xl p-5 relative overflow-hidden group hover:border-cyan-500/50 transition-colors">
+           <div className="flex justify-between items-start mb-2">
+             <div className="p-2 bg-cyan-500/10 rounded-lg"><DollarSign className="w-5 h-5 text-cyan-400"/></div>
+             <span className="text-xs text-green-400 flex items-center gap-1"><TrendingUp className="w-3 h-3"/> +12.5%</span>
+           </div>
+           <div className="text-2xl font-bold text-white">$14,205,000</div>
+           <div className="text-xs text-gray-500 uppercase tracking-wider">Daily Volume</div>
+        </div>
+        <div className="col-span-1 bg-gray-900/50 border border-gray-800 rounded-xl p-5 hover:border-purple-500/50 transition-colors">
+           <div className="flex justify-between items-start mb-2">
+             <div className="p-2 bg-purple-500/10 rounded-lg"><Scan className="w-5 h-5 text-purple-400"/></div>
+             <span className="text-xs text-purple-400">Active Now</span>
+           </div>
+           <div className="text-2xl font-bold text-white">8,492</div>
+           <div className="text-xs text-gray-500 uppercase tracking-wider">Live Scans</div>
+        </div>
+        <div className="col-span-1 bg-gray-900/50 border border-gray-800 rounded-xl p-5 hover:border-blue-500/50 transition-colors">
+           <div className="flex justify-between items-start mb-2">
+             <div className="p-2 bg-blue-500/10 rounded-lg"><Truck className="w-5 h-5 text-blue-400"/></div>
+             <span className="text-xs text-blue-400">En Route</span>
+           </div>
+           <div className="text-2xl font-bold text-white">1,204</div>
+           <div className="text-xs text-gray-500 uppercase tracking-wider">Shipments</div>
+        </div>
+        <div className="col-span-1 bg-gray-900/50 border border-gray-800 rounded-xl p-5 hover:border-red-500/50 transition-colors">
+           <div className="flex justify-between items-start mb-2">
+             <div className="p-2 bg-red-500/10 rounded-lg"><AlertTriangle className="w-5 h-5 text-red-400"/></div>
+             <span className="text-xs text-red-400">Action Req.</span>
+           </div>
+           <div className="text-2xl font-bold text-white">3</div>
+           <div className="text-xs text-gray-500 uppercase tracking-wider">Fraud Alerts</div>
+        </div>
+
+        {/* 2. Global Map Visualization (Middle Left - Large) */}
+        <div className="col-span-3 row-span-3 bg-black border border-gray-800 rounded-xl relative overflow-hidden flex items-center justify-center">
+           {/* Grid Background */}
+           <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+           
+           <div className="absolute top-4 left-4 z-10">
+             <h3 className="text-lg font-bold text-white flex items-center gap-2"><Globe className="w-4 h-4 text-cyan-400"/> GLOBAL TRAFFIC</h3>
+             <p className="text-xs text-gray-500">Real-time node activity</p>
+           </div>
+
+           {/* Abstract World Map with Ping Animations */}
+           <div className="relative w-3/4 h-3/4 opacity-60">
+              <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white rounded-full animate-ping"></div>
+              <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-cyan-500 rounded-full"></div>
+              <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
+              <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
+              
+              {/* Connecting Lines */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                 <path d="M 200 150 Q 400 50 600 200" stroke="rgba(6,182,212,0.2)" strokeWidth="1" fill="none" />
+                 <path d="M 600 200 Q 500 400 400 300" stroke="rgba(168,85,247,0.2)" strokeWidth="1" fill="none" />
+              </svg>
+           </div>
+        </div>
+
+        {/* 3. Live Event Feed (Right Column) */}
+        <div className="col-span-1 row-span-3 bg-gray-900/50 border border-gray-800 rounded-xl flex flex-col overflow-hidden">
+           <div className="p-4 border-b border-gray-800 bg-gray-900/80">
+             <h3 className="text-xs font-bold text-gray-400 flex items-center gap-2"><Activity className="w-3 h-3"/> LIVE FEED</h3>
+           </div>
+           <div className="flex-1 overflow-y-auto p-2 space-y-2">
+             {events.map((ev, i) => (
+               <div key={i} className="p-3 bg-black/40 border border-gray-800 rounded-lg text-xs animate-in slide-in-from-right duration-300">
+                 <div className="flex justify-between text-gray-500 mb-1">
+                   <span>{ev.time}</span>
+                   <span className={ev.type === 'ALERT' ? 'text-red-500 font-bold' : 'text-cyan-500'}>{ev.type}</span>
+                 </div>
+                 <div className="text-white font-bold truncate">{ev.item}</div>
+                 <div className="flex justify-between mt-1">
+                   <span className="text-gray-400">{ev.loc}</span>
+                   <span className="text-green-400">{ev.status}</span>
+                 </div>
+               </div>
+             ))}
+           </div>
+        </div>
+
+        {/* 4. Pending Auth Requests (Bottom Left) */}
+        <div className="col-span-2 row-span-2 bg-gray-900/50 border border-gray-800 rounded-xl p-4 flex flex-col">
+           <div className="flex justify-between items-center mb-4">
+             <h3 className="text-sm font-bold text-white flex items-center gap-2"><Lock className="w-4 h-4 text-yellow-400"/> PENDING AUTH APPROVALS</h3>
+             <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded">3 Pending</span>
+           </div>
+           <div className="space-y-3">
+             <div className="flex items-center justify-between bg-black/40 p-3 rounded border border-gray-700">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-800 rounded flex items-center justify-center text-xl">👜</div>
+                  <div>
+                    <div className="text-sm font-bold text-white">Hermes Birkin 25</div>
+                    <div className="text-xs text-gray-500">Req by: Inspector Lee</div>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button className="px-3 py-1.5 bg-red-500/10 text-red-400 text-xs rounded hover:bg-red-500/20">Reject</button>
+                  <button className="px-3 py-1.5 bg-green-500 text-black font-bold text-xs rounded hover:bg-green-400">Approve K-TAG</button>
+                </div>
+             </div>
+             <div className="flex items-center justify-between bg-black/40 p-3 rounded border border-gray-700">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-800 rounded flex items-center justify-center text-xl">⌚</div>
+                  <div>
+                    <div className="text-sm font-bold text-white">Rolex Daytona</div>
+                    <div className="text-xs text-gray-500">Req by: Store Manager</div>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button className="px-3 py-1.5 bg-red-500/10 text-red-400 text-xs rounded hover:bg-red-500/20">Reject</button>
+                  <button className="px-3 py-1.5 bg-green-500 text-black font-bold text-xs rounded hover:bg-green-400">Approve K-TAG</button>
+                </div>
+             </div>
+           </div>
+        </div>
+
+        {/* 5. Revenue Chart (Bottom Right) */}
+        <div className="col-span-2 row-span-2 bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+           <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2"><BarChart3 className="w-4 h-4 text-cyan-400"/> REVENUE FLOW</h3>
+           <div className="h-32 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={revenueData}>
+                  <defs>
+                    <linearGradient id="colorVal" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+                  <XAxis dataKey="name" stroke="#555" tick={{fontSize: 10}} />
+                  <YAxis stroke="#555" tick={{fontSize: 10}} />
+                  <Tooltip contentStyle={{backgroundColor: '#000', border: '1px solid #333'}} itemStyle={{color: '#fff'}} />
+                  <Area type="monotone" dataKey="value" stroke="#06b6d4" fillOpacity={1} fill="url(#colorVal)" />
+                </AreaChart>
+              </ResponsiveContainer>
+           </div>
+        </div>
+
+      </main>
+    </div>
+  );
+};
+
+// ==========================================
+// [COMPONENT] APP LOGIC (Client Side)
 // ==========================================
 
 const KTagAppInner = () => {
@@ -237,29 +439,6 @@ const KTagAppInner = () => {
                           </div>
                       </div>
 
-                      {/* Market Data Graph (Simple) */}
-                      <div className="mb-8">
-                          <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
-                              <TrendingUp className="w-4 h-4" /> Market Price Trend
-                          </h3>
-                          <div className="h-32 w-full">
-                              <ResponsiveContainer width="100%" height="100%">
-                                  <LineChart data={priceData}>
-                                      <Line type="monotone" dataKey="value" stroke="#000000" strokeWidth={2} dot={false} />
-                                      <Tooltip 
-                                        contentStyle={{background: '#000', border: 'none', borderRadius: '8px', color: '#fff'}}
-                                        itemStyle={{color: '#fff', fontSize: '12px'}}
-                                        formatter={(value) => [`$${value}`, 'Price']}
-                                        labelStyle={{display: 'none'}}
-                                      />
-                                  </LineChart>
-                              </ResponsiveContainer>
-                          </div>
-                          <p className="text-[10px] text-gray-400 mt-2 text-center">
-                              *Based on last 6 months global transaction data.
-                          </p>
-                      </div>
-
                       {/* Purchase Button */}
                       <div className="pb-6">
                           {orderStatus === 'idle' && (
@@ -313,15 +492,19 @@ const KTagAppInner = () => {
 };
 
 // ==========================================
-// [COMPONENT] MAIN WEBSITE SHELL
+// [COMPONENT] MAIN WEBSITE SHELL (Container)
 // ==========================================
 
 const FieldNineEmpire = () => {
   const [appOpen, setAppOpen] = useState(true);
+  const [adminMode, setAdminMode] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden relative flex flex-col">
       
+      {/* NEXUS ADMIN OVERLAY */}
+      {adminMode && <NexusAdmin onClose={() => setAdminMode(false)} />}
+
       {/* Desktop Navigation */}
       <nav className="w-full bg-white border-b border-gray-200 px-8 h-20 flex items-center justify-between z-30">
           <div className="flex items-center gap-2 font-black text-2xl tracking-tighter">
@@ -331,7 +514,13 @@ const FieldNineEmpire = () => {
           <div className="hidden md:flex gap-8 text-sm font-medium text-gray-500">
               <a href="#" className="hover:text-black">Solutions</a>
               <a href="#" className="hover:text-black">Authentication</a>
-              <a href="#" className="hover:text-black">Pricing</a>
+              {/* NEXUS TRIGGER BUTTON */}
+              <button 
+                onClick={() => setAdminMode(true)} 
+                className="hover:text-cyan-600 font-bold flex items-center gap-1 text-black"
+              >
+                <Activity className="w-4 h-4" /> Nexus
+              </button>
               <a href="#" className="hover:text-black">Enterprise</a>
           </div>
           <button 
